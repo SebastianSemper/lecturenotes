@@ -1,0 +1,162 @@
+\usepackage[fleqn]{amsmath}
+\usepackage{amsfonts, amssymb, yhmath}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage[]{pgfplots}
+\pgfplotsset{compat=newest}
+\usepackage[]{glossaries}
+
+\usepackage[]{hyperref}
+\usepackage[]{cleveref}
+
+%% end packages
+%% 
+
+\declaretheorem[
+	numberwithin=section,
+  title=Lemma,
+  refname={lemma,lemmas},
+  Refname={Lemma,Lemmas}
+]{Lem}
+
+\declaretheorem[
+	numberwithin=section,
+  title=Theorem,
+  refname={theorem,theorems},
+  Refname={Theorem,Theorems}
+]{Thm}
+
+\declaretheorem[
+	numberwithin=section,
+  title=Corollary,
+  refname={corollary,corollaries},
+  Refname={Corollary,Corollaries}
+]{Cor}
+
+\declaretheorem[
+	numberwithin=section,
+  title=Example,
+  refname={example,examples},
+  Refname={Example,Examples}
+]{Exm}
+
+\declaretheorem[
+	numberwithin=section,
+  title=Remark,
+  refname={remark,remarks},
+  Refname={Remark,Remarks}
+]{Rem}
+
+\declaretheorem[
+	numberwithin=section,
+  title=Algorithm,
+  refname={algorithm,algorithms},
+  Refname={Algorithm,Algorithms}
+]{Alg}
+
+\declaretheorem[
+	numberwithin=section,
+  title=Definition,
+  refname={definition,definitions},
+  Refname={Definition,Definitions}
+]{Def}
+
+\declaretheorem[
+	numberwithin=section,
+  title=Discussion,
+  refname={discussion,discussions},
+  Refname={Discussion,Discussions}
+]{Dis}
+
+\newcommand{\Ind}[1]{{\boldsymbol{\mathrm{#1}}}}
+
+\newcommand{\trans}{\mathrm{T}}
+\newcommand{\herm}{\mathrm{H}}
+\newcommand{\forward}[2]{\bm{\phi}_{#1}(#2)}
+\newcommand{\backward}[2]{\bm{\beta}_{#1}(#2)}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Ps}[1]{{\mathfrak{P}\left( #1\right)}}
+\newcommand{\As}{\mathcal{A}}
+\newcommand{\Hs}{\mathcal{H}}
+\newcommand{\Fs}{\mathcal{F}}
+\newcommand{\Gs}{\mathcal{G}}
+\newcommand{\Ts}{\mathcal{T}}
+\newcommand{\Li}{\mathcal{L}}
+\newcommand{\RT}{{\mathscr{R}}}
+\newcommand{\FT}{{\mathscr{F}}}
+\newcommand{\BT}{{\mathscr{B}}}
+\newcommand{\HT}{{\mathscr{H}}}
+
+\newcommand{\Real}[1]{{\rm Re}\left\{#1\right\}}
+\newcommand{\Imag}[1]{{\rm Im}\left\{#1\right\}}
+\newcommand{\Conj}[1]{\overline{#1}}
+
+\newcommand{\E}{\bm{\mathrm{E}}}
+\newcommand{\Prb}{\bm{\mathrm{P}}}
+
+\newcommand{\ScPr}[2]{{\left\langle #1,#2 \right\rangle}}
+\newcommand{\Norm}[1]{{\left\Vert #1\right\Vert}}
+\newcommand{\Abs}[1]{{\left| #1 \right|}}
+\newcommand{\Text}[1]{{\hspace{3mm} \text{#1} \hspace{3mm}}}
+\newcommand{\brac}[2]{{\left(\frac{#1}{#2}\right)}}
+\newcommand{\br}[1]{{\left(#1\right)}}
+
+\newcommand{\Int}[4]{{\int\limits_{#1}^{#2}{#3}\,\mathrm{d}{#4}}}
+\newcommand{\Sum}[3]{{\sum\limits_{#1}^{#2}{#3}}}
+\newcommand{\Prod}[3]{{\prod\limits_{#1}^{#2}{#3}}}
+\newcommand{\SumB}[3]{{\left(\sum\limits_{#1}^{#2}{#3}\right)}}
+\newcommand{\ProdB}[3]{{\left(\prod\limits_{#1}^{#2}{#3}\right)}}
+
+\newcommand{\ConvA}[2]{{\xrightarrow[]{#1 \rightarrow #2}}}
+\newcommand{\RA}[1]{\overset{#1}{\Rightarrow}}
+\newcommand{\LRA}[1]{\overset{#1}{\Leftrightarrow}}
+\newcommand{\V}[0]{\hspace{1.2mm}\middle\vert\hspace{1.5mm}}
+\newcommand{\D}[0]{\hspace{0.5mm}:\hspace{1.0mm}}
+
+\DeclareMathOperator*{\Argmin}{argmin}
+\DeclareMathOperator*{\Argmax}{argmax}
+\DeclareMathOperator*{\Arg}{arg}
+\DeclareMathOperator*{\BlkDiag}{blkdiag}
+\DeclareMathOperator*{\Conv}{conv}
+\DeclareMathOperator*{\Cov}{Cov}
+\DeclareMathOperator*{\Cone}{cone}
+\DeclareMathOperator*{\Diag}{diag}
+\DeclareMathOperator*{\id}{id}
+\DeclareMathOperator*{\Ker}{ker}
+\DeclareMathOperator*{\Median}{median}
+\DeclareMathOperator*{\Max}{max}
+\DeclareMathOperator*{\Mat}{mat}
+\DeclareMathOperator*{\Min}{min}
+\DeclareMathOperator*{\Mod}{Mod}
+\DeclareMathOperator*{\Toep}{\bm{\mathrm{Toep}}}
+\DeclareMathOperator*{\Tr}{tr}
+\DeclareMathOperator*{\Rk}{rk}
+\DeclareMathOperator*{\Ran}{ran}
+\DeclareMathOperator*{\Sign}{sign}
+\DeclareMathOperator*{\Sinc}{sinc}
+\DeclareMathOperator*{\Supp}{supp}
+\DeclareMathOperator*{\Sup}{sup}
+\DeclareMathOperator*{\Span}{span}
+\DeclareMathOperator*{\Spark}{spark}
+\DeclareMathOperator*{\Surf}{surf}
+\DeclareMathOperator*{\Vol}{vol}
+\DeclareMathOperator*{\Pack}{pack}
+\DeclareMathOperator*{\Pb}{\bm{\mathrm{P}}}
+\DeclareMathOperator*{\Vectorize}{vec}
+\DeclareMathOperator*{\Unif}{Unif}
+
+\newcommand{\for}{\Text{for}}
+
+\newcommand{\tx}{\rm tx}
+\newcommand{\rx}{\rm rx}
+\newcommand{\mycaption}[2]{\caption[#2]{\emph{#1} -- {#2}}}
+\newcommand{\ilcode}[1]{\texttt{#1}}
+\newcommand{\TODO}[1]{{\color{red} TODO:#1}}
