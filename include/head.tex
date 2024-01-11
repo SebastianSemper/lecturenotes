@@ -1,8 +1,27 @@
 \documentclass[ngerman]{article}
 \usepackage[ngerman]{babel}
+\usepackage{csquotes}
 \usepackage{fullpage}
+\usepackage{microtype}
 
-\usepackage{biblatex}
+\usepackage[backref]{biblatex}
+\AtEveryBibitem{
+ \clearfield{url}
+\clearfield{doi}
+ \clearfield{addendum}
+ \clearfield{month}
+ \clearfield{eprint}
+ \clearfield{volume}
+ \clearfield{isbn}
+ \clearfield{issn}
+ \clearfield{pages}
+ \clearlist{location}
+}
 \addbibresource{../lib/sempersn.bib}
 
-\usepackage{hyperref}
+\renewcommand{\baselinestretch}{1.2}
+
+\usepackage[colorlinks,linktocpage]{hyperref}
+\usepackage[acronym,hyperfirst]{glossaries}
+\input{../lib/sempersn.tex}
+\makeglossaries
