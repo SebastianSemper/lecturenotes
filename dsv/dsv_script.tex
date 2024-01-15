@@ -1,3 +1,4 @@
+\documentclass[ngerman]{article}
 \input{../include/head.tex}
 
 \title{Anhang zu Digitale Signalverarbeitung}
@@ -10,30 +11,9 @@
 \subsection{B-Splines}
 \section{Anwendungen}
 \subsection{Sinc-Interpolation von Antennenantworten: EADF}
-\subsubsection{Motivation}
-\begin{itemize}
-    \item Fuer Kommunikation ist das Ausbreitungsverhalten von EM zwischen den beteiligten geraeten wichtig
-    \item abschaetzung von link budget, datenraten, simulation in software, verifizierung von geraeten
-    \item channel sounding vermisst solche kanaele \cite{thomae2005multidim_hrpe}
-    \item hohe bandbreiten, antennen arrays, hohe aufloesung
-    \item extraktion der einzelnen ausbreitungswege zwischen sender und empfaenger
-    \item da eine antenne bei uebertragung selbst ein \gls{lti} system ist, praegt sie dem signal ihre impulsantwort auf
-    \item dieser einfluss soll aber aus den messungen entfernt werden
-    \item deshalb muessen die benutzten antennen vorher korrekt charakterisiert werden
-    \item Wir muessen wissen wie das richtungs, frequenz und polarisations-abh. verhalten der antenne ist
-    \item wir gehen in die antennenmesskammer und regen die antenne an (winkel, pol, freq)
-    \item koennen nicht "alle" winkel messen
-    \item muessen nicht alle winkel messen \cite{delgaldo2007phd}
-    \item antennen sind im winkel bandlimitiert
-    \item koennen nyquist-sampling theorie anwenden
-\end{itemize}
-\subsubsection{Messvorgang}
-\begin{itemize}
-    \item messung in echo-freier messkammer
-    \item anregung mit bekannter, direktiver und polarisierter referenz-antenne
-    \item zu kalibrierende \gls{aut} wird an roboter geschnallt, der sie beliebig bezueglich referenz-antenne ausrichten kann
-    \item messung des freqeunzganges der \gls{aut} fuer endliche menge an winkeln
-    \item bereinigung der messdaten von einfluss des messsystems unter der annahme von \gls{lti} system
-\end{itemize}
+\input{content/eadf.tex}
+%
+%
+%
 \input{../include/backmatter.tex}
 \end{document}

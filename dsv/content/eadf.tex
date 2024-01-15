@@ -1,0 +1,137 @@
+% !TEX root = ../dsv_script.tex
+
+\subsubsection{Motivation}
+\begin{itemize}
+    \item Fuer Kommunikation ist das Ausbreitungsverhalten von EM zwischen den beteiligten geraeten wichtig
+    \item abschaetzung von link budget, datenraten, simulation in software, verifizierung von geraeten
+    \item channel sounding vermisst solche kanaele \cite{thomae2005multidim_hrpe}
+    \item hohe bandbreiten, antennen arrays, hohe aufloesung
+    \item extraktion der einzelnen ausbreitungswege zwischen sender und empfaenger
+    \item da eine antenne bei uebertragung selbst ein \gls{lti} system ist, praegt sie dem signal ihre impulsantwort auf
+    \item dieser einfluss soll aber aus den messungen entfernt werden
+    \item deshalb muessen die benutzten antennen vorher korrekt charakterisiert werden
+    \item andere anwendung ist die simulation, wo bereits informationen \"uber die ausbreitungsrichtungen vorliegen und jetzt realistische Messdaten simuliert werden sollen
+    \item In any case: Wir muessen wissen wie das richtungs, frequenz und polarisations-abh. verhalten der antenne ist
+    \item wir gehen in die antennenmesskammer und regen die antenne an (winkel, pol, freq)
+    \item koennen nicht "alle" winkel messen
+    \item antennen sind im winkel bandlimitiert \cite{delgaldo2007phd}
+    \item koennen nyquist-sampling theorie anwenden
+    \item muessen nicht alle winkel messen
+\end{itemize}
+\subsubsection{Messvorgang}
+\begin{itemize}
+    \item messung in echo-freier messkammer (wir nehmen das an, ist aber nicht so)
+    \item anregung mit bekannter, direktiver und polarisierter referenz-antenne
+    \item zu kalibrierende \gls{aut} wird an roboter geschnallt, der sie beliebig bezueglich referenz-antenne ausrichten kann
+    \item messung des freqeunzganges der \gls{aut} fuer endliche menge an winkeln
+    \item bereinigung der messdaten von einfluss des messsystems unter der annahme von \gls{lti} system
+\end{itemize}
+%
+%
+\subsubsection{Fourier-Interpolation}
+%
+%
+Gegeben sei ein periodisches, analoges Signal $x: \R \rightarrow \C$, mit periode $T_p = 1/F_0$. Dieses Signal kann man in seine Fourier-Reihe via
+\begin{equation}\label{fourier_series}
+    x(t) = \Sum{k=-\infty}{+\infty}{
+        c[k] \exp(\jmath 2 \pi k t F_0) 
+    }
+\end{equation}
+entwickeln. Nun tasten wir dieses Signal uniform mit Samplerate $F_s = N/T_p = 1/T$ (also passend zur Periodendauer) ab und erhalten die Folge 
+\begin{equation}
+    x[n] = x(n T) = \Sum{k=-\infty}{+\infty}{
+        c[k] \exp(\jmath 2 \pi k n T F_0) 
+    } = \Sum{k=-\infty}{+\infty}{
+        c[k] \exp\left(\jmath 2 \pi k \frac nN\right) 
+    }
+    \Text{f\"ur}
+    n \in \N
+\end{equation}
+bestehend aus den Samples von $x$. Mit der Periodizit\"at von $\exp(\jmath 2 \pi t)$ und der Abtastung erhalten wir au{\ss}erdem noch
+\begin{equation}
+    x[n] = \Sum{k=0}{N-1}{
+        \left[\Sum{\ell=-\infty}{+\infty}{
+            c[k - \ell N]
+        }\right] \exp\left(\jmath 2 \pi k \frac nN\right) 
+    } = \Sum{k=0}{N-1}{
+        \tilde{c}[k] \exp\left(\jmath 2 \pi k \frac nN\right) 
+    },
+\end{equation}
+wobei wir 
+\begin{equation}\label{aliased_ck}
+    \tilde{c}[k] = \Sum{\ell=-\infty}{+\infty}{
+        c[k - \ell N]
+    }
+\end{equation}
+als Abk\"urzung benutzt haben. Ist nun die Funktion $x$ auch bandbegrenzt, d.h.~ihre Fourier-Transformierte $X : \R \rightarrow \C$ verschwindet au{\ss}erhalb eines gewissen Bandes, also
+\begin{equation}
+    X(F) = \Int{-\infty}{+\infty}{x(t) \exp(-\jmath 2 \pi F t )}{t} = 0 \Text{f\"ur} \Abs{F} > B,
+\end{equation}
+dann wissen wir, dass die Fourier-Transformation $X$ und die Folge $c[k]$ verkn\"upft sind via 
+\begin{equation}
+    c[k] = \frac{1}{T_p} X(k F_0),
+\end{equation}
+was impliziert, dass die Folge $c[k]$ verschwindet, also gilt
+\begin{equation}
+    c[k] = 0 \Text{f\"ur} \Abs{k} > \frac{B}{F_0}.
+\end{equation}
+Das hei{\ss}t, dass wir nun $F_s = N/T_p$ so gro{\ss} w\"ahlen m\"ussen, dass sich in \eqref{aliased_ck} kein Aliasing ergeben darf, also muss gelten
+\begin{equation}
+    N > \lceil B/F_0 \rceil \Text{bzw.} F_s > \lceil B/(F_0 T_p) \rceil.
+\end{equation}
+In diesem Falle gilt, dann dass $c[k] = X[k]$, wobei $X[k]$ die \gls{dft} der Folge $x[n]$ darstellt. Das hei{\ss}, dass wir die Fourier-Koeffizienten der kontinuierlichen Funktion $x$ durch die \gls{dft} der Abtastwerte $x[n]$ bestimmen k\"onnen. Mit \eqref{fourier_series} k\"onnen wir also die Folge $x[n]$ interpolieren, indem wir
+\begin{equation}\label{dft_interpolation}
+    x(t) = \Sum{k=-\frac{B}{F_0}}{+\frac{B}{F_0}}{
+        X[k] \exp(\jmath 2 \pi k t F_0) 
+    }
+\end{equation}
+schreiben. Man beachte hier, dass nun aus der Folge von diskreten Werten $x[n]$ eine analytische Formel in Form einer \emph{endlichen} Summation entstanden ist. Unter der Annahme der Bandlimitierung von $x$ ist diese Interpolation \emph{exakt} und kann effizient implementiert werden, durch die Vorberechnung der Folge $X[k]$ durch die \gls{fft}~\cite{FFTW05} der Folge $x[n]$. 
+%
+%
+%
+%
+\subsubsection{Ableitung der EADF}
+%
+%
+Wir wollen nun \eqref{dft_interpolation} aus zwei Dimensionen erweitern und folgen damit effektiv~\cite{landmann2004EADF}.
+Aus{\ss}erdem \"andern wir das Argument der Funktion $x$ und deren Namen zu der \"ublicheren Schreibweise $a : [0, 2 \pi] \times [0, 2 \pi] \rightarrow \C$ mit Werten $a(\varphi, \vartheta)$. 
+Wir nehmen nun hier an, dass $a$ in \emph{beiden} Argumenten $2\pi$-periodisch ist und schneiden somit die Funktion bereits auf unsere Anwendung zu.
+
+Die Bandlimitierung von $a$ l\"asst sich nun so formulieren, dass die Bedingungen
+\begin{align}
+    A_{\varphi}(F_\varphi, \vartheta) 
+    &= \Int{-\infty}{+\infty}{
+        a(\varphi, \vartheta) \exp(\jmath 2 \pi F_\varphi \varphi)
+    }{\varphi} = 0 
+    \fuer F_\varphi > B_\varphi \Text{und alle} \vartheta \in [0, 2 \pi] \Text{und} \\
+    A_{\vartheta}(\varphi, F_\vartheta) 
+    &= \Int{-\infty}{+\infty}{
+        a(\varphi, \vartheta) \exp(\jmath 2 \pi F_\vartheta \vartheta)
+    }{\varphi} = 0 
+    \fuer F_\vartheta > B_\vartheta \Text{und alle} \varphi \in [0, 2 \pi]
+\end{align}
+erf\"ullt sein m\"ussen. Nun lassen sich alle obigen Argumente ``schnittweise'' auf eine abgetastete Version von $a$ in der Form $a[n_\varphi, n_\vartheta]$ anwenden. Das hei{\ss}t, wir landen schlussendlich bei einer Interpolations-Formel
+\begin{equation}\label{2d_dft_interpolation}
+    a(\varphi, \vartheta) = \Sum{k_\varphi=-\frac{B_\varphi}{F_\varphi}}{+\frac{B_\varphi}{F_\varphi}}{
+        \Sum{k_\vartheta=-\frac{B_\vartheta}{F_\vartheta}}{+\frac{B_\vartheta}{F_\vartheta}}{
+            A[k_\varphi, k_\vartheta] 
+            \cdot \exp(\jmath 2 \pi k_\varphi \varphi F_\varphi)
+            \cdot \exp(\jmath 2 \pi k_\vartheta \vartheta F_\vartheta)
+        }
+    },
+\end{equation}
+welche absolut analoge $2D$-Version zu \eqref{dft_interpolation} darstellt. Auch in diesem Fall, k\"onnen wir das $2D$-Array $A[k_\varphi, k_\vartheta]$ durch eine $2D$-\gls{dft}, bzw. der \gls{fft}, von uniformen Samples der Funktion $a$ effizient vorberechnen.
+
+Um einen m\"oglichst effizienten Algorithmus f\"ur die Auswertung der Interpolante zu erhalten, sollte man \eqref{2d_dft_interpolation} geeignet umschreiben. Moderne Rechenarchitekturen und Scientific-Computing-Libraries sind auf schnelle Matrix-Vektor-Produkte optimiert. Nehmen wir an, wir wollen \eqref{2d_dft_interpolation} f\"ur mehrere Winkelpaare $(\varphi_1, \vartheta_1), \dots, (\varphi_L, \vartheta_L)$ auswerten. Dann berechnen wir zun\"achst zwei $2D$ arrays
+\begin{align}
+    D_\varphi &= [\exp(\jmath 2 \pi k_\varphi \varphi F_\varphi)]_{\ell = 1, k_\varphi=-\frac{B_\varphi}{F_\varphi}} \in \C^{L \times 2 \frac{B_\varphi}{F_\varphi} + 1} \Text{und}\\
+    D_\vartheta &= [\exp(\jmath 2 \pi k_\vartheta \vartheta F_\vartheta)]_{\ell = 1, k_\vartheta=-\frac{B_\vartheta}{F_\vartheta}} \in \C^{L \times 2 \frac{B_\vartheta}{F_\vartheta} + 1}, 
+\end{align}
+was uns erlaubt \eqref{2d_dft_interpolation} das folgende Vektor-Matrix-Vektor-Produkt
+\begin{equation}\label{fast_2d_dft}
+    a(\varphi_\ell, \vartheta_\ell) = 
+        D_\varphi[\ell, :] \cdot A \cdot D_\vartheta[\ell, :]^\trans
+\end{equation}
+umzuschreiben. Damit besteht der Interpolations-Algorithmus zun\"achst aus der Vorberechnung des Arrays $A$, sowie bei Ausf\"uhrung dann aus der Berechnung von $D_\varphi$ und $D_\vartheta$, sowie der Auswertung von \eqref{fast_2d_dft}.
+
+Man sieht hier der sch\"on, dass die Laufzeitkomplexit\"at von \eqref{fast_2d_dft} ma{\ss}geblich von der r\"aumlichen Bandbegrenzung der Antennen-Richtcharakteristik beeinflusst wird. Je h\"oher die Bandbreite, desto h\"oher ist nicht nur der Aufwand bei der Messung, sondern auch bei der Interpolation.
