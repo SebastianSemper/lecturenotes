@@ -1,0 +1,112 @@
+% !TEX root = ../dsv_script.tex
+%
+Eine Grundvoraussetzung f\"ur eine praktisch n\"utzliche digitale Signalverarbeitung ist die M\"oglichkeit zwischen dem analogen und digitalen Bereich wechseln zu k\"onnen. Hierbei sollte man auch genau quantifizieren k\"onnen, ob bei diesem Prozess Informationen verloren gehen, oder wie man garantieren kann, dass diese Umwandlung verlustfrei vonstatten geht. Meist nutzt man hierf\"ur das Nyquist-Shannon Sampling Theorem~\cite[Kapitel~1.4.2]{proakis2013}. Die hieraus resultierende sogenannte Nyquist-Sampling-Theorie fu{\ss}t bekannterma{\ss}en auf der Repr\"asentation von bandbegrenzten Signalen durch hinreichend dichte \"aquidistante Abtastwerte. Diese Theorie ist gut studiert, in Textb\"uchern aufbereitet und bildet die Grundlage f\"ur viele Messsysteme und Algorithmen im Digitalen, siehe beispielsweise~\cref{eadf-interpol}.
+
+Es gibt jedoch auch einige Nachteile von Nyquist-Sampling, die aus dessen Annahmen und der daraus folgenden Verarbeitung entstehen. Einerseits kann ein endliches Signal im Allgemeinen \emph{nicht} bandbegrenzt sein. Weiterhin entstehen durch die Bandlimitierung von Signalen Gibbs-Artefakte, die besonders in Bildern nicht erw\"unscht sind. Geht es um die Auswertung $x(t)$ eines Signals $x$ zwischen den aufgenommenen Samples $x[n]$, also Interpolation, hat man das Problem, dass die $\Sinc$-Funktion nur sehr langsam mit Rate $1/t$ abf\"allt. Diese Eigenschaft f\"uhrt dazu, dass man f\"ur die Bestimmung eines Wertes $x(t)$ mit einer Genauigkeit von \SI{1}{\percent} etwa $100$ um $t$ benachbarte Samples betrachten muss. Das hei{\ss}t, vor allem bei 2D-Interpolation skaliert der resultierende Rechenaufwand nicht sehr g\"unstig, falls hohe Genauigkeit ben\"otigt wird.
+
+Aus diesem Grund m\"ochten wir uns eine alternative Sampling-Theorie genauer ansehen -- die B-Splines~\cite{unser1999splines_mag}. Wir f\"uhren zun\"achst die auf Polynomen basierende Signalverarbeitung ein und vergleichen sie anschlie{\ss}end zur bereits bekannten Nyquist-Theorie.
+
+\subsection{B-Splines als Polynome}
+
+Allgemein bezeichnet man st\"uckweise definierte und stetig differenzierbare Polynome als Splines. Man bezeichnet die Stellen an denen zwei unterschiedliche Polynome zusammensto{\ss}en als Knoten. Ein Spline der Ordnung $\ell \in \N$ ist ein Polynom vom Grad $\ell$, ist also von der Form
+\begin{equation}
+    p(x) = 
+        a_{\ell} t^{\ell} 
+        + a_{\ell - 1} t^{\ell-1} 
+        + \dots
+        + a_1 t 
+        + a_{0}.
+\end{equation}
+%
+Ein Spline ist nun eine Funktion $s(t)$, welche f\"ur Knoten $n = 1, 2, \dots$ definiert ist durch
+\begin{equation}
+    s(t) = \begin{cases}
+        p_1(t) \fuer x \in [1,2], \\
+        p_2(t) \fuer x \in [2,3], \\
+        \vdots
+    \end{cases}
+\end{equation}
+wobei sich die Glattheit durch die Forderung ergibt, dass die Funktion und ihre Ableitungen an den Knoten stetig sei, also
+\begin{equation}
+    \lim\limits_{t \rightarrow n^-} s^{(m)}(t) =
+    \lim\limits_{t \rightarrow n^+} s^{(m)}(t)
+\end{equation}
+erf\"ullt ist, wobei $s^{(m)}$ f\"ur $m \geqslant 0$ die $m$-te Ableitung des Splines $s$ repr\"asentiert. In einer Arbeit~\cite{schoenberg1988bsplines}, die sogar dem ber\"uhmten Paper von Shannon vorausgeht, beschreibt Schoenberg, dass sich diese Splines der Ordnung $\ell$ via
+\begin{equation}\label{bsplines_summation}
+    s(t) = \Sum{k \in \Z}{}{
+        c[k] \beta^{\ell}(t - k)
+    }
+\end{equation}
+darstellen lassen. Hierbei ist die Funktion $\beta^\ell: \R \rightarrow \R$ definiert als eine iterierte Faltung einer Rechteck-Funktion via
+\begin{equation}
+    \beta^\ell = \underbrace{
+        \beta^0 \ast \dots \ast \beta^0
+    }_{(\ell+1) \Text{mal}}, 
+    \Text{wobei}
+    \beta^0(t) = \begin{cases}
+        1,\quad \Abs{t} < \frac{1}{2} \\
+        \frac{1}{2}, \quad \Abs{t} = \frac{1}{2} \\
+        0, \Text{sonst.}
+    \end{cases}
+\end{equation}
+%
+\begin{figure}
+    \caption{}\label{bsplines_order3}
+\end{figure}
+%
+In \cref{bsplines_order3} sind die Funktionen $\beta^\ell$ f\"ur $\ell = 0, \dots, 3$ dargestellt. Man erkennt sehr gut, dass der Grad der Glattheit von der Ordnung des Splines abh\"angt und dass die Funktionswerte $\beta^\ell(t)$ f\"ur $\Abs{t}>\ell+1/2$ verschwinden. Man spricht von Funktionen mit kompaktem Tr\"ager.
+
+Wir wollen nun eine explizite Formel f\"ur $\beta^\ell$ entwickeln. Hierzu betrachten wir die Fourier-Transformation 
+\begin{equation}
+    B^\ell(\omega) 
+        = \left(\frac{sin(\omega / 2)}{(\omega / 2)}\right)^{\ell + 1}
+        = \frac{(\exp(\jmath \omega/2) - \exp(-\jmath \omega/2))^{\ell+1}}{
+            (\jmath \omega)^{\ell + 1}
+        }
+\end{equation}
+mit einigen Rechentricks (siehe \cite[Box 1.]{unser1999splines_mag}) kann man dies so lange umformen, bis man
+\begin{equation}
+    \beta^\ell(t) = \frac{1}{\ell !}\Sum{p = 0}{\ell+1}{
+            \binom{\ell+1}{p}(-1)^p
+            \left(t - p + \frac{\ell+1}{2}\right)_+^\ell
+        }
+    \Text{mit}
+    (x)_+ = \begin{cases}
+      x, \fuer x \geqslant 0, \\
+      0, \Text{sonst},  
+    \end{cases}
+\end{equation}
+erh\"alt. Damit ist $\beta^\ell$ wirklich ein Polynom $\ell$-ten Grades. Die Stetig- und Differenzierbarkeit muss man sich aber noch separat \"uberlegen. 
+
+Weiterhin kann man zeigen, dass folgende Formeln f\"ur Differentiation und Integration von B-Splines gelten:
+\begin{equation}\label{bsplines_deriv_int}
+    \left(\beta^\ell\right)^\prime(t) =
+        \beta^{\ell-1}(x + 1/2) - \beta^{\ell-1}(x - 1/2), 
+    \Int{-\infty}{t}{\beta^\ell(s)}{s} = 
+        \Sum{p = 0}{+\infty}{\beta^{\ell+1}(t - 1/2 - p)}
+\end{equation}
+Das he{\ss}t, dass man auch einen kompletten Spline $s$ differenzieren und integrieren kann, indem man nutzt, dass sowohl Differentiation, als auch Integration linear sind. Es gilt also mit \eqref{bsplines_summation} und \eqref{bsplines_deriv_int}:
+\begin{equation}
+    s^\prime(t) = \Sum{k \in \Z}{}{
+        c[k] \left(\beta^{\ell}\right)^\prime(t - k)
+    }
+    = \Sum{k \in \Z}{}{
+        c[k]\left(
+            \beta^{\ell-1}(x + 1/2 - k) - \beta^{\ell-1}(x - 1/2 - k)
+        \right)
+    }.
+\end{equation}
+%
+%
+\subsection{Kubische B-Spline Interpolation}
+%
+%
+Wir m\"ochten uns eine spezielle Version der B-Splines genauer Ansehen, da sie in der Anwendung den Spagat zwischen Komplexit\"at und Approximationsg\"ute sehr gut hinbekommen. Wir setzen hierzu $\ell=3$ und erhalten somit ein Polynom dritten Grades der Form
+\begin{equation}
+    \beta^3(t) = \begin{cases}
+        \frac 23 - \Abs{x}^2 + \frac{\Abs{x}^3}{2} \fuer \Abs{x} < 1\\
+        \frac{(2 - \Abs{x})^3}{6}, \fuer \Abs{x} \in [1, 2) \\
+        0, \fuer \Abs{x} > 2.
+    \end{cases}
+\end{equation}
+In Analogie zum bekannten Nyquist-Sampling wollen wir untersuchen, wie man nun aus gegebenen Abtastwerten $x[n]$ eine Darstellung wie in \eqref{bsplines_summation} herleiten k\"onnen, welche die abgetasteten Werte exakt interpoliert.

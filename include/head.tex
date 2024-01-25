@@ -5,6 +5,13 @@
 \usepackage{fullpage}
 \usepackage{microtype}
 
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+
+\usepackage{siunitx}
+
 \usepackage[backref]{biblatex}
 \AtEveryBibitem{
  \clearfield{url}
@@ -29,3 +36,11 @@
 \makeglossaries
 
 \newcommand{\fuer}{\Text{f\"ur}}
+
+\usepackage{placeins}
+\usepackage{etoolbox}
+\pretocmd{\section}{\FloatBarrier}{}{}
+\pretocmd{\subsection}{\FloatBarrier}{}{}
+
+\DeclareSymbolFont{otone}{OT1}{cmr}{m}{n}
+
