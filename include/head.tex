@@ -12,7 +12,7 @@
 
 \usepackage{siunitx}
 
-\usepackage[backref]{biblatex}
+\usepackage[sorting=none, backref]{biblatex}
 \AtEveryBibitem{
  \clearfield{url}
 \clearfield{doi}
@@ -39,8 +39,8 @@
 
 \usepackage{placeins}
 \usepackage{etoolbox}
-\pretocmd{\section}{\FloatBarrier}{}{}
+\pretocmd{\section}{\FloatBarrier\clearpage}{}{}
 \pretocmd{\subsection}{\FloatBarrier}{}{}
 
-\DeclareSymbolFont{otone}{OT1}{cmr}{m}{n}
+\numberwithin{equation}{subsection}
 
