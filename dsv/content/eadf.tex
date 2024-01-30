@@ -16,7 +16,7 @@ Nat\"urlich sind hierzu vor der Messung pr\"azise Kalibriermessungen des Systems
 \begin{equation}
     Y(f) = G_{\rx}(f) \cdot H(f) \cdot G_{\tx}(f) \cdot X(f).
 \end{equation}
-Hierbei steht $X$ f\"ur die Anregung des Systems durch ein eingegebenes Signal, $G_{\tx/\rx}$ f\"ur die Transferfunktion der Sender- bzw. Empf\"angerhardware, und $H$ f\"ur die Transferfunktion des Funkkanals, der demnach auch als ein \gls{lti} system modelliert wird. Es stellt sich aber heraus, dass jede Antenne eine \emph{winkelabh\"angige} Richtcharakteristik besitzt. Das hei{\ss}t, dass die Systemantworten $G_{\tx/\rx}$ davon abh\"angig sind, in welche Richtungen sich die Wellen vom Sender $\tx$ ausbreiten und aus welchen Richtungen, sie am Empf\"anger $\rx$ eintreffen. 
+Hierbei steht $X$ f\"ur die Anregung des Systems durch ein eingegebenes Signal, $G_{\tx/\rx}$ f\"ur die Transferfunktion der Sender- bzw. Empf\"angerhardware, und $H$ f\"ur die Transferfunktion des Funkkanals, der demnach auch als ein \gls{lti} System modelliert wird. Es stellt sich aber heraus, dass jede Antenne eine \emph{winkelabh\"angige} Richtcharakteristik besitzt. Das hei{\ss}t, dass die Systemantworten $G_{\tx/\rx}$ davon abh\"angig sind, in welche Richtungen sich die Wellen vom Sender $\tx$ ausbreiten und aus welchen Richtungen, sie am Empf\"anger $\rx$ eintreffen. 
 
 Um dies korrekt zu modellieren, muss man sich also zun\"achst auf einzelne sog. \emph{Ausbreitungspfade} konzentrieren. Das hei{\ss}t wir nehmen an, dass eine ebene Welle sich in die normierte Richtung $\Omega_{\tx}$ ausbreitet und nach ihrem Weg durch den Funkkanal am Empf\"anger aus normierter Richtung $\Omega_{\rx}$ eintrifft. Folglich ergibt sich f\"ur dieses Verhalten
 \begin{equation}\label{eadf_single_path}
@@ -74,70 +74,7 @@ F\"ur ein einzelnes Antennenelement beobachten wir also die Funktion $a$ auf ein
 besteht. Wir erhalten also ein zweidimensionales Array $a[i,j] \in \C^{N_\varphi \times N_\vartheta - 1}$, welches wir noch durch einen Trick geeignet periodifizieren m\"ussen, wie in \cref{eadf_bp_aperture} links dargestellt. Diese Abtastwerte entspringen also einer zweidimensionalen bandbegrenzten, periodischen Funktion. Aufgabe ist es nun aus diesen Werten eine geeignete Interpolante herzuleiten, die sich diese beiden Eigenschaften zunutze macht.
 %
 %
-\subsubsection{Fourier-Interpolation}
-%
-%
-Gegeben sei ein periodisches, analoges Signal $x: \R \rightarrow \C$, mit periode $T_p = 1/F_0$. Wir beobachten dieses Signal auf einem uniformen Raster von Punkten, via $x[n] = x(n T)$ und wollen eine Funktion $y(t)$ herleiten, f\"ur welche die Interpolationsbedingung
-\begin{equation}\label{eadf_interpol_cond}
-    y(nT) = x[n] = x(nT)
-\end{equation}
-erf\"ullt ist. Hier zu entwickeln wir das Signal $x$ in seine Fourier-Reihe via
-\begin{equation}\label{fourier_series}
-    x(t) = \Sum{k=-\infty}{+\infty}{
-        c[k] \exp(\jmath 2 \pi k t F_0) 
-    }.
-\end{equation}
-Nun tasten wir dieses Signal uniform mit Samplerate $F_s = N/T_p = 1/T$ (also passend zur Periodendauer) ab und erhalten die Folge 
-\begin{equation}
-    x[n] = x(n T) = \Sum{k=-\infty}{+\infty}{
-        c[k] \exp(\jmath 2 \pi k n T F_0) 
-    } = \Sum{k=-\infty}{+\infty}{
-        c[k] \exp\left(\jmath 2 \pi k \frac nN\right) 
-    }
-    \Text{f\"ur}
-    n \in \N
-\end{equation}
-bestehend aus den Samples von $x$. Mit der Periodizit\"at von $\exp(\jmath 2 \pi t)$ und der Abtastung erhalten wir au{\ss}erdem noch
-\begin{equation}
-    x[n] = \Sum{k=0}{N-1}{
-        \left[\Sum{\ell=-\infty}{+\infty}{
-            c[k - \ell N]
-        }\right] \exp\left(\jmath 2 \pi k \frac nN\right) 
-    } = \Sum{k=0}{N-1}{
-        \tilde{c}[k] \exp\left(\jmath 2 \pi k \frac nN\right) 
-    },
-\end{equation}
-wobei wir 
-\begin{equation}\label{aliased_ck}
-    \tilde{c}[k] = \Sum{\ell=-\infty}{+\infty}{
-        c[k - \ell N]
-    }
-\end{equation}
-als Abk\"urzung benutzt haben. Ist nun die Funktion $x$ auch bandbegrenzt, d.h.~ihre Fourier-Transformierte $X : \R \rightarrow \C$ verschwindet au{\ss}erhalb eines gewissen Bandes, also
-\begin{equation}
-    X(F) = \Int{-\infty}{+\infty}{x(t) \exp(-\jmath 2 \pi F t )}{t} = 0 \Text{f\"ur} \Abs{F} > B.
-\end{equation}
-Au{\ss}erdem wissen wir, dass die Fourier-Transformation $X$ und die Folge $c[k]$ verkn\"upft sind via 
-\begin{equation}
-    c[k] = \frac{1}{T_p} X(k F_0),
-\end{equation}
-was impliziert, dass die Folge $c[k]$ verschwindet, also gilt
-\begin{equation}
-    c[k] = 0 \Text{f\"ur} \Abs{k} > \frac{B}{F_0}.
-\end{equation}
-Das hei{\ss}t, dass wir nun $F_s = N/T_p$ so gro{\ss} w\"ahlen m\"ussen, dass sich in \eqref{aliased_ck} kein Aliasing f\"ur $\tilde{c}[k]$ ergeben darf. Es muss also gelten
-\begin{equation}
-    N > \lceil B/F_0 \rceil \Text{bzw.} F_s > \lceil B/(F_0 T_p) \rceil.
-\end{equation}
-In diesem Falle gilt, dann dass $c[k] = X[k]$, wobei $X[k]$ die \gls{dft} der Folge $x[n]$ darstellt. Das hei{\ss}, dass wir die Fourier-Koeffizienten der kontinuierlichen Funktion $x$ durch die \gls{dft} der Abtastwerte $x[n]$ bestimmen k\"onnen. Mit \eqref{fourier_series} k\"onnen wir also die Folge $x[n]$ interpolieren, indem wir
-\begin{equation}\label{dft_interpolation}
-    y(t) = \frac{1}{T_p}\Sum{k=-\frac{B}{F_0}}{+\frac{B}{F_0}}{
-        X[k] \exp(\jmath 2 \pi k t F_0) 
-    }
-\end{equation}
-schreiben. Dieses $y$ erf\"ullt die Interpolationsbedingung \eqref{eadf_interpol_cond}, weil wegen der Bandbegrenzung von $x$ und der Periodizit\"at sogar gilt $y(t) = x(t)$ f\"ur alle $t$ gilt.
 
-Man beachte hier, dass nun aus der Folge von diskreten Werten $x[n]$ eine analytische Formel in Form einer \emph{endlichen} Summation entstanden ist. Unter der Annahme der Bandlimitierung von $x$ ist diese Interpolation \emph{exakt} und kann effizient implementiert werden, durch die Vorberechnung der Folge $X[k]$ durch die \gls{fft}~\cite{FFTW05} der Folge $x[n]$. 
 %
 %
 %
@@ -145,7 +82,7 @@ Man beachte hier, dass nun aus der Folge von diskreten Werten $x[n]$ eine analyt
 \subsubsection{Ableitung der EADF}
 %
 %
-Wir wollen nun \eqref{dft_interpolation} auf zwei Dimensionen erweitern und folgen damit effektiv~\cite{landmann2004EADF}.
+Wir wollen nun \eqref{dft_interpolation} aus \cref{dftintp} benutzen und auf zwei Dimensionen erweitern. Wir folgen damit effektiv~\cite{landmann2004EADF}.
 Au{\ss}erdem \"andern wir das Argument der Funktion $x$ und deren Namen zu der oben eingef\"uhrten Schreibweise $a : [0, 2 \pi] \times [0, 2 \pi] \rightarrow \C$ mit Werten $a(\varphi, \vartheta)$. 
 In unserem Fall der Interpolation von Antennenantworten wissen wir, dass $a$ in \emph{beiden} Argumenten $2\pi$-periodisch ist.
 
@@ -158,12 +95,12 @@ Die Bandlimitierung von $a$ l\"asst sich formulieren, indem man fordert, dass di
 \begin{align}
     A_{\varphi}(F_\varphi, \vartheta) 
     &= \Int{-\infty}{+\infty}{
-        a(\varphi, \vartheta) \exp(\jmath 2 \pi F_\varphi \varphi)
+        a(\varphi, \vartheta) \exp(-\jmath 2 \pi F_\varphi \varphi)
     }{\varphi} = 0 
     \fuer F_\varphi > B_\varphi \Text{und alle} \vartheta \in [0, 2 \pi] \Text{und} \\
     A_{\vartheta}(\varphi, F_\vartheta) 
     &= \Int{-\infty}{+\infty}{
-        a(\varphi, \vartheta) \exp(\jmath 2 \pi F_\vartheta \vartheta)
+        a(\varphi, \vartheta) \exp(-\jmath 2 \pi F_\vartheta \vartheta)
     }{\varphi} = 0 
     \fuer F_\vartheta > B_\vartheta \Text{und alle} \varphi \in [0, 2 \pi]
 \end{align}
@@ -191,4 +128,4 @@ was uns erlaubt \eqref{2d_dft_interpolation} in das folgende Vektor-Matrix-Vekto
 \end{equation}
 umzuschreiben. Damit besteht der Interpolations-Algorithmus zun\"achst aus der Vorberechnung des Arrays $A$, sowie bei Ausf\"uhrung dann aus der Berechnung von $D_\varphi$ und $D_\vartheta$, sowie der Auswertung von \eqref{fast_2d_dft}.
 
-Man sieht hier der sch\"on, dass die Laufzeitkomplexit\"at von \eqref{fast_2d_dft} ma{\ss}geblich von der r\"aumlichen Bandbegrenzung der Antennen-Richtcharakteristik beeinflusst wird. Je h\"oher die Bandbreite, desto h\"oher ist nicht nur der Aufwand bei der Messung, sondern auch bei der Interpolation. Eine alternative Form der Interpolation, welche diese eventuell nachteilige Eigenschaft nicht hat, ist in \Cref{b-splines} dargestellt.
+Man sieht hier der sch\"on, dass die Laufzeitkomplexit\"at von \eqref{fast_2d_dft} ma{\ss}geblich von der r\"aumlichen Bandbegrenzung der Antennen-Richtcharakteristik beeinflusst wird. Je h\"oher die Bandbreite, desto h\"oher ist nicht nur der Aufwand bei der Messung, sondern auch bei der Interpolation. Eine alternative Form der Interpolation, welche diese eventuell nachteilige Eigenschaft nicht hat, ist in \Cref{bsplines} dargestellt.

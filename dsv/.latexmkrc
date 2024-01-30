@@ -8,3 +8,5 @@ sub makeglossaries {
     if ($silent) { unshift @args, "-q"; }
     return system "makeglossaries", "-d", $path, $base_name; 
 }
+
+$pdflatex='pdflatex -shell-escape';

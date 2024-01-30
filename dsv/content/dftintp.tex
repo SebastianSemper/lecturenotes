@@ -1,0 +1,64 @@
+% !TEX root = ../dsv_script.tex
+%
+%
+Gegeben sei ein periodisches, analoges Signal $x: \R \rightarrow \C$, mit Periode $T_p = 1/F_0$. Wir beobachten dieses Signal auf einem uniformen Raster von Punkten, via $x[n] = x(n T)$ und wollen eine Funktion $y(t)$ herleiten, f\"ur welche die Interpolationsbedingung
+\begin{equation}\label{eadf_interpol_cond}
+    y(nT) = x[n] = x(nT)
+\end{equation}
+erf\"ullt ist. Hier zu entwickeln wir das Signal $x$ in seine Fourier-Reihe via
+\begin{equation}\label{fourier_series}
+    x(t) = \Sum{k=-\infty}{+\infty}{
+        c[k] \exp(\jmath 2 \pi k t F_0) 
+    }.
+\end{equation}
+Nun tasten wir dieses Signal uniform mit Samplerate $F_s = N/T_p = 1/T$ (also passend zur Periodendauer) ab und erhalten die Folge 
+\begin{equation}
+    x[n] = x(n T) = \Sum{k=-\infty}{+\infty}{
+        c[k] \exp(\jmath 2 \pi k n T F_0) 
+    } = \Sum{k=-\infty}{+\infty}{
+        c[k] \exp\left(\jmath 2 \pi k \frac nN\right) 
+    }
+    \Text{f\"ur}
+    n \in \N
+\end{equation}
+bestehend aus den Samples von $x$. Mit der Periodizit\"at von $\exp(\jmath 2 \pi t)$ und der Abtastung erhalten wir au{\ss}erdem noch
+\begin{equation}
+    x[n] = \Sum{k=0}{N-1}{
+        \left[\Sum{\ell=-\infty}{+\infty}{
+            c[k - \ell N]
+        }\right] \exp\left(\jmath 2 \pi k \frac nN\right) 
+    } = \Sum{k=0}{N-1}{
+        \tilde{c}[k] \exp\left(\jmath 2 \pi k \frac nN\right) 
+    },
+\end{equation}
+wobei wir 
+\begin{equation}\label{aliased_ck}
+    \tilde{c}[k] = \Sum{\ell=-\infty}{+\infty}{
+        c[k - \ell N]
+    }
+\end{equation}
+als Abk\"urzung benutzt haben. Ist nun die Funktion $x$ auch bandbegrenzt, d.h.~ihre Fourier-Transformierte $X : \R \rightarrow \C$ verschwindet au{\ss}erhalb eines gewissen Bandes, also
+\begin{equation}
+    X(F) = \Int{-\infty}{+\infty}{x(t) \exp(-\jmath 2 \pi F t )}{t} = 0 \Text{f\"ur} \Abs{F} > B.
+\end{equation}
+Au{\ss}erdem wissen wir, dass die Fourier-Transformation $X$ und die Folge $c[k]$ verkn\"upft sind via 
+\begin{equation}
+    c[k] = \frac{1}{T_p} X(k F_0),
+\end{equation}
+was impliziert, dass die Folge $c[k]$ verschwindet, also gilt
+\begin{equation}
+    c[k] = 0 \Text{f\"ur} \Abs{k} > \frac{B}{F_0}.
+\end{equation}
+Das hei{\ss}t, dass wir nun $F_s = N/T_p$ so gro{\ss} w\"ahlen m\"ussen, dass sich in \eqref{aliased_ck} kein Aliasing f\"ur $\tilde{c}[k]$ ergeben darf. Es muss also gelten
+\begin{equation}
+    N > \lceil B/F_0 \rceil \Text{bzw.} F_s > \lceil B/(F_0 T_p) \rceil.
+\end{equation}
+In diesem Falle gilt, dann dass $c[k] = X[k]$, wobei $X[k]$ die \gls{dft} der Folge $x[n]$ darstellt. Das hei{\ss}, dass wir die Fourier-Koeffizienten der kontinuierlichen Funktion $x$ durch die \gls{dft} der Abtastwerte $x[n]$ bestimmen k\"onnen. Mit \eqref{fourier_series} k\"onnen wir also die Folge $x[n]$ interpolieren, indem wir
+\begin{equation}\label{dft_interpolation}
+    y(t) = \frac{1}{T_p}\Sum{k=-\frac{B}{F_0}}{+\frac{B}{F_0}}{
+        X[k] \exp(\jmath 2 \pi k t F_0) 
+    }
+\end{equation}
+schreiben. Dieses $y$ erf\"ullt die Interpolationsbedingung \eqref{eadf_interpol_cond}, weil wegen der Bandbegrenzung von $x$ und der Periodizit\"at sogar $y(t) = x(t)$ f\"ur alle $t$ gilt.
+
+Man beachte hier, dass nun aus der Folge von diskreten Werten $x[n]$ eine analytische Formel in Form einer \emph{endlichen} Summation entstanden ist. Unter der Annahme der Bandlimitierung von $x$ ist diese Interpolation \emph{exakt} und kann effizient implementiert werden, durch die Vorberechnung der Folge $X[k]$ durch die \gls{fft}~\cite{FFTW05} der Folge $x[n]$. Eine Anwendung der hier vorgestellten Methode zur Interpolation wird in \cref{eadf} aufgezeigt.

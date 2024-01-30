@@ -1,6 +1,6 @@
 % !TEX root = ../dsv_script.tex
 %
-Eine Grundvoraussetzung f\"ur eine praktisch n\"utzliche digitale Signalverarbeitung ist die M\"oglichkeit zwischen dem analogen und digitalen Bereich wechseln zu k\"onnen. Hierbei sollte man auch genau quantifizieren k\"onnen, ob bei diesem Prozess Informationen verloren gehen, oder wie man garantieren kann, dass diese Umwandlung verlustfrei vonstatten geht. Meist nutzt man hierf\"ur das Nyquist-Shannon Sampling Theorem~\cite[Kapitel~1.4.2]{proakis2013}. Die hieraus resultierende sogenannte Nyquist-Sampling-Theorie fu{\ss}t bekannterma{\ss}en auf der Repr\"asentation von bandbegrenzten Signalen durch hinreichend dichte \"aquidistante Abtastwerte. Diese Theorie ist gut studiert, in Textb\"uchern aufbereitet und bildet die Grundlage f\"ur viele Messsysteme und Algorithmen im Digitalen, siehe beispielsweise~\cref{eadf-interpol}.
+Eine Grundvoraussetzung f\"ur eine praktisch n\"utzliche digitale Signalverarbeitung ist die M\"oglichkeit zwischen dem analogen und digitalen Bereich wechseln zu k\"onnen. Hierbei sollte man auch genau quantifizieren k\"onnen, ob bei diesem Prozess Informationen verloren gehen, oder wie man garantieren kann, dass diese Umwandlung verlustfrei vonstatten geht. Meist nutzt man hierf\"ur das Nyquist-Shannon Sampling Theorem~\cite[Kapitel~1.4.2]{proakis2013}. Die hieraus resultierende sogenannte Nyquist-Sampling-Theorie fu{\ss}t bekannterma{\ss}en auf der Repr\"asentation von bandbegrenzten Signalen durch hinreichend dichte \"aquidistante Abtastwerte. Diese Theorie ist gut studiert, in Textb\"uchern aufbereitet und bildet die Grundlage f\"ur viele Messsysteme und Algorithmen im Digitalen, siehe beispielsweise~\cref{dftintp}.
 
 Es gibt jedoch auch einige Nachteile von Nyquist-Sampling, die aus dessen Annahmen und der daraus folgenden Verarbeitung entstehen. Einerseits kann ein endliches Signal im Allgemeinen \emph{nicht} bandbegrenzt sein. Weiterhin entstehen durch die Bandlimitierung von Signalen Gibbs-Artefakte, die besonders in Bildern nicht erw\"unscht sind. Geht es um die Auswertung $x(t)$ eines Signals $x$ zwischen den aufgenommenen Samples $x[n]$, also Interpolation, hat man das Problem, dass die $\Sinc$-Funktion nur sehr langsam mit Rate $1/t$ abf\"allt. Diese Eigenschaft f\"uhrt dazu, dass man f\"ur die Bestimmung eines Wertes $x(t)$ mit einer Genauigkeit von \SI{1}{\percent} etwa $100$ um $t$ benachbarte Samples betrachten muss. Das hei{\ss}t, vor allem bei 2D-Interpolation skaliert der resultierende Rechenaufwand nicht sehr g\"unstig, falls hohe Genauigkeit ben\"otigt wird.
 
@@ -49,13 +49,13 @@ darstellen lassen. Hierbei ist die Funktion $\beta^\ell: \R \rightarrow \R$ defi
         0, \Text{sonst.}
     \end{cases}
 \end{equation}
+In \cref{bsplines_all_splines} sind die Funktionen $\beta^\ell$ f\"ur $\ell = 0, \dots, 3$ dargestellt. Man erkennt sehr gut, dass der Grad der Glattheit von der Ordnung des Splines abh\"angt und dass die Funktionswerte $\beta^\ell(t)$ f\"ur $\Abs{t}>\ell+1/2$ verschwinden. Man spricht von Funktionen mit kompaktem Tr\"ager. Das hei{\ss}t die Summation in \eqref{bsplines_summation} ist f\"ur fixes $t \in \R$ \emph{endlich} und ist auf $\ell+1$ Summanden beschr\"ankt!
 %
 \begin{figure}
-    \caption{}\label{bsplines_order3}
+    \centering\includegraphics[width=0.9\textwidth]{img/bsplines/all_splines.png}
+    \caption{Kubische B-Splines f\"ur Abtastung an den Werten $n = 0, \dots, 12$.}\label{bsplines_all_splines}
 \end{figure}
 %
-In \cref{bsplines_order3} sind die Funktionen $\beta^\ell$ f\"ur $\ell = 0, \dots, 3$ dargestellt. Man erkennt sehr gut, dass der Grad der Glattheit von der Ordnung des Splines abh\"angt und dass die Funktionswerte $\beta^\ell(t)$ f\"ur $\Abs{t}>\ell+1/2$ verschwinden. Man spricht von Funktionen mit kompaktem Tr\"ager. Das hei{\ss}t die Summation in \eqref{bsplines_summation} ist f\"ur fixes $t \in \R$ \emph{endlich} und ist auf $\ell+1$ Summanden beschr\"ankt!
-
 Wir wollen nun eine explizite Formel f\"ur $\beta^\ell$ entwickeln. Hierzu betrachten wir die Fourier-Transformation 
 \begin{equation}
     B^\ell(\omega) 
@@ -83,7 +83,7 @@ Weiterhin kann man zeigen, dass folgende Formeln f\"ur Differentiation und Integ
     \left(\beta^\ell\right)^\prime(t) =
         \beta^{\ell-1}(x + 1/2) - \beta^{\ell-1}(x - 1/2), 
     \Int{-\infty}{t}{\beta^\ell(s)}{s} = 
-        \Sum{p = 0}{+\infty}{\beta^{\ell+1}(t - 1/2 - p)}
+        \Sum{p = 0}{+\infty}{\beta^{\ell+1}(t - 1/2 - p)}.
 \end{equation}
 Das hei{\ss}t, dass man auch einen kompletten Spline $s$ differenzieren und integrieren kann, indem man nutzt, dass sowohl Differentiation, als auch Integration lineare Operationen sind. Es gilt also mit \eqref{bsplines_summation} und \eqref{bsplines_deriv_int} beispielsweise f\"ur die Differentiation, dass
 \begin{equation}
@@ -108,22 +108,35 @@ Wir m\"ochten uns eine spezielle Version der B-Splines genauer Ansehen, da sie i
     \beta^3(t) = \begin{cases}
         \frac 23 - \Abs{x}^2 + \frac{\Abs{x}^3}{2} \fuer \Abs{x} < 1\\
         \frac{(2 - \Abs{x})^3}{6}, \fuer \Abs{x} \in [1, 2) \\
-        0, \fuer \Abs{x} > 2.
+        0, \fuer \Abs{x} > 2,
     \end{cases}
 \end{equation}
-In Analogie zum bekannten Nyquist-Sampling wollen wir untersuchen, wie man aus endlich vielen gegebenen Abtastwerten $x[n]$ mit $n \leqslant N$ eine Darstellung wie in \eqref{bsplines_summation} herleiten k\"onnen, welche die abgetasteten Werte exakt interpoliert. Aufgabe ist es also aus $x[n]$ die Folge $c[k]$ zu bestimmen.
+welche in \cref{bsplines_eval} auch einmal implementiert wurde. In Analogie zum bekannten Nyquist-Sampling wollen wir untersuchen, wie man aus endlich vielen gegebenen Abtastwerten $x[n]$ mit $n \leqslant N$ eine Darstellung wie in \eqref{bsplines_summation} herleiten k\"onnen, welche die abgetasteten Werte exakt interpoliert. Aufgabe ist es also aus $x[n]$ die Folge $c[k]$ zu bestimmen.
 
-Hierzu ben\"otigen wir die sogenannte Interpolationsbedingung, welche f\"r eine zu interpolierende Funktion $x$ und ihre Abtastwerte $x[n] = x(n)$ fordert, dass
+\begin{listing}
+\begin{minted}{python}
+def cubic_spline(t: np.ndarray) -> np.ndarray:
+    s1: np.ndarray = 2.0/3.0 - np.abs(t)**2 + 0.5 * np.abs(t)**3
+    s2: np.ndarray = (2 - np.abs(t))**3 / 6
+    s3: np.ndarray = np.zeros_like(t)
+    return s3 + s1 * (np.abs(t) < 1) + s2 * (np.abs(np.abs(t) - 1.5) <= 0.5)
+\end{minted}
+\caption{Berechnung des kubischen B-Splines.}\label{bsplines_eval}            
+\end{listing}
+
+Hierzu ben\"otigen wir die sogenannte Interpolationsbedingung, welche f\"ur eine zu interpolierende Funktion $x$ und ihre Abtastwerte $x[n] = x(n)$ fordert, dass
 \begin{equation}\label{bsplines_interpol}
     x(n) = x[n] = s(n) = \Sum{k \in \Z}{}{
         c[k] \beta^{3}(n - k)
     }
 \end{equation}
 gilt. Wir fordern also \emph{exakte} Interpolation. Nun k\"onnte man f\"ur die Bestimmung der Folge $c[k]$ ein lineares Gleichungssystem aufstellen, welches die Form
+%
 \begin{equation}\label{bsplines_lse}
     B \cdot c = y
 \end{equation}
-hat, wobei die Systematrix B durch die Auswertung der B-Splines bestimmt ist und der Vektor $y$ den Werten $x[n]$ entspricht. Dem endlichen Tr\"ger der Funktionen $\beta^\ell$ ist es zu verdanken, dass die Matrix $B$ sparse (genaur: band-diagonal) und demnzufolge effizient invertierbar ist. Doch die Anwendung von $B^{-1}$ ist numerisch instabil, weshalb wir einen alternativen Weg einschlagen, der auf inverser Filterung beruht.
+%
+hat, wobei die Systematrix B durch die Auswertung der B-Splines bestimmt ist und der Vektor $y$ den Werten $x[n]$ entspricht. Dem endlichen Tr\"ager der Funktionen $\beta^\ell$ ist es zu verdanken, dass die Matrix $B$ mit nur weniger von $0$ verschiedenen Werten besetzt. (genauer: band-diagonal) und demzufolge effizient invertierbar ist. Doch die Anwendung von $B^{-1}$ ist numerisch instabil, weshalb wir einen alternativen Weg einschlagen, der auf inverser Filterung beruht.
 
 Sehen wir uns \eqref{bsplines_interpol} genauer an. Wir finden, dass sich diese Gleichung nach Definition von $\beta[k] = \beta^3(k)$ als Faltung via
 \begin{equation}\label{bsplines_conv}
@@ -133,6 +146,7 @@ schreiben l\"asst. Nach Transformation in den $z$-Bereich erhalten wir
 \begin{equation}\label{bsplines_ztrafo}
     X(z) = C(z) \cdot B(z) \Rightarrow C(z) = \frac{X(z)}{B(z)},
 \end{equation}
+
 was uns motiviert eine Darstellung von $1/B(z)$ herzuleiten. F\"ur die kubischen B-Splines folgt, dass
 \begin{equation}\label{bsplines_filter}
     B(z) = \frac{z + 4 + z^{-1}}{6} 
@@ -143,10 +157,10 @@ gilt. Wobei man zeigen kann, dass $z_1 = \sqrt{3} - 2 < 1$ gilt. Wir betrachten 
 \begin{align}
     c^+[k] &= 
         x[n] + z_1 c^+[k-1] \fuer k = 1, \dots N-1 \\
-    c[k]/6 = c^-[k] &= 
+    -c[k]/6 = c^-[k] &= 
         z_1\left( c^{-}[k+1] - c^+[k]\right) \fuer k = N-2, \dots, 0
 \end{align}
-ausdr\"ucken l\"asst. Diese Methode der kausalen und anti-kausalen Filterung ist deutlich effizienter und stabiler, als \eqref{bsplines_lse}, da beispielsweise keine Divisionen notwendig sind. Nun ist es noch notwendig Anfangswerte f\"r $c^+[k]$ und $c^-[k]$ zu finden. Man sieht, dass die Impulsantwort von $c^+$ eine abklingende Exponentialfunktion ist, also gilt
+ausdr\"ucken l\"asst. Diese Methode der kausalen und anti-kausalen Filterung ist deutlich effizienter und stabiler, als \eqref{bsplines_lse}, da beispielsweise keine Divisionen notwendig sind. Nun ist es noch notwendig Anfangswerte f\"ur $c^+[k]$ und $c^-[k]$ zu finden. Dies ist aufgrund der Endlichkeit von $x$ nicht ohne Weiteres m\"oglich. Man sieht, dass die Impulsantwort von $c^+$ eine abklingende Exponentialfunktion ist, also gilt
 \begin{equation}
     c^+[0] = \Sum{k=0}{\infty}{x[n] z_1^k} \approx \Sum{k=0}{K}{x[n] z_1^k},
 \end{equation}
@@ -154,7 +168,35 @@ wobei man $K \in \N$ so w\"ahlen kann, dass $z_1^K \leqslant \varepsilon$ erf\"u
 \begin{equation}
     c^-[N-1] = \frac{z_1}{1 - z_1^2}\left(c^+[N-1] + z_1 c^+[N-2]\right)
 \end{equation}
-effizient und exakt initialisieren.
+effizient und exakt initialisieren. Beides wurde in \cref{bsplines_coeffs} beispielhaft implementiert und eine beispielhafte Ausgabe nach Auswertung von \eqref{bsplines_summation} ist in \cref{bsplines_interpol_pic} dargestellt.
+%
+\begin{listing}[t]
+\begin{minted}{python}
+def filter_coeffs(x_n: np.ndarray) -> np.ndarray:
+    z_1: float = np.sqrt(3) - 2.0
+    c_k_p: np.ndarray = np.zeros_like(x_n)
+    c_k_m: np.ndarray = np.zeros_like(x_n)
+    
+    c_k_p[0] = np.sum(x_n * np.power(z_1, np.arange(x_n.size)))
+    
+    for kk in range(1, x_n.size):
+        c_k_p[kk] = x_n[kk] + z_1 * c_k_p[kk-1]
+    
+    c_k_m[-1] = z_1 * (c_k_p[-1] + z_1 * c_k_p[-2]) / (1.0 - z_1**2)
+
+    for kk in range(2, x_n.size+1):
+        c_k_m[-kk] = z_1 * (c_k_m[-kk+1] + c_k_p[-kk])
+        
+    return - 6 * c_k_m
+\end{minted}
+\caption{Berechnung der B-Spline Koeffizienten $c[k]$.}\label{bsplines_coeffs}            
+\end{listing}
+%
+\begin{figure}[t]
+    \centering\includegraphics[width=0.9\textwidth]{img/bsplines/interpol.png}
+    \caption{Kubische B-Spline-Interpolation f\"ur Abtastung an den Werten $n = 0, \dots, 12$.}\label{bsplines_interpol_pic}
+\end{figure}
+%
 %
 %
 \subsubsection{Verbindung zur Nyquist-Sampling-Theorie}
