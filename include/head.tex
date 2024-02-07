@@ -1,5 +1,10 @@
 \input{../lib/math.tex}
 
+\usepackage{morewrites}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
 \usepackage[ngerman]{babel}
 \usepackage{csquotes}
 \usepackage{fullpage}
@@ -12,10 +17,13 @@
 
 \usepackage{siunitx}
 
-\usepackage[sorting=none, backref]{biblatex}
+\usepackage[sorting=none,
+maxbibnames=99,
+defernumbers=true,
+style=numeric,
+backref=true,
+giveninits=true,]{biblatex}
 \AtEveryBibitem{
- \clearfield{url}
-\clearfield{doi}
  \clearfield{addendum}
  \clearfield{month}
  \clearfield{eprint}
@@ -39,10 +47,14 @@
 
 \usepackage{placeins}
 \usepackage{etoolbox}
-\pretocmd{\section}{\FloatBarrier\clearpage}{}{}
-\pretocmd{\subsection}{\FloatBarrier}{}{}
 
 \numberwithin{equation}{subsection}
 
 \usepackage{minted}
 
+\renewcommand\listingscaption{Code-Schnipsel}
+\renewcommand\listoflistingscaption{Code-Schnipsel-Verzeichnis}
+
+\usepackage{helvet}
+\usepackage{mathpazo}
+\usepackage{sourcecodepro}
