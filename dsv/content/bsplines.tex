@@ -8,7 +8,7 @@ Aus diesem Grund m\"ochten wir uns eine alternative Sampling-Theorie genauer ans
 
 \subsubsection{B-Splines als Polynome}
 
-Allgemein bezeichnet man st\"uckweise definierte und stetig differenzierbare Polynome als Splines. Man bezeichnet die Stellen an denen zwei unterschiedliche Polynome zusammensto{\ss}en als Knoten. Ein Spline der Ordnung $\ell \in \N$ ist ein Polynom vom Grad $\ell$, ist also von der Form
+Allgemein bezeichnet man st\"uckweise definierte und stetig differenzierbare Polynome als Splines. Man nennt die Stellen an denen zwei unterschiedliche Polynome zusammensto{\ss}en als Knoten. Ein Spline der Ordnung $\ell \in \N$ ist ein Polynom vom Grad $\ell$, ist also von der Form
 \begin{equation}
     p(x) = 
         a_{\ell} t^{\ell} 
@@ -111,7 +111,7 @@ Wir m\"ochten uns eine spezielle Version der B-Splines genauer Ansehen, da sie i
         0, \fuer \Abs{x} > 2,
     \end{cases}
 \end{equation}
-welche in \cref{bsplines_eval} auch einmal implementiert wurde. In Analogie zum bekannten Nyquist-Sampling wollen wir untersuchen, wie man aus endlich vielen gegebenen Abtastwerten $x[n]$ mit $n \leqslant N$ eine Darstellung wie in \eqref{bsplines_summation} herleiten k\"onnen, welche die abgetasteten Werte exakt interpoliert. Aufgabe ist es also aus $x[n]$ die Folge $c[k]$ zu bestimmen.
+welche in \cref{bsplines_eval} auch einmal implementiert wurde. In Analogie zum bekannten Nyquist-Sampling wollen wir untersuchen, wie wir aus endlich vielen gegebenen Abtastwerten $x[n]$ mit $n \leqslant N$ eine Darstellung wie in \eqref{bsplines_summation} herleiten k\"onnen, welche die abgetasteten Werte exakt interpoliert. Aufgabe ist es also aus $x[n]$ die Folge $c[k]$ zu bestimmen.
 
 \begin{listing}
 \begin{minted}{python}
@@ -136,7 +136,7 @@ gilt. Wir fordern also \emph{exakte} Interpolation. Nun k\"onnte man f\"ur die B
     B \cdot c = y
 \end{equation}
 %
-hat, wobei die Systematrix B durch die Auswertung der B-Splines bestimmt ist und der Vektor $y$ den Werten $x[n]$ entspricht. Dem endlichen Tr\"ager der Funktionen $\beta^\ell$ ist es zu verdanken, dass die Matrix $B$ mit nur weniger von $0$ verschiedenen Werten besetzt. (genauer: band-diagonal) und demzufolge effizient invertierbar ist. Doch die Anwendung von $B^{-1}$ ist numerisch instabil, weshalb wir einen alternativen Weg einschlagen, der auf inverser Filterung beruht.
+hat, wobei die Systematrix $B$ durch die Auswertung der B-Splines bestimmt ist und der Vektor $y$ den Werten $x[n]$ entspricht. Dem endlichen Tr\"ager der Funktionen $\beta^\ell$ ist es zu verdanken, dass die Matrix $B$ mit nur wenigen von $0$ verschiedenen Werten besetzt ist. (genauer: band-diagonal) und demzufolge effizient invertierbar ist. Doch die Anwendung von $B^{-1}$ ist numerisch instabil, weshalb wir einen alternativen Weg einschlagen, der auf inverser Filterung beruht.
 
 Sehen wir uns \eqref{bsplines_interpol} genauer an. Wir finden, dass sich diese Gleichung nach Definition von $\beta[k] = \beta^3(k)$ als Faltung via
 \begin{equation}\label{bsplines_conv}
@@ -146,7 +146,6 @@ schreiben l\"asst. Nach Transformation in den $z$-Bereich erhalten wir
 \begin{equation}\label{bsplines_ztrafo}
     X(z) = C(z) \cdot B(z) \Rightarrow C(z) = \frac{X(z)}{B(z)},
 \end{equation}
-
 was uns motiviert eine Darstellung von $1/B(z)$ herzuleiten. F\"ur die kubischen B-Splines folgt, dass
 \begin{equation}\label{bsplines_filter}
     B(z) = \frac{z + 4 + z^{-1}}{6} 
@@ -261,7 +260,7 @@ erhalten, wobei wir analog zu \eqref{bsplines_sinckernel} den Interpolationskern
         b^{-1,\ell}[p] \beta^{\ell}(t - p)
     }
 \end{equation}
-definiert haben. Man kann zeigen, dass $\lim_{l \rightarrow \infty} h^\ell = g$. Das hei{\ss}t, dass die $\Sinc$-Interpolation als Grenzwert der B-Spline Interpolation aufgefasst werden kann -- oder andersherum die B-Spline-Interpolation als Approximation der $\Sinc$-Interpolation. Das hei{\ss}t, dass auch im Frequenzbereich Konvergenz in der Form
+definiert haben. Man kann zeigen, dass $\lim_{l \rightarrow \infty} h^\ell = g$. Das hei{\ss}t, dass die $\Sinc$-Interpolation als Grenzwert der B-Spline Interpolation aufgefasst werden kann -- oder andersherum -- die B-Spline-Interpolation als Approximation der $\Sinc$-Interpolation. Das hei{\ss}t, dass auch im Frequenzbereich Konvergenz in der Form
 \begin{equation}
     H^\ell(\omega) = \left(\frac{\sin(\omega/2)}{\omega/2}\right)^{\ell+1} \frac{1}{B^{\ell}(\exp(\jmath \omega))} \rightarrow_{\ell \rightarrow \infty} \Rect(\omega)
 \end{equation} 

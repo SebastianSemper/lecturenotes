@@ -1,4 +1,12 @@
 {
     "ltex.language": "de-DE",
-    "ltex.additionalRules.enablePickyRules": true
+    "ltex.additionalRules.enablePickyRules": true,
+    "spellright.language": [
+        "de"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ]
 }

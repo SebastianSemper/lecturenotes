@@ -1,14 +1,29 @@
 \documentclass[ngerman]{article}
 \input{../include/head.tex}
-
+%
 \title{Anhang zu Digitale Signalverarbeitung}
 \author{Sebastian Semper -- FG Elektrische Messtechnik und Signalverarbeitung -- EMS}
-
+%
 \begin{document}
 \input{../include/frontmatter.tex}
 %
 %
+\section{Grundlagen}
+%
+\input{content/basics.tex}
+%
+%
 \section{Theorie}
+%
+%
+\subsection{Fourier-Transformation}\label{fourier}
+%
+\input{content/fourier.tex}
+%
+%
+\subsection{Abtastung von Signalen}\label{sampling}
+%
+\input{content/sampling.tex}
 %
 %
 \subsection{DFT-Interpolation}\label{dftintp}
@@ -16,12 +31,23 @@
 \input{content/dftintp.tex}
 %
 %
+\subsection{Wavelets}\label{wavelets}
+%
+%
 \subsection{B-Splines}\label{bsplines}
 %
 \input{content/bsplines.tex}
 %
 %
+\subsection{Zuf\"allige Signale}
+%
+\input{content/random.tex}
+%
+%
 \section{Anwendungen}
+%
+%
+\subsection{Radar}\label{radar}
 %
 %
 \subsection{DFT-Interpolation von Antennenantworten}\label{eadf}
