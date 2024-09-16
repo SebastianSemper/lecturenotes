@@ -1,0 +1,39 @@
+\begin{itemize}
+    \item Fourier Transform (theoretisches tool, weil digital nicht umsetzbar): kernel, eigenschaften (linear, shift, skalierung), beispiele uebung 
+    \item Discrete Time Fourier Transform (theoretisches tool, weil digital nicht umsetzbar)
+    \item Discrete Fourier Transform
+    \begin{itemize}
+        \item eigenschaften der kernel-funktion: perioden, wann reel, ..., was passiert bei abtastung?
+        \item implizite periodifizierung des signals?
+        \item zusammenhang zur physik
+        \item dc, nyquist-frequenzen, wann vorhanden?
+        \item reelles signal: dc und nyquist reell
+    \end{itemize}
+    \item zusammenhang zwischen ft, dtft und dft (intuition mit periodifizierung vs. abtastung; non-intuition durch kernel angucken)
+    \item dft als approximation der ft
+    \begin{itemize}
+        \item $s(t) = \exp(-t/\tau) \cdot \sin(\omega_0 \cdot t)$, 
+        \item $s(t) = \exp(-(t - \mu)^2/\sigma^2)$ (Uebung)
+    \end{itemize}
+    \item spectral leakage;
+\end{itemize}
+\subsection{Anwendung der Transformationen}
+\begin{itemize}
+    \item fft
+    \item bild-kompression (DCT, JPEG)
+    \item fensterung \footnote{\url{https://docs.scipy.org/doc/scipy/reference/signal.windows.html}}
+    \item schnelle faltung (cyclic/non-cyclic)
+    \item beliebig lange signale overlap add, overlap save (\"Ubung: irgendwas mit audio prosessing)
+    \item Unschaerfe Relation (Fensterbreite vs. Frequenzaufloesung)\cite[chpt. 4.2]{mallat2008wavelets}
+    \item Multiraten Systeme
+\end{itemize}
+%
+%
+\subsection{DFT-Interpolation}\label{dftintp}
+%
+\input{content/dftintp.tex}
+%
+%
+\subsection{DFT-Interpolation von Antennenantworten}\label{eadf}
+%
+\input{content/eadf.tex}

@@ -6,7 +6,7 @@ Es gibt jedoch auch einige Nachteile von Nyquist-Sampling, die aus dessen Annahm
 
 Aus diesem Grund m\"ochten wir uns eine alternative Sampling-Theorie genauer ansehen -- die B-Splines~\cite{unser1999splines_mag}. Wir f\"uhren zun\"achst die auf Polynomen basierende Signalverarbeitung ein und vergleichen sie anschlie{\ss}end zur bereits bekannten Nyquist-Theorie.
 
-\subsubsection{B-Splines als Polynome}
+\subsection{B-Splines als Polynome}
 
 Allgemein bezeichnet man st\"uckweise definierte und stetig differenzierbare Polynome als Splines. Man nennt die Stellen an denen zwei unterschiedliche Polynome zusammensto{\ss}en als Knoten. Ein Spline der Ordnung $\ell \in \N$ ist ein Polynom vom Grad $\ell$, ist also von der Form
 \begin{equation}
@@ -100,7 +100,7 @@ Das hei{\ss}t, dass man auch einen kompletten Spline $s$ differenzieren und inte
 Diese Eigenschaft macht man sich auch f\"ur kompliziertere Operationen, wie Rotationen und Verzerrungen der Interpolante zunutze.
 %
 %
-\subsubsection{Kubische B-Spline Interpolation}
+\subsection{Kubische B-Spline Interpolation}
 %
 %
 Wir m\"ochten uns eine spezielle Version der B-Splines genauer Ansehen, da sie in der Anwendung den Spagat zwischen Komplexit\"at und Approximationsg\"ute sehr gut hinbekommen. Wir setzen hierzu $\ell=3$ und erhalten somit ein Polynom dritten Grades der Form
@@ -198,7 +198,7 @@ def filter_coeffs(x_n: np.ndarray) -> np.ndarray:
 %
 %
 %
-\subsubsection{Verbindung zur Nyquist-Sampling-Theorie}
+\subsection{Verbindung zur Nyquist-Sampling-Theorie}
 %
 %
 Wir wollen als Abschluss eine Verbindung zum Sampling und der Interpolation~\cite[Kapitel~6.1]{proakis2013} von bandbegrenzten Funktionen mit endlicher Energie ziehen. Nehmen wir als Wiederholung zun\"achst an, dass das bandbegrenzte Signal $x_a$ mit endlicher Energie und Fourier-Transformation $X_a$ mindestens kritisch mit Rate $F_s$ zu den Werten $x[n]$ abgetastet wurde. Wir bezeichnen mit $X$ die \gls{dtft} von $x[n]$. Dann gilt als Zusammenhang zwischen den beiden Spektra, dass

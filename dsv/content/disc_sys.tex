@@ -1,0 +1,40 @@
+
+\cite[chp. 2.1]{proakis2013}
+
+
+\subsection{Diskrete Signale}
+\begin{itemize}
+    \item darstellung: funktion, tabelle, folge, grafisch, $z$-trafo (\Cref{ztrafo})alle gleichwertig, aber verschieden nuetzlich, je nach situation
+    \item beispiele: delta, heavyside, ramp, exponential
+    \item energie in signal, durchschnittliche leistung, $E < \infty \Rightarrow P = 0$
+    \item beispiel: heavyside, 
+    \item \"Ubung: Problem 2.1, 2.2, 2.3
+    \item periodic, aperiodic
+    \item symmetrisch, anti-symmetrisch
+    \item manipulation: verzoegerung ($+-$), skalierung, addition, multiplikation
+\end{itemize}
+
+\subsection{Diskrete Systeme}
+\begin{itemize}
+    \item JEDE manipulation eines signals kann als system aufgefasst werden
+    \item system $\mathcal{T}$ ist als abbildung zu verstehen. signal rein, anderes signal raus: $y[n] = (\mathcal{T}x)[n]$ (auf bedeutung von schreibweise eingehen)
+    \item beispiele: \cite[ex. 2.2.1]{proakis2013} (a-c vorlesung, rest uebung)
+    \item vergangenheit der systeme: akkumulator
+    \item blockschaltbilder: adder, multiplikator, scaler, delay, uebung \cite[ex 2.2.3]{proakis2013}(per hand, per modularem code)
+    \item statisch vs. dynamisch (gedaechtnislos, mit gedaechtnis)
+    \item causal, antikausal, relaxed state
+    \item stabilitaet
+    \item zeitvariant vs zeitinvariant: definition
+\end{itemize}
+
+\subsection{Diskrete \texorpdfstring{\acrshort{lti}}{LTI}-Systeme}\label{disc_lti}
+
+\begin{itemize}
+    \item wiederholung der eigenschaften: shift-invarianz, linearitaet
+    \item reaktion auf signal, das aus bausteinsignalen zusammengesetzt wurde
+    \item darstellung als summe von skalierten, geshifteten einheitsstoessen
+    \item faltungsformel
+    \item algorithmus zur berechnung
+    \item exerzieren von beispiel 2.3.2, uebung programmieren (naiv, scipy convolve)
+    \item exerzieren von beispiel 2.3.3, uebung programmieren der approximation
+\end{itemize}
