@@ -1,47 +1,186 @@
 \begin{itemize}
-    \item komplexe zahlen
-        \begin{itemize}
-            \item darstellungen
-            \item multiplikation
-            \item beispiel: mandelbrot-menge (\"Ubung)
-        \end{itemize}
-    \item signale
-        \begin{itemize}
-            \item kontinuierlich
-            \item zeit-diskret (nicht definiert dazwischen), wert-diskret
-            \item 1D (zeit), 2D/3D (bild, video, voxel)
-            \item beispiele (\"Ubung): phasor als harmonische
-        \end{itemize}
-    \item signale als vektoren: 
-        \begin{itemize}
-            \item vektor-rechnung
-            \item basen: bausteine von signalen, dimension entspricht benoetigter information, um beliebiges signal darzustellen
-            \item lineare abbildungen: "passen zu vektoren" manipulation von signalen, \gls{ft}, \gls{dft}, differentiation, gegenbeispiele (exp, sin)
-            \item basis-wechsel: verschiedene darstellung des gleichen signals (analyse, synthese)
-            \item eigenwerte/vektoren: richtungen entlang derer die lineare abbildung "einfach" ist, i.e. skaliert
-            \item geometrie von signalen: skalarprodukt, norm, 
-            \item \"Ubung: dot, inner, norm, dft, eigs (random)
-            \item \"Ubung: bild-kompression mit svd
-        \end{itemize}
-    \item spezielle signale:
-    \begin{itemize}
-        \item dirac
-        \item heavyside
-        \item harmonic
-        \item endliche folgen, pfeil
-        \item periodische folgen
-    \end{itemize} 
-    \item operationen mit signalen
-    \begin{itemize}
-        \item faltung
-        \item korrelation
-        \item zyklische faltung
-    \end{itemize}
-    \item lineare systeme: 
-        \begin{itemize}
-            \item beispiel fuer lineare abbildungen
-            \item zeitinvariant
-            \item eigenfunktionen
-            \item beispiele: verzoegerung, skalierung, kopieren + verzoegerung (\"Ubung)
-        \end{itemize}
+    % \item signale als vektoren: 
+    %     \begin{itemize}
+    %         \item basis-wechsel: verschiedene darstellung des gleichen signals (analyse, synthese)
+    %         \item eigenwerte/vektoren: richtungen entlang derer die lineare abbildung "einfach" ist, i.e. skaliert
+    %         \item geometrie von signalen: skalarprodukt, norm, 
+    %         \item \"Ubung: dot, inner, norm, dft, eigs (random)
+    %         \item \"Ubung: bild-kompression mit svd
+    %     \end{itemize}
+    % \item lineare systeme: 
+    %     \begin{itemize}
+    %         \item beispiel fuer lineare abbildungen
+    %         \item zeitinvariant
+    %         \item eigenfunktionen
+    %         \item beispiele: verzoegerung, skalierung, kopieren + verzoegerung (\"Ubung)
+    %     \end{itemize}
 \end{itemize}
+
+Digitale Signalverarbeitung ist ein Feld, das sich vieler verschiedener mathematischer Grundlagen bedient, um die gefundenen Zusammenh\"ange rigoros, knapp und gleichzeitig elegant zu formulieren.
+Deshalb kommen wir nicht umhin, uns einiger dieser Grundlagen zu erinnern. 
+Alles hier knapp aufgelistete sollte schon bekannt sein und dient nur als bequemes Nachschlagewerk f\"ur das kommende Semester.
+
+\subsection{Komplexe Zahlen}
+
+Die \emph{komplexen Zahlen} $\C$ sind die Menge aller $z = x + \jmath y$, wobei $x,y \in \R$ und f\"ur die imagin\"are Einheit $\jmath$ gilt, dass $\jmath^2 = -1$.
+Wir nutzen hier speziell $\jmath$ in Abgrenzung zu $i$ oder $j$, da diese oft als Indices oder Laufvariablen auftreten.
+Bei $z = x + \jmath y$ nennen wir $x =\Re(z)$ den Realteil und respektive $y = \Im(z)$ den Imagin\"arteil.
+Komplexe Zahlen lassen sich auch in der Polarform $z = r \exp(\jmath \phi)$ darstellen, wobei $r = \Abs{z} = \sqrt{\Re(z)^2 + \Im(z)^2} \geq 0$ den Betrag und $\phi = \angle(z) = \arctan(y,x)$ das Argument von $z$ darstellen.
+Die zu $z = r \exp(\jmath \phi) = x + \jmath y$ komplex konjugierte Zahl ist $z^\ast = r \exp(-\jmath \phi) = x - \jmath y$.
+
+Komplexe Zahlen haben viele interessante Eigenschaften und Anwendungen, vor allem in der digitalen Signalverarbeitung.
+Beispielsweise f\"ur die Darstellung von einem modulierten reellen Passband Signal $s \D \R \rightarrow \R$ dargestellt durch
+\[
+s(t) = x(t)\cos(\omega t) + y(t)\sin(\omega t) \in \R,
+\]
+die \"aquivalente Darstellung im komplexen Basisband
+\[
+s_B(t) = x(t) + \jmath y(t) \Text{mit} \R(s_B(t)\exp(\jmath \omega t)) = s(t).
+\]
+existiert. Man sagt auch, dass $s_B \exp(\jmath \omega t)$ das analytische Signal zu $s$ darstellt.Dass komplexe Zahlen viele \"Uberaschungen bereithalten sieht man wenn man sich simuliert f\"ur welche $c \in \C$ die Folge
+\[
+z_{n+1} = z_{n}^2 + c
+\]
+konvergiert oder divergiert, wenn man $z_0 = 0$ setzt (\"Ubung). 
+%
+%
+\subsection{Signale}
+%
+\subsubsection{Definition und Typen}
+%
+Wir haben gerade schon von Signalen gesprochen, ohne sie etwas genauer einzuf\"uhren. 
+Ganz allgemein kann man sich Signale als Objekte vorstellen, die abh\"angig von Raum, Zeit, oder beidem, physikalische Messgr\"o\ss{}en, wie Spannungen, Feldst\"arken, oder Temperaturen modellieren/abbilden.
+
+Die theoretische Darstellung von Signalen erfolgt durch \emph{Funktionen}.
+Eine Funktion $s : D \rightarrow B$ besitzt einen Namen ($s$), einen Definitionsbereich $D$ und einen Bildbereich $B$.
+Hierbei sind $D$ und $B$ zun\"achst irgendwelche Mengen. 
+Die Funktion $s$ bildet nun Paare $(d,b)$ zwischen Mengenelementen von $D$ und $B$, indem man schreibt $(d, s(d))$, oder $d \mapsto s(d) = b$.
+Der Witz ist nun, dass man ein Signal mit physikalischer Bedeutung erh\"alt, indem man lediglich $D$ und $B$ geschickt w\"ahlt.
+
+Ist $D = B = \R$ so sprechen wir von einem reellen Signal $s$ und meist denken wir dabei bei $D$ an die Zeitachse, weshalb wir auch $s \mapsto s(t)$ schreiben. 
+Ist $D = R^3$, $B = \R$, so denken wir meist an den dreidimensionalen Raum f\"r den Definitionsbereich und haben als ein Signal im Raum gegeben.
+Ist nun jedoch $D = \Z$, $B = \R$, so ist das Signal nur f\"ur die ganzen Zahlen $\Z$ definiert, weshalb wir dann von einem Zeitdiskreten Signal sprechen.
+Meist schreiben wir hierf\"ur kurz $s[k] \in \R, k\in \Z$.
+Man soll sich hier nicht vorstellen, dass die Werte "zwischen" den ganzen Zahlen nur fehlen w\"urden. 
+So ist dies \emph{nicht} zu verstehen. 
+Zwischen den gegeben Werten ist keine Information vorhanden!
+In manchen Situationen werden wir die diskreten Signale explizit aufschreiben wollen. 
+In diesen F\"allen markieren wir die Stelle $k = 0$ via
+\[
+\dots, 0, 1, 2, \Start{3}, 2, 1, 0, \dots,
+\]
+um eine bequeme Schreibweise f\"ur solche Folgen zu erhalten. 
+
+Versuchen sie f\"ur m\"oglichst viele verschiedene Kombinationen von $D$ und $B$ Beispiele zu finden (\"Ubung).
+%
+\subsubsection{Signale als Vektoren}
+%
+Um mit Signalen gut umgehen zu k\"onnen, ist es wichtig ihre Eigenschaften als mathematische Objekte zu kennen.
+Intuitiv stellt man sich vor, dass man Signale in ihrer Intensit\"at ver\"andern k\"onnen sollte, und f\"ur beliebige \"Anderung der Intsit\"at wieder ein Signal erh\"alt.
+Wir gehen hier zun\"acht der Einfachheit halber von $D = B = \R$ aus.
+
+Definiert man f\"ur $a \in \R$ das Objekt $a \cdot s$ als $t \mapsto a \cdot s(t)$ so erh\"alt man wieder ein Signal.
+Die Werte von $s$ werden also einfach skaliert.
+Betrachtet man nun zwei Signale $s_1, s_2$ und definiert $s_1 + s_2$ als $t \mapsto s_1(t) + s_2(t)$, so erhalten wir die Summe oder die Superposition von $s_1$ und $s_2$.
+Da Signale oft physikalische Messgr\"o\ss{}en darstellen, macht dies auch oft Sinn, da in der Physik das Prinzip der Superposition oft eine Rolle spielt.
+Wenn wir die beiden Fakten nun kombinieren erhalten wir f\"ur $a_1, a_2 \in \R$ und zwei Signale $s_1, s_2$, dass
+\[
+(a_1 s_1 + a_2 s_2)(t) = a_1 s_1(t) + a_2 s_2(t)
+\]
+wieder ein Signal repr\"asentiert.
+Objekte, die diese Eigenschaft haben, nennt man \emph{Vektoren} und diese leben in einem \emph{Vektorraum}.
+
+Das mag erstmal nicht so schockieren, aber wir gewinnen dadurch \emph{alle} Werkzeuge aus der linearen Algebra f\"ur unsere Zwecke.
+Beispielsweise k\"onnen wir nun geschickt Bausteine f\"ur eine gewisse Untergruppe von Signalen finden, mit denen sich diese Signale gut und informativ beschreiben lassen.
+Beispielsweise k\"onnten wir uns fragen, ob es f\"ur den Vektorraum der Bild-Signale eine Basis gibt, sodass f\"ur jedes Bild $b$ eine Darstellung existiert, dass
+\[
+b(x,y) = c_1 b_1(x,y) + c_2 b_2(x,y) + \dots,
+\]
+gilt. 
+Die Zahlen $c_1, c_2, \dots$ k\"onnen also das Signal $b$ darstellen, indem man einfach die Elemente aus der Basis hernimmt, entsprechend skaliert und summiert.
+In gewisser Weise \emph{sind} die Koeffizienten $c_i$ das Signal $b$.
+Vielleicht gelingt es uns, die Menge $\{b_1, b_2, \dots\}$ so zu konstruieren, dass wir immer nur \emph{wenige} von diesen $b_i$ brauchen, sodass wir \emph{jedes beliebige} Bild aus einer Fotokamera durch geschickte Kombination von diesen darstellen k\"onnen (*sadMP3noises*). 
+%
+\subsubsection{Transformation von Signalen}
+%
+Noch interessanter ist aber die Manipulation von Signalen durch \emph{Transformationen}.
+Der Sinn von Transformationen ist es, neue oder einfach bestimmte Einsichten in ein Signal zu gewinnen. 
+Jede Transformation liefert hierbei andere Informationen oder ist f\"ur andere Signale definiert.
+Mathematisch ist eine Transformation nichts anderes als eine Abbildung zwischen Signalen.
+D.h. auch eine Transformation $T$ bildet Paare zwischen Signalen, also $s \mapsto Ts = S$.
+Nach Anwendung der Transformation $T$ auf $s$ erhalten wir also ein anderes Signal $Ts = S$.
+Gerade haben wir schon festgestellt, dass man Signale beliebig skalieren und addieren kann und es als eine Art grundlegende Eigenschaft von Signalen festgehalten.
+Nehmen wir nun ein Signal mit Werten
+\[
+    s(t) = a_1 s_1(t) + a_2 s_2(t)
+\] 
+und wir wenden die Transformation $T$ auf beiden Seiten der Gleichung an
+\[
+    \{Ts\}(t) = \{T (a_1 s_1 + a_2 s_2)\}(t).
+\]
+Ist nun die Transformation so, dass wir schreiben k\"onnen
+\[
+    \{Ts\}(t) = \{T (a_1 s_1 + a_2 s_2)\}(t) = a_1 \{Ts_1\}(t) + a_2 \{Ts_2\}(t),
+\]
+so nennen wir $T$ eine \emph{lineare} Transformation.
+Zusammen mit der Superpositionseigenschaft von Signalen sieht man nun, warum Linearit\"t so wichtig f\"ur Transformationen ist, weil es einfach zur Vektorraumstruktur von Signalen passt.
+Die Linearit\"at erlaubt es uns beispielsweise auch das obige Signal $b$ ganz einfach zu transformieren.
+Nehmen wir es in seiner Darstellung als
+\[
+    b(x,y) = c_1 b_1(x,y) + c_2 b_2(x,y) + \dots,
+\]
+und wir haben eine beliebige lineare Transformation $T$, deren Effekt wir auf $b$ angewendet sehen wollen. 
+Wir suchen also $\{Tb\}(x,y)$.
+Aber das ist mit der Linearit\"at ganz einfach. Wir m\"ussen nur $Tb_i$ kennen, also die Wirkung von $T$ auf die Basisvektoren $b_i$, denn
+\[
+    \{Tb\}(x,y) = c_1 \{Tb_1\}(x,y) + c_2 \{Tb_2\}(x,y) + \dots,
+\]
+ist eine valide Darstellung von $Tb$.
+Cool!
+
+Beispiele f\"ur solche linearen Transformationen sind Differentiation (falls m\"oglich), bilden der Stammfunktion (falls m\"oglich), Verz\"ogerung eines Zeitsignals um Zeit $a \in \R$, Stauchung und Streckung in eines Zeitsignals, Rotation eines Bildes, die Fourier-Transformation, die diskrete Fourier-Transformation, zyklische Faltung, Korrelation mit einem anderen Signal, etc.
+Gegenbeispiele sind $p(t) = \sin(s(t))$, oder $p(t) = (s(t))^\alpha$ f\"ur $\alpha \neq 1$.
+
+Man sieht, dass viele wichtige Operationen lineare Transformationen darstellen und wir haben mit linearer Algebra ein m\"achtiges Tool an unserer Seite, um mit ihnen umzugehen.
+%
+%
+\subsubsection{Spezielle Signale}
+%
+Uns werden immer wieder einige spezielle Signale begegnen, die wir hier kurz auflisten wollen.
+\begin{itemize}
+    \item Die \emph{Delta-Funktion (Dirac-$\delta$)} als Funktional $\delta$, das angewendet auf ein Signal $s$, liefert, dass $\delta(s) = s(t = 0)$. Visualisiert wird dieses nicht-Signal, durch einen Impuls der H\"ohe $1$ bei $t = 0$. Es ist nicht ohne Ironie, dass eines der wichtigsten Objekte der Signalverarbeitung selbst kein Signal ist, wie eines behandelt wird, aber immer mit Vorsicht.
+    \item Die \emph{Heavyside-Funktion} $u : \R \rightarrow \R$ mit
+    \[
+        u(t) = \begin{cases}
+            1 \Text{f\"ur} t>0 \\
+            \frac{1}{2} \Text{f\"ur} t = 0 \\
+            0 \Text{f\"ur} t < 0.
+        \end{cases}
+    \]
+    Man kann $\delta$ als distributionelle Ableitung von $u$ auffassen.
+    \item Die \emph{komplexe Schwingung} $s : \R \rightarrow \C$ bei Frequenz $f > 0$ is definiert als 
+        $s(t) = \exp(\jmath f t)$
+    und wir uns im Verlauf des Semesters noch einige Male begegnen. Beispielsweise gilt $s^\ast(t) = s(-t)$.
+    \item Der \emph{diskrete $\delta$-Sto\ss{}} $\delta[k]$ ist definiert als
+    \[\dots, 0, \Start{1}, 0, \dots\]
+    \item Endliche Signale k\"onnen wir entweder durch
+    \[
+        s = [0,1,2,\Start{3},2,1,0]
+    \]
+    darstellen, oder als endliche Summe von einigen diskreten $\delta$-St\"o\ss{}en:
+    \[
+        s[n] = \Sum{k=-2}{k=+2} s[k] \delta[n - k]
+    \]
+\end{itemize}
+%
+%
+\subsubsection{Beispiel: LTI-Systeme}
+Wir werden uns zwar noch sp\"ater ausf\"uhrlich mit \gls{lti} Systemen besch\"aftigen, doch sie sollen hier schon als nicht-triviales Beispiel dienen.
+Wir sind also mit einem System $H$ konfrontiert, das einerseits die Eigenschaft hat, dass 
+f\"ur Anregungen $x_{1,2} : \R \rightarrow \R$ eine Verschiebungsinvarianz mit $y(t - \tau) = (Hx(\cdot  - \tau)))(t)$ gilt. Au\ss{}erdem ist $H$ linear.
+
+Dann kann man die Wirkung von $H$ auch durch Faltung mit der sog. Impulsantwort $h$ des Systems darstellen, also
+\[
+    y(t) = \Int{\infty}{+\infty}{x(t - s) h(s)}{s},
+\]
+wobei $h = H\delta$, also die Reaktion des Systems auf einen Dirac-Sto\ss{} darstellt.
