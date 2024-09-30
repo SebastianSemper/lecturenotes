@@ -19,9 +19,9 @@
 Digitale Signalverarbeitung ist ein Feld, das sich vieler verschiedener mathematischer Grundlagen bedient, um die gefundenen Zusammenh\"ange rigoros, knapp und gleichzeitig elegant zu formulieren.
 Deshalb kommen wir nicht umhin, uns einiger dieser Grundlagen zu erinnern. 
 Alles hier knapp aufgelistete sollte schon bekannt sein und dient nur als bequemes Nachschlagewerk f\"ur das kommende Semester.
-
+%
 \subsection{Komplexe Zahlen}
-
+%
 Die \emph{komplexen Zahlen} $\C$ sind die Menge aller $z = x + \jmath y$, wobei $x,y \in \R$ und f\"ur die imagin\"are Einheit $\jmath$ gilt, dass $\jmath^2 = -1$.
 Wir nutzen hier speziell $\jmath$ in Abgrenzung zu $i$ oder $j$, da diese oft als Indices oder Laufvariablen auftreten.
 Bei $z = x + \jmath y$ nennen wir $x =\Re(z)$ den Realteil und respektive $y = \Im(z)$ den Imagin\"arteil.
@@ -35,9 +35,9 @@ s(t) = x(t)\cos(\omega t) + y(t)\sin(\omega t) \in \R,
 \]
 die \"aquivalente Darstellung im komplexen Basisband
 \[
-s_B(t) = x(t) + \jmath y(t) \Text{mit} \R(s_B(t)\exp(\jmath \omega t)) = s(t).
+s_B(t) = x(t) + \jmath y(t) \Text{mit} \Re(s_B(t)\exp(\jmath \omega t)) = s(t).
 \]
-existiert. Man sagt auch, dass $s_B \exp(\jmath \omega t)$ das analytische Signal zu $s$ darstellt.Dass komplexe Zahlen viele \"Uberaschungen bereithalten sieht man wenn man sich simuliert f\"ur welche $c \in \C$ die Folge
+existiert. Man sagt auch, dass $s_B \exp(\jmath \omega \cdot)$ das analytische Signal zu $s$ darstellt.Dass komplexe Zahlen viele \"Uberaschungen bereithalten sieht man wenn man sich simuliert f\"ur welche $c \in \C$ die Folge
 \[
 z_{n+1} = z_{n}^2 + c
 \]
@@ -58,10 +58,10 @@ Die Funktion $s$ bildet nun Paare $(d,b)$ zwischen Mengenelementen von $D$ und $
 Der Witz ist nun, dass man ein Signal mit physikalischer Bedeutung erh\"alt, indem man lediglich $D$ und $B$ geschickt w\"ahlt.
 
 Ist $D = B = \R$ so sprechen wir von einem reellen Signal $s$ und meist denken wir dabei bei $D$ an die Zeitachse, weshalb wir auch $s \mapsto s(t)$ schreiben. 
-Ist $D = R^3$, $B = \R$, so denken wir meist an den dreidimensionalen Raum f\"r den Definitionsbereich und haben als ein Signal im Raum gegeben.
+Ist $D = R^3$, $B = \R$, so denken wir meist an den dreidimensionalen Raum f\"ur den Definitionsbereich und haben als ein Signal im Raum gegeben.
 Ist nun jedoch $D = \Z$, $B = \R$, so ist das Signal nur f\"ur die ganzen Zahlen $\Z$ definiert, weshalb wir dann von einem Zeitdiskreten Signal sprechen.
 Meist schreiben wir hierf\"ur kurz $s[k] \in \R, k\in \Z$.
-Man soll sich hier nicht vorstellen, dass die Werte "zwischen" den ganzen Zahlen nur fehlen w\"urden. 
+Man soll sich hier nicht vorstellen, dass die Werte \q{zwischen} den ganzen Zahlen nur fehlen w\"urden. 
 So ist dies \emph{nicht} zu verstehen. 
 Zwischen den gegeben Werten ist keine Information vorhanden!
 In manchen Situationen werden wir die diskreten Signale explizit aufschreiben wollen. 
@@ -104,10 +104,13 @@ Vielleicht gelingt es uns, die Menge $\{b_1, b_2, \dots\}$ so zu konstruieren, d
 \subsubsection{Transformation von Signalen}
 %
 Noch interessanter ist aber die Manipulation von Signalen durch \emph{Transformationen}.
-Der Sinn von Transformationen ist es, neue oder einfach bestimmte Einsichten in ein Signal zu gewinnen. 
+Der Sinn von Transformationen ist es, neue oder einfach bestimmte Einsichten in ein Signal zu gewinnen.
+Es kann aber auch sein, dass man Operationen, die auf Signalen ausgef\"uhrt werden sollen, \q{einfach} mittransformieren kann.
+Vielleicht ist die gew\"unschte Operation nach Transformation deutlich einfacher anzuwenden?
 Jede Transformation liefert hierbei andere Informationen oder ist f\"ur andere Signale definiert.
+
 Mathematisch ist eine Transformation nichts anderes als eine Abbildung zwischen Signalen.
-D.h. auch eine Transformation $T$ bildet Paare zwischen Signalen, also $s \mapsto Ts = S$.
+D.h. auch eine Transformation $T$ bildet Paare zwischen Objekten aus Mengen -- in diesem Fall Signalen -- also $s \mapsto Ts = S$.
 Nach Anwendung der Transformation $T$ auf $s$ erhalten wir also ein anderes Signal $Ts = S$.
 Gerade haben wir schon festgestellt, dass man Signale beliebig skalieren und addieren kann und es als eine Art grundlegende Eigenschaft von Signalen festgehalten.
 Nehmen wir nun ein Signal mit Werten
@@ -138,10 +141,42 @@ Aber das ist mit der Linearit\"at ganz einfach. Wir m\"ussen nur $Tb_i$ kennen, 
 ist eine valide Darstellung von $Tb$.
 Cool!
 
-Beispiele f\"ur solche linearen Transformationen sind Differentiation (falls m\"oglich), bilden der Stammfunktion (falls m\"oglich), Verz\"ogerung eines Zeitsignals um Zeit $a \in \R$, Stauchung und Streckung in eines Zeitsignals, Rotation eines Bildes, die Fourier-Transformation, die diskrete Fourier-Transformation, zyklische Faltung, Korrelation mit einem anderen Signal, etc.
+Beispiele f\"ur solche linearen Transformationen sind Differentiation (falls m\"oglich), bilden der Stammfunktion (falls m\"oglich), Verz\"ogerung eines Zeitsignals um Zeit $a \in \R$, Stauchung und Streckung in eines Zeitsignals, Rotation eines Bildes, die Fourier-Transformation, die diskrete Fourier-Transformation, zyklische Faltung, oder Korrelation mit einem anderen Signal $p$.
 Gegenbeispiele sind $p(t) = \sin(s(t))$, oder $p(t) = (s(t))^\alpha$ f\"ur $\alpha \neq 1$.
 
 Man sieht, dass viele wichtige Operationen lineare Transformationen darstellen und wir haben mit linearer Algebra ein m\"achtiges Tool an unserer Seite, um mit ihnen umzugehen.
+%
+%
+\subsubsection{Zuf\"allige Signale}
+%
+Man kann auch noch eine weitere Sichtweise auf Signale haben. In manchen F\"allen ist es nicht zweckm\"a\ss{}ig, dass man ein Signal $s$ als vollst\"andig bekannte und fixe Funktion modelliert.
+Stattdessen modelliert man die Werte $s(t)$ des Signals $s$ an den Stellen $t$ als \emph{Zufallsgr\"o\ss{}e}.
+Das hei\ss{}t, dass die Werte $s(t)$ einer Verteilung $X(t)$ folgen. 
+An jedem Zeitpunkt $t$ \q{h\"angt} eine solche Verteilung, die bestimmt mit welcher Wahrscheinlichkeit die Werte $s(t)$ in einem gewissen Intervall liegen.
+Man spricht in diesem Fall auch von \emph{stochastischen} Signalen, im Gegensatz zu den obigen \emph{deterministischen} Signalen.
+
+Es kann verschiedene Gr\"unde haben, dass man ein Signal nicht mehr deterministisch beschreiben kann/will/sollte:
+
+\begin{itemize}
+    \item Sobald die Werte von $s$ durch eine Messung entstanden sind, enthalten diese normalerweise Messrauschen.
+    Dann modelliert man $s$ meistens als Summe
+    \[
+    s(t) = x(t) + n(t),
+    \]
+    wobei $n(t) \sim \mathcal{N}(0, \sigma^2(t))$ meist eine mittelwertfreie Normalverteilung mit Varianz $\sigma^2(t)$ ist und $x$ ein deterministisches Signal.
+    \item Wenn man generell nicht genug Information \"uber das Signal hat, beispielsweise, kennt man nur dessen Verteilung im Frequenzbereich, also Wahrscheinlichkeiten, dass gewisse Frequenzen vorhanden sind, oder nicht.
+    Dennoch ist man nat\"urlich an dem Verhalten des Signals im Zeitbereich interessiert.
+    \item Wenn es f\"ur die Anwendung nicht notwendig ist.
+    Dies kann der Fall sein, wenn man einen Filter entwickelt, der eine gewisse Klasse von Signalen als Eingang bekommt, kann es reichen die Verteilung der Signale zu kennen und dann den Ausgang des Filters nur stochastisch zu beschreiben.
+
+    \q{In \SI{99.99}{\percent} der F\"alle ist der nachgeschaltete Verst\"arker nicht \"ubersteuert.}
+
+    F\"ur solche Aussagen ist es sogar \emph{notwendig} die Verteilung der Eingangssignale zu kennen, ansonsten ist so eine Aussage gar nicht m\"oglich.
+\end{itemize}
+
+
+
+Um stochastische Signale korrekt handhaben zu k\"onnen, ist einige Mathematik notwendig, die wir einfach \"ubergehen und stattdessen versuchen ein \emph{intuitives} Verst\"andnis zu entwickeln.
 %
 %
 \subsubsection{Spezielle Signale}
@@ -176,11 +211,38 @@ Uns werden immer wieder einige spezielle Signale begegnen, die wir hier kurz auf
 %
 \subsubsection{Beispiel: LTI-Systeme}
 Wir werden uns zwar noch sp\"ater ausf\"uhrlich mit \gls{lti} Systemen besch\"aftigen, doch sie sollen hier schon als nicht-triviales Beispiel dienen.
-Wir sind also mit einem System $H$ konfrontiert, das einerseits die Eigenschaft hat, dass 
-f\"ur Anregungen $x_{1,2} : \R \rightarrow \R$ eine Verschiebungsinvarianz mit $y(t - \tau) = (Hx(\cdot  - \tau)))(t)$ gilt. Au\ss{}erdem ist $H$ linear.
+Wir sind also mit einem System $\mathcal{H}$ konfrontiert, das einerseits die Eigenschaft hat, dass 
+f\"ur Anregungen $x : \R \rightarrow \R$ eine Verschiebungsinvarianz mit $y(t - \tau) = (\mathcal{H}x(\cdot  - \tau)))(t)$ gilt. Au\ss{}erdem ist $\mathcal{H}$ linear.
 
-Dann kann man die Wirkung von $H$ auch durch Faltung mit der sog. Impulsantwort $h$ des Systems darstellen, also
+Dann kann man die Wirkung von $\mathcal{H}$ auch durch Faltung mit der sog. Impulsantwort $h$ des Systems darstellen, also
+%
+\begin{equation}\label{lti-conv}
+    y(t) 
+        = (\mathcal{H}x)(t) 
+        = \Int{-\infty}{+\infty}{x(t - \tau) h(\tau)}{\tau} 
+        = (x \ast h)(t),
+\end{equation}
+%
+wobei $h = \mathcal{H}\delta$, also die Reaktion des Systems auf einen Dirac-Sto\ss{} darstellt.
+An dieser Darstellung sieht man sehr gut, dass $\mathcal{H}$ linear ist, weil die Integration linear in $x$ ist.
+
+Nat\"urlich ist der Zeitbereich f\"ur diese Art von System nicht der richtige Anschauungsort. 
+Nach Laplace-Transformation von $y$ zu $Y = \mathcal{L}y$ sehen wir, dass wir stattdessen 
 \[
-    y(t) = \Int{\infty}{+\infty}{x(t - s) h(s)}{s},
+Y(s) = X(s) \cdot H(s),
 \]
-wobei $h = H\delta$, also die Reaktion des Systems auf einen Dirac-Sto\ss{} darstellt.
+schreiben k\"onnen. 
+Hierbei sind $X = \mathcal{L}x$ und $H = \mathcal{L}h$ die Laplace-Transformationen des Eingangs und der Impulsantwort $h$.
+Nicht nur hat sich die \q{Berechnung} von $Y$ vereinfacht, sondern wir haben auch ein besseres Gef\"uhl f\"ur das Verhalten des Systems in Abh\"angigkeit von $h$, bzw. $H$, weil der Einfluss einfach multiplikativ ist.
+
+Wir k\"onnen die lineare Algebra noch ein wenig weiter treiben. Betrachten wir als Eingang die Funktion $x_s(t) = \exp(s t)$ f\"ur ein beliebiges $s \in \C$.
+Dann rechnen wir einfach mit \eqref{lti-conv} nach, dass
+\[
+(H\exp(s\cdot))(t) 
+    = \Int{-\infty}{+\infty}{\exp(s (t-\tau))h(\tau)}{\tau}
+    = \exp(s t) \Int{-\infty}{+\infty}{\exp(-s\tau)h(\tau)}{\tau}
+    = \exp(s t) H(s),
+\]
+gilt. Das hei\ss{}t, dass die Funktionen $\exp(s \cdot)$ die \emph{Eigenvektoren} des Operators $\mathcal{H}$, weil gilt $(\mathcal{H} x_s)(t) = x_s(t) \cdot H(s)$, wobei $H$ die Laplace-Transformation von $h$ ist.
+Das hei\ss{}t auch, dass $H(s)$ die zugeh\"origen \emph{Eigenwerte} sind.
+Wir sehen hier also, dass Signale \emph{wirklich} wie Vektoren funktionieren k\"onnen und es sich im Fall von linearen System f\"ormlich aufzwingt, da die Linearit\"t des Systemz zur linearen Vektorraumstruktur \q{passt}.

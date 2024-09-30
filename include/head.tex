@@ -1,13 +1,14 @@
 \input{../lib/math.tex}
 
-\usepackage{csquotes}
-
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+
+\usepackage{csquotes}
 
 \usepackage[ngerman]{babel}
 \usepackage{fullpage}
 \usepackage{microtype}
+\usepackage{siunitx}
 
 \usepackage{morewrites}
 \usepackage{pgfplots}
@@ -61,3 +62,5 @@ giveninits=true,]{biblatex}
 
 \usepackage{mathtools}
 \newcommand{\Start}[1]{\underset{\uparrow}{#1}}
+
+\newcommand{\q}[1]{{\glqq{}#1\grqq{}}}
