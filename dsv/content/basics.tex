@@ -1,21 +1,4 @@
-\begin{itemize}
-    % \item signale als vektoren: 
-    %     \begin{itemize}
-    %         \item basis-wechsel: verschiedene darstellung des gleichen signals (analyse, synthese)
-    %         \item eigenwerte/vektoren: richtungen entlang derer die lineare abbildung "einfach" ist, i.e. skaliert
-    %         \item geometrie von signalen: skalarprodukt, norm, 
-    %         \item \"Ubung: dot, inner, norm, dft, eigs (random)
-    %         \item \"Ubung: bild-kompression mit svd
-    %     \end{itemize}
-    % \item lineare systeme: 
-    %     \begin{itemize}
-    %         \item beispiel fuer lineare abbildungen
-    %         \item zeitinvariant
-    %         \item eigenfunktionen
-    %         \item beispiele: verzoegerung, skalierung, kopieren + verzoegerung (\"Ubung)
-    %     \end{itemize}
-\end{itemize}
-
+%
 Digitale Signalverarbeitung ist ein Feld, das sich vieler verschiedener mathematischer Grundlagen bedient, um die gefundenen Zusammenh\"ange rigoros, knapp und gleichzeitig elegant zu formulieren.
 Deshalb kommen wir nicht umhin, uns einiger dieser Grundlagen zu erinnern. 
 Alles hier knapp aufgelistete sollte schon bekannt sein und dient nur als bequemes Nachschlagewerk f\"ur das kommende Semester.
@@ -33,10 +16,11 @@ Beispielsweise f\"ur die Darstellung von einem modulierten reellen Passband Sign
 \[
 s(t) = x(t)\cos(\omega t) + y(t)\sin(\omega t) \in \R,
 \]
-die \"aquivalente Darstellung im komplexen Basisband
-\[
-s_B(t) = x(t) + \jmath y(t) \Text{mit} \Re(s_B(t)\exp(\jmath \omega t)) = s(t).
-\]
+die "aquivalente Darstellung im komplexen Basisband
+\begin{equation}\label{complex_baseband}
+    s_B(t) = x(t) + \jmath y(t) \Text{mit} \Re(s_B(t)\exp(\jmath \omega t)) = s(t).
+\end{equation}
+
 existiert. Man sagt auch, dass $s_B \exp(\jmath \omega \cdot)$ das analytische Signal zu $s$ darstellt.Dass komplexe Zahlen viele \"Uberaschungen bereithalten sieht man wenn man sich simuliert f\"ur welche $c \in \C$ die Folge
 \[
 z_{n+1} = z_{n}^2 + c
