@@ -2,7 +2,7 @@
 Als ersten Schritt der digitalen Signalverarbeitung wollen wir uns den \"Ubergang von einem analogen Signal zu einem digitalen n\"aher ansehen.
 Intuitiv k\"onnen wir diesen Vorgang in vielen Anwendungen beobachten.
 Wir nehmen im Tonstudio mit einem Mikrophon Ton auf und eine Soundkarte wandelt das analoge Signal in einen WAV-Datenstrom um.
-In einer Fotokamera, trifft ein Feld von Lichtstrahlen ein und wird von einem CMOS-Sensor \q{direkt} abgetastet und in Helligkeitswerte pro Farbkanal umgewandelt.
+In einer Fotokamera, trifft ein Feld von Lichtstrahlen ein und wird von einem \gls{cmos}-Sensor \q{direkt} abgetastet und in Helligkeitswerte pro Farbkanal umgewandelt.
 Eine Antenne wandelt ein anliegendes elektro-magnetisches Feld in eine Spannung um, welche nachtr\"aglich von einem \gls{adc} abgetastet und quantisiert wird.
 
 Mathematisch modellieren wir analoge Signale $s_a : D \rightarrow B$ meist mit $D$ und $B$, die auf die reellen Zahlen $\R$ zur\"uckgreifen.
@@ -62,6 +62,16 @@ Es gibt noch eine alternative Darstellung von der obigen Funktion durch die Addi
 \]
 Da die beiden "uberlagerten Phasoren so interpretiert werden k"onnen als rotierten diese in gegens"atzliche Richtungen, ist es gerechtfertigt der physikalischen Intuition entgegen auch von \q{negativen} Frequenzen zu sprechen.
 Wir erlauben also $F \in \R$, womit auch der Spezialfall $T_p = \infty$, also $x_a(t) = A$ abgedeckt ist.
+Ein kleines Beispiel findet man in \Cref{py:cont_harms}.
+%
+\begin{listing}
+    \begin{minipage}{0.49\textwidth}
+        \inputminted{python3}{code/cont_harms.py}
+    \end{minipage}
+    \includegraphics[width=0.49\textwidth]{code/cont_harms.png}
+    \caption{Berechnung und Darstellung von \eqref{eq:analog_cosine}}\label{py:cont_harms}
+\end{listing}
+\FloatBarrier
 %
 \subsubsection{Zeit-Diskrete Harmonische}
 %
@@ -75,7 +85,6 @@ In Analogie zu \eqref{eq:analog_cosine} definieren wir
 %
 Wichtig bei diskreten Signalen ist, dass ihre physikalische Interpretierbarkeit nicht direkt gegeben ist, da $n \in \Z$ nur die diskreten Werte \q{nummeriert}, also \emph{einheitenlos} ist.
 Deshalb hat $f \in \R$ lediglich als Einheit \q{Zyklen pro Sample}, was man auch daran sieht, dass f"ur $f = 1$ gilt $x[n] = A \cos(2\pi n + \theta) = A \cos(\theta)$.
-
 Es existiert nun ein wichtiger Unterschied zwischen $x[\cdot]$ von \eqref{eq:discrete_cosine} und $x_a(\cdot)$ von \eqref{eq:analog_cosine}.
 Das Signal $x[\cdot]$ ist nur periodisch, falls $f$ eine rationale Zahl ist, also $f = p/q$ f"ur $p,q \in \Z$ und $q \neq 0$.
 
@@ -92,3 +101,71 @@ Da $\cos$ Periode $2\pi k$ f"ur $k \in \Z$ besitzt, muss $2 \pi f N = 2 \pi k$ g
 \[
     f = \frac kN.
 \]
+Andersherum kann man die kleinste Periode $N$ ermitteln, indem man $f = k/N$ vollst"andig k"urzt, sodass also Z"ahler und Nenner keine gemeinsamen Teiler mehr haben, und man dann den Nenner des resultierenden Bruches als $N$ setzt. 
+Ein Beispiel wird in \Cref{py:disc_harms} gezeigt. 
+Man kann interessante Ergebnisse erzielen, wenn man diesen Plot f"ur $\omega=0,\pi/8,\pi/4,\pi/2$ und $\omega=\pi$ erzeugt ("Ubung).
+%
+\begin{listing}
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted{python3}{code/disc_harms.py}
+    \end{minipage}
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/disc_harms.png}
+    \end{minipage}
+    \caption{Berechnung und Darstellung von \eqref{eq:analog_cosine}}\label{py:disc_harms}
+\end{listing}
+
+Die Signale der Form \eqref{eq:discrete_cosine} haben noch eine andere interessante Eigenschaft, die sich wieder aus der $2\pi$-Periodizit"at von $\cos$ ergibt. 
+Betrachten wir noch einmal \eqref{eq:discrete_cosine} und wir finden, dass
+\[
+\cos(\omega n + \theta) = \cos(\omega n + 2\pi n + \theta) = \cos((\omega + 2\pi) n + \theta).
+\]
+Das hei"st, dass
+\[
+    x[n] = \cos(\omega n + \theta) = \cos((\omega + 2\pi k) n + \theta) = x_k[n]
+\]
+f"ur \emph{alle} $k \in \Z$ gilt.
+Das hei"st, dass sich $x_k[\cdot]$ nicht von $x[\cdot]$ unterscheiden l"asst.
+Man nennt dann jedes der $x_k[\cdot]$ einen \emph{Alias} von $x[\cdot]$.
+Man kann deshalb auch sagen, dass f"ur jedes $\omega$ mit $\Abs{\omega} > \pi$ ein zugeh"origes $\omega_a$ mit $\Abs{\omega_a} < \pi$ existiert, sodass
+\[
+    \cos(\omega n + \theta) = \cos(\omega_a n + \theta)
+\]
+gilt.
+Vergewissern sie sich von dieser Tatsache, indem sie verschiedene Aliase basierend auf \Cref{py:disc_harms} visualisieren ("Ubung).
+
+Stellen wir uns f"ur einen kurzen Moment vor, dass wir wissen, dass wir $x[n]$ durch Abtastung einer Funktion wie in \eqref{eq:analog_cosine} erhalten haben.
+Selbst wenn wir wissen, dass nur \emph{eine} Frequenz in diesem Signal vor Abtastung vorhanden war, k"onnen wir \emph{nicht} entscheiden, welche das war.
+%
+\FloatBarrier
+%
+\subsection{Komplexe Harmonische}
+%
+Wir wollen eine bestimmte Menge an Funktionen betrachten. Wir wollen kontinuierliche komplexe Schwingungen betrachten, welche mit einer Frequenz $F_k$ schwingen, welche ein ganzzahliges Vielfaches einer Frequenz $F_0$ ist.
+Das hei"st, wir betrachten dann
+\[
+F_k = k \cdot F_0 \Text{f"ur} k \in \Z \Text{, was}
+x_k(t) = \exp(\jmath 2 \pi F_k t) = \exp(\jmath 2 \pi k F_0 t)
+\]
+ergibt. 
+Jedes der $x_k$ hat Periode $1/F_k = T_k = T_0/k$. 
+Das hei"st f"ur wachsendes $\Abs{k}$ werden die Perioden immer um ein Vielfaches k"urzer. 
+Umgekehrt haben dann alle $x_k$ gemeinsame Periode, $T_0$, da f"ur jedes $k$ gilt, dass $T_k \cdot k = T_0$.
+Wir haben auch kein Problem mit Aliasing zwischen den $x_k$, da bei kontinuierlichen Signalen gilt, dass $x_{k_1} \neq x_{k_2}$, falls $k_1 \neq k_2$.
+
+Wie wir in \Cref{sec:signals_vec} gesehen haben, k"onnen wir beliebige Linearkombination aus Signalen bilden und erhalten wieder ein Signal.
+Wir k"onnen also f"ur eine Folge von $c_k \in \C$ die Linearkombination der $x_k$ bilden und erhalten
+%
+\begin{equation}\label{eq:fourier_series}
+    x_a = \Sum{k \in \Z}{}{c_k x_k} : \R \rightarrow \C
+    \Text{mit} 
+    t \mapsto x_a(t) = \Sum{k \in \Z}{}{c_k x_k(t)}
+        = \Sum{k \in \Z}{}{c_k \exp(\jmath 2 \pi k F_0 t)}.
+\end{equation}
+%
+Die erste Schreibweise ist absichtlich ohne das Argument $t$, um zu verdeutlichen, dass Signale \emph{wirklich} als eigenst"andige Signale behandelt werden k"onnen und dass $x_a(t) \in \C$ \q{nur} die Auswertung von $x_a$ an der Stelle $t$ ist, welche \emph{strikt} von dem \emph{Vektor} $x_a$ zu unterscheiden ist.
+
+Nat"urlich ist \eqref{eq:fourier_series} als Fourierreihe von $x_a$ bekannt, und die $c_k$ sind die Fourierkoeffizienten von $x_a$.
+Wie in \Cref{sec:signals_vec} k"onnen wir also die $c_k$ durch \eqref{eq:fourier_series} mit $x_a$ \emph{identifizieren}, da uns die $c_k$ eine alternative Darstellung von $x_a$ liefern.

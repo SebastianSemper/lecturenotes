@@ -10,6 +10,7 @@
 \usepackage{microtype}
 \usepackage{siunitx}
 
+% \usepackage[hyperref]{xcolor}
 \usepackage{morewrites}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.15}
@@ -37,8 +38,8 @@ giveninits=true,]{biblatex}
 \addbibresource{../lib/sempersn.bib}
 
 \renewcommand{\baselinestretch}{1.2}
-
-\usepackage[colorlinks,linktocpage]{hyperref}
+\definecolor{Links}{RGB}{255,93,0}
+\usepackage[colorlinks,linktocpage,allcolors=Links]{hyperref}
 \usepackage{cleveref}
 \usepackage[acronym,hyperfirst]{glossaries}
 \input{../lib/sempersn.tex}
@@ -53,8 +54,11 @@ giveninits=true,]{biblatex}
 
 \usepackage{minted}
 
-\renewcommand\listingscaption{Code-Schnipsel}
-\renewcommand\listoflistingscaption{Code-Schnipsel-Verzeichnis}
+\newcommand{\code}{Codeschnipsel}
+\renewcommand\listingscaption{\code}
+\renewcommand\listoflistingscaption{\code-Verzeichnis}
+\crefname{listing}{\code}{\code}  
+\Crefname{listing}{\code}{\code}
 
 \usepackage{helvet}
 \usepackage{mathpazo}

@@ -114,17 +114,11 @@ Wir m\"ochten uns eine spezielle Version der B-Splines genauer Ansehen, da sie i
 welche in \cref{bsplines_eval} auch einmal implementiert wurde. In Analogie zum bekannten Nyquist-Sampling wollen wir untersuchen, wie wir aus endlich vielen gegebenen Abtastwerten $x[n]$ mit $n \leqslant N$ eine Darstellung wie in \eqref{bsplines_summation} herleiten k\"onnen, welche die abgetasteten Werte exakt interpoliert. Aufgabe ist es also aus $x[n]$ die Folge $c[k]$ zu bestimmen.
 
 \begin{listing}
-\begin{minted}{python}
-def cubic_spline(t: np.ndarray) -> np.ndarray:
-    s1: np.ndarray = 2.0/3.0 - np.abs(t)**2 + 0.5 * np.abs(t)**3
-    s2: np.ndarray = (2 - np.abs(t))**3 / 6
-    s3: np.ndarray = np.zeros_like(t)
-    return s3 + s1 * (np.abs(t) < 1) + s2 * (np.abs(np.abs(t) - 1.5) <= 0.5)
-\end{minted}
+\inputminted{python}{code/bsplines_eval.py}
 \caption{Berechnung des kubischen B-Splines.}\label{bsplines_eval}            
 \end{listing}
 
-Hierzu ben\"otigen wir die sogenannte Interpolationsbedingung, welche f\"ur eine zu interpolierende Funktion $x$ und ihre Abtastwerte $x[n] = x(n)$ fordert, dass
+Hierzu ben"otigen wir die sogenannte Interpolationsbedingung, welche f\"ur eine zu interpolierende Funktion $x$ und ihre Abtastwerte $x[n] = x(n)$ fordert, dass
 \begin{equation}\label{bsplines_interpol}
     x(n) = x[n] = s(n) = \Sum{k \in \Z}{}{
         c[k] \beta^{3}(n - k)
@@ -170,24 +164,7 @@ wobei man $K \in \N$ so w\"ahlen kann, dass $z_1^K \leqslant \varepsilon$ erf\"u
 effizient und exakt initialisieren. Beides wurde in \cref{bsplines_coeffs} beispielhaft implementiert und eine beispielhafte Ausgabe nach Auswertung von \eqref{bsplines_summation} ist in \cref{bsplines_interpol_pic} dargestellt.
 %
 \begin{listing}[t]
-\begin{minted}{python}
-def filter_coeffs(x_n: np.ndarray) -> np.ndarray:
-    z_1: float = np.sqrt(3) - 2.0
-    c_k_p: np.ndarray = np.zeros_like(x_n)
-    c_k_m: np.ndarray = np.zeros_like(x_n)
-    
-    c_k_p[0] = np.sum(x_n * np.power(z_1, np.arange(x_n.size)))
-    
-    for kk in range(1, x_n.size):
-        c_k_p[kk] = x_n[kk] + z_1 * c_k_p[kk-1]
-    
-    c_k_m[-1] = z_1 * (c_k_p[-1] + z_1 * c_k_p[-2]) / (1.0 - z_1**2)
-
-    for kk in range(2, x_n.size+1):
-        c_k_m[-kk] = z_1 * (c_k_m[-kk+1] + c_k_p[-kk])
-        
-    return - 6 * c_k_m
-\end{minted}
+\inputminted{python3}{code/bsplines_coeffs.py}
 \caption{Berechnung der B-Spline Koeffizienten $c[k]$.}\label{bsplines_coeffs}            
 \end{listing}
 %

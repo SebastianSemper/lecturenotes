@@ -57,7 +57,7 @@ um eine bequeme Schreibweise f\"ur solche Folgen zu erhalten.
 
 Versuchen sie f\"ur m\"oglichst viele verschiedene Kombinationen von $D$ und $B$ Beispiele zu finden (\"Ubung).
 %
-\subsubsection{Signale als Vektoren}
+\subsubsection{Signale als Vektoren}\label{sec:signals_vec}
 %
 Um mit Signalen gut umgehen zu k\"onnen, ist es wichtig ihre Eigenschaften als mathematische Objekte zu kennen.
 Intuitiv stellt man sich vor, dass man Signale in ihrer Intensit\"at ver\"andern k\"onnen sollte, und f\"ur beliebige \"Anderung der Intsit\"at wieder ein Signal erh\"alt.
@@ -140,14 +140,14 @@ An jedem Zeitpunkt $t$ \q{h\"angt} eine solche Verteilung, die bestimmt mit welc
 Man spricht in diesem Fall auch von \emph{stochastischen} Signalen, im Gegensatz zu den obigen \emph{deterministischen} Signalen.
 
 Es kann verschiedene Gr\"unde haben, dass man ein Signal nicht mehr deterministisch beschreiben kann/will/sollte:
-
+%
 \begin{itemize}
     \item Sobald die Werte von $s$ durch eine Messung entstanden sind, enthalten diese normalerweise Messrauschen.
     Dann modelliert man $s$ meistens als Summe
     \[
     s(t) = x(t) + n(t),
     \]
-    wobei $n(t) \sim \mathcal{N}(0, \sigma^2(t))$ meist eine mittelwertfreie Normalverteilung mit Varianz $\sigma^2(t)$ ist und $x$ ein deterministisches Signal.
+    wobei $n(t) \sim \mathcal{N}(0, \sigma^2(t))$ meist als eine Realisierung einer mittelwertfreien Normalverteilung mit Varianz $\sigma^2(t)$ angenommen wird, und $x$ als ein deterministisches Signal.
     \item Wenn man generell nicht genug Information \"uber das Signal hat, beispielsweise, kennt man nur dessen Verteilung im Frequenzbereich, also Wahrscheinlichkeiten, dass gewisse Frequenzen vorhanden sind, oder nicht.
     Dennoch ist man nat\"urlich an dem Verhalten des Signals im Zeitbereich interessiert.
     \item Wenn es f\"ur die Anwendung nicht notwendig ist.
@@ -155,11 +155,10 @@ Es kann verschiedene Gr\"unde haben, dass man ein Signal nicht mehr deterministi
 
     \q{In \SI{99.99}{\percent} der F\"alle ist der nachgeschaltete Verst\"arker nicht \"ubersteuert.}
 
-    F\"ur solche Aussagen ist es sogar \emph{notwendig} die Verteilung der Eingangssignale zu kennen, ansonsten ist so eine Aussage gar nicht m\"oglich.
+    F\"ur solche Aussagen ist es sogar \emph{notwendig} die Verteilung der Eingangssignale zu kennen, ansonsten ist so eine Aussage gar nicht m\"oglich, da man eben keine Verteilung f"ur ein deterministisches Signal angeben kann.
 \end{itemize}
-
-
-
+%
+%
 Um stochastische Signale korrekt handhaben zu k\"onnen, ist einige Mathematik notwendig, die wir einfach \"ubergehen und stattdessen versuchen ein \emph{intuitives} Verst\"andnis zu entwickeln.
 %
 %
@@ -196,7 +195,7 @@ Uns werden immer wieder einige spezielle Signale begegnen, die wir hier kurz auf
 \subsubsection{Beispiel: LTI-Systeme}
 Wir werden uns zwar noch sp\"ater ausf\"uhrlich mit \gls{lti} Systemen besch\"aftigen, doch sie sollen hier schon als nicht-triviales Beispiel dienen.
 Wir sind also mit einem System $\mathcal{H}$ konfrontiert, das einerseits die Eigenschaft hat, dass 
-f\"ur Anregungen $x : \R \rightarrow \R$ eine Verschiebungsinvarianz mit $y(t - \tau) = (\mathcal{H}x(\cdot  - \tau)))(t)$ gilt. Au\ss{}erdem ist $\mathcal{H}$ linear.
+f\"ur Anregungen $x : \R \rightarrow \R$ eine Verschiebungsinvarianz mit $y(t - \tau) = (\mathcal{H}x(\cdot  - \tau))(t)$ gilt. Au\ss{}erdem ist $\mathcal{H}$ linear.
 
 Dann kann man die Wirkung von $\mathcal{H}$ auch durch Faltung mit der sog. Impulsantwort $h$ des Systems darstellen, also
 %
@@ -229,4 +228,4 @@ Dann rechnen wir einfach mit \eqref{lti-conv} nach, dass
 \]
 gilt. Das hei\ss{}t, dass die Funktionen $\exp(s \cdot)$ die \emph{Eigenvektoren} des Operators $\mathcal{H}$, weil gilt $(\mathcal{H} x_s)(t) = x_s(t) \cdot H(s)$, wobei $H$ die Laplace-Transformation von $h$ ist.
 Das hei\ss{}t auch, dass $H(s)$ die zugeh\"origen \emph{Eigenwerte} sind.
-Wir sehen hier also, dass Signale \emph{wirklich} wie Vektoren funktionieren k\"onnen und es sich im Fall von linearen System f\"ormlich aufzwingt, da die Linearit\"t des Systemz zur linearen Vektorraumstruktur \q{passt}.
+Wir sehen hier also, dass Signale \emph{wirklich} wie Vektoren funktionieren k\"onnen und es sich im Fall von linearen System f\"ormlich aufzwingt, da die Linearit"at des Systems zur linearen Vektorraumstruktur \q{passt}.
