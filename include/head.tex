@@ -53,6 +53,7 @@ giveninits=true,]{biblatex}
 \numberwithin{equation}{subsection}
 
 \usepackage{minted}
+\setminted{fontsize=\footnotesize}
 
 \newcommand{\code}{Codeschnipsel}
 \renewcommand\listingscaption{\code}
@@ -69,3 +70,6 @@ giveninits=true,]{biblatex}
 
 \newcommand{\q}[1]{{\glqq{}#1\grqq{}}}
 \newcommand{\myemph}[1]{\emph{#1}}
+\newcommand{\codecaption}[2]{\caption[#2]{#2, siehe \url{#1}}}
+
+\crefname{Thm}{Theorem}{Theorems}

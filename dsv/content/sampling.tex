@@ -66,10 +66,13 @@ Ein kleines Beispiel findet man in \Cref{py:cont_harms}.
 %
 \begin{listing}
     \begin{minipage}{0.49\textwidth}
-        \inputminted{python3}{code/cont_harms.py}
+        \inputminted[firstline=4]{python3}{code/cont_harms.py}
+    \end{minipage}%
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/cont_harms.png}
     \end{minipage}
-    \includegraphics[width=0.49\textwidth]{code/cont_harms.png}
-    \caption{Berechnung und Darstellung von \eqref{eq:analog_cosine}}\label{py:cont_harms}
+    \codecaption{code/cont_harms.py}{Berechnung und Darstellung von \eqref{eq:analog_cosine}}\label{py:cont_harms}
 \end{listing}
 \FloatBarrier
 %
@@ -106,15 +109,16 @@ Ein Beispiel wird in \Cref{py:disc_harms} gezeigt.
 Man kann interessante Ergebnisse erzielen, wenn man diesen Plot f"ur $\omega=0,\pi/8,\pi/4,\pi/2$ und $\omega=\pi$ erzeugt ("Ubung).
 %
 \begin{listing}
+    \noindent
     \begin{minipage}{0.49\textwidth}
         \strut\vspace*{-\baselineskip}\newline
-        \inputminted{python3}{code/disc_harms.py}
-    \end{minipage}
+        \inputminted[firstline=4]{python3}{code/disc_harms.py}
+    \end{minipage}%
     \begin{minipage}{0.49\textwidth}
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/disc_harms.png}
     \end{minipage}
-    \caption{Berechnung und Darstellung von \eqref{eq:analog_cosine}}\label{py:disc_harms}
+    \codecaption{code/disc_harms.py}{Berechnung und Darstellung von \eqref{eq:discrete_cosine}}\label{py:disc_harms}
 \end{listing}
 
 Die Signale der Form \eqref{eq:discrete_cosine} haben noch eine andere interessante Eigenschaft, die sich wieder aus der $2\pi$-Periodizit"at von $\cos$ ergibt. 
@@ -259,11 +263,12 @@ Wir beschr"anken uns auf Abtastung, welche ein analoges Signal auf eine regelm"a
 Diese Art wird manchmal auch \q{Nyquist-Sampling} genannt, weil die theoretische Grundlage f"ur \q{erfolgreiches} Sampling durch das Nyquist-Theorem gelegt ist.
 Wir stellen uns Abtastung so vor, dass wir das Signal $x_a: \R \rightarrow \R$ direkt an gewissen Stellen beobachten k"onnen.
 Wir k"onnen uns eine Art Sampling-Operator $\mathcal{S}$ vorstellen, der ein analoges Signal $x_a$ in eine abgetastete Version $x_a \mapsto \mathcal{S}(x_a)[\cdot] = x[\cdot]$ transformiert.
-Durch die regelm"a"sige Abtastung in Zeitabst"anden $T > 0$ von $x_a$ erhalten wir also
+Durch die regelm"a"sige/uniforme Abtastung in Zeitabst"anden $T > 0$ von $x_a$ erhalten wir also
 \[
     x[n] = \mathcal{S}(x_a)[n] = x_a(n T) \Text{mit} n \in \Z.
 \]
 Wir nennen $F_s = T^{-1}$ die Sampling-Frequenz, oder die Abtastrate.
+Der Vorgang ist schematisch in \Cref{fig:uniform_sampling} dargestellt.
 
 Da wir uns $x[\cdot]$ so vorstellen, dass es \q{einfach} eine Folge von reellen Zahlen ist, m"ussen wir bei der Interpretation von $x[\cdot]$ auch immer gleichzeitig im Hinterkopf behalten, dass der Wert $x[n]$ dem Wert $x_a(n T) = x_a(n/F_s)$ entspricht.
 Das bedeutet, dass $t$ (als Argument von $x_a$) und $n$ (als Argument von $x[\cdot]$) durch
@@ -272,4 +277,113 @@ t = n T = n/F_s
 \]
 miteinander in Verbindung stehen. 
 Man sieht auch nun eindrucksvoll, dass dadurch $n = t \cdot F_s$ einheitenlos geworden ist, bzw.~sein muss.
+%
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{img/sampling/uniform_sampling.png}
+    \end{center}
+    \caption{Uniforme Abtastung einer Signals. Quelle: \cite{proakis2013}}\label{fig:uniform_sampling}
+\end{figure}
 
+Weiterhin folgt aus $t = n/F_s$, dass es auch einen Zusammenhang zwischen der Frequenz $F$ einer kontinuierlichen Signals und der Frequenz $f$ im Zeit-diskreten geben muss.
+Um diesen herzuleiten, betrachten wir eine einfache analoge Schwingung, wie in \eqref{eq:analog_cosine}, also
+\[
+x_a(t) = A \cos(2 \pi F t + \theta)
+\]
+und wir stellen uns vor, dass wir dieses Signal mit Samplerate $F_s = 1/T$ abtasten. Dann erhalten wir zun"achst
+\[
+x[n] 
+    = x_a(n T) 
+    = A \cos(2 \pi F n T + \theta) 
+    = A \cos\left(\frac{2 \pi F n}{F_s} + \theta\right).
+\]
+Wenn wir nun $x[n]$ in die Form von \eqref{eq:discrete_cosine} bringen, sehen wir, dass $f = F/F_s$ gelten muss.
+
+Wie ist dies zu interpretieren? 
+Wir sind mit dem analogen Signal $x_a$ gestartet, welches die Frequenz $F$ enth"alt.
+Durch das Sampling mit Rate $F_s$ entsteht eine abgetastete Schwingung mit Frequenz $f = F/F_s$. 
+Doch wir haben bereits gesehen, dass sich die Frequenz $f$ von keiner Frequenzen $f + k$ unterscheiden l"asst.
+Das hei"st im Umkehrschluss, dass sich \emph{nach} der Abtastung die urspr"ungliche Frequenz nicht eindeutig bestimmen l"asst, da alle
+\[
+F_k = F + k \cdot F_s 
+\]
+bei Abtastung von $A \cos(2 \pi F_k t + \theta)$ diesselben Abtastwerte $x[n]$ ergeben w"urden.
+Wenn wir nun also behaupten wollen, dass wir im digitalen irgendetwas sinnvolles zu tun gedenken, dann k"onnen wir dies gerade nicht so ohne weiteres.
+Denn bis jetzt haben wir keine M"oglichkeit das wahre analoge Signal zu rekonstruieren.
+Diese missliche Lage wird in \Cref{py:aliasing} dargestellt, wo ein m"ogliches $x_a$, dessen Abtastwerte $x[n]$ und zwei m"gliche Aliase dargestellt sind.
+Man sieht, wie die Aliase so geschaffen sind, dass auch sie Ursprung f"ur die Abtastwerte $x[n]$ sein k"onnten.
+%
+\begin{listing}
+    \noindent
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=4]{python3}{code/aliasing.py}
+    \end{minipage}%
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/aliasing.png}
+    \end{minipage}
+    \codecaption{code/aliasing.py}{Visualisierung von $F_k = F + k \cdot F_s$}\label{py:aliasing}
+\end{listing}
+
+Die Frage ist nun, wie wir das Sampling gestalten m"ussen, dass wir aus $x[n]$ eindeutig das Signal $x_a$ rekonstruieren k"onnen.
+In diesem Fall ist mit \q{rekonstruieren} gemeint, dass wir aus den Werten $x[n]$ den Wert $x_a(t)$ f"ur beliebige $t \in \R$ korrekt bestimmen k"onnen.
+Wie wir oben gesehen haben, ist im Digitalen nur sinnvoll von Frequenzen $f \in [-1/2,+1/2]$ zu sprechen, da wir f"ur alle anderen $f^\prime \notin [-1/2,+1/2]$ ein $f \in [-1/2,+1/2]$ finden, das dieselben Werte in \eqref{eq:discrete_cosine} produziert.
+Wegen des Zusammenhangs $f = F/F_s$ macht es also Sinn sich auch im \emph{Analogen} auf den entsprechenden Bereich zu beschr"anken.
+Das hei"st, wenn wir nur analoge Signale betrachten, bei welchen
+\[
+-\frac{F_s}2 \leqslant F \leqslant +\frac{F_s}2
+\]
+gilt, dann sind wir in der Lage aus $x[\cdot]$ das originale $x_a$ zu rekonstruieren, weil wir wissen, auf welche der Aliase wir uns beschr"anken m"ussen.
+
+\emph{Eine M"oglichkeit der perfekten Rekonstruktion von analogen Signalen aus uniformen digitalen Abtastwerten ist die Einschr"ankung auf einen bestimmten Frequenzbereich.}
+
+Umgekehrt k"onnen wir auch bei Vorwissen "uber die maximale Frequenz $F_{\rm max}$, also $F \in [-F_{\rm max},+F_{\rm max}]$ in einem Signal $x_a$ die Samplingrate ermitteln, sodass im Digitalen die Aliase $f + k$ f"ur $k \neq 0$ nicht im Bereich $[-F_{\rm max},+F_{\rm max}]$ liegen.
+Damit
+\[
+    -\frac 12 \leqslant f \leqslant + \frac 12
+\]
+gilt, muss also auch
+\[
+    -\frac 12 \leqslant \frac{F}{F_s} \leqslant + \frac 12 \Text{f"ur alle} F \in [-F_{\rm max},+F_{\rm max}]
+\]
+gelten.
+Deshalb muss schlussendlich $F_s > 2 F_{\rm max}$ gelten.
+
+Was nun noch fehlt ist eine analytische Formel f"ur die Rekonstruktion von dem Signal $x_a$ aus $x[\cdot]$.
+\begin{Thm}[Sampling Theorem]\label{stm:sampling_theorem}
+Gegeben sei ein analoges Signal $x_a$ mit Frequezen in $[-F_{\rm max},+F_{\rm max}]$ und dessen Abtastwerte $x[\cdot]$ mit $x[n] = x_a(nT)$, wobei $T = 1/F_s$.
+
+Falls $F_s > 2 F_{\rm max}$, dann gilt
+\begin{equation}\label{eq:sampling_theorem}
+    x_a(t) = \Sum{n \in \Z}{}{
+        x[n] \cdot g(t - n T),
+    }
+\end{equation}
+wobei der Interpolationskern $g : \R \rightarrow \R$ gegeben ist durch
+\[
+g_{F_s}(t) = \frac{\sin(\pi F_s t)}{\pi F_s t}.
+\]
+\end{Thm}
+
+\textbf{Hinweis:} Das Sampling Theorem, wie es in \cite{proakis2013} formuliert ist, beinhaltet einen Fehler. Die Definition des Interpolationskernes ist dort mit
+\[
+g(t) = \frac{\sin(2 \pi B t)}{2 \pi B t}.
+\]
+gegeben. Doch in diesem Falle w"urde der Interpolationskern von der Bandbreite des Signals $x_a$, aber nicht von der Abtastrate $F_s$ abh"angen. 
+Die angegebe Definition ist nur korrekt, falls $F_s = 2 B$, wir also mit der \emph{minimalen} Samplerate abgetastet haben.
+In diesem Fall spricht man auch von \emph{kritischer Abtastung}.
+
+\begin{listing}
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=4]{python3}{code/sampling_theorem.py}
+    \end{minipage}
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/sampling_theorem.png}
+    \end{minipage}
+    \codecaption{code/sampling_theorem.py}{Berechnung und Darstellung von \Cref{stm:sampling_theorem}}\label{py:sampling_theorem}
+\end{listing}
+
+\FloatBarrier
