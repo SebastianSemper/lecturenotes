@@ -1,7 +1,7 @@
 %
 Als ersten Schritt der digitalen Signalverarbeitung wollen wir uns den \"Ubergang von einem analogen Signal zu einem digitalen n\"aher ansehen.
 Intuitiv k\"onnen wir diesen Vorgang in vielen Anwendungen beobachten.
-Wir nehmen im Tonstudio mit einem Mikrophon Ton auf und eine Soundkarte wandelt das analoge Signal in einen WAV-Datenstrom um.
+Wir nehmen im Tonstudio mit einem Mikrofon Ton auf und eine Soundkarte wandelt das analoge Signal in einen WAV-Datenstrom um.
 In einer Fotokamera, trifft ein Feld von Lichtstrahlen ein und wird von einem \gls{cmos}-Sensor \q{direkt} abgetastet und in Helligkeitswerte pro Farbkanal umgewandelt.
 Eine Antenne wandelt ein anliegendes elektro-magnetisches Feld in eine Spannung um, welche nachtr\"aglich von einem \gls{adc} abgetastet und quantisiert wird.
 
@@ -98,7 +98,7 @@ F"ur unser Signal in \eqref{eq:discrete_cosine} hei"st das also, dass
 \[
     \cos(2 \pi f n + \theta) 
         = \cos(2 \pi f (n + N) + \theta)
-        + \cos(2 \pi f n + 2 \pi f N + \theta)
+        = \cos(2 \pi f n + 2 \pi f N + \theta)
 \]
 Da $\cos$ Periode $2\pi k$ f"ur $k \in \Z$ besitzt, muss $2 \pi f N = 2 \pi k$ gelten, also
 \[
@@ -310,7 +310,8 @@ F_k = F + k \cdot F_s
 bei Abtastung von $A \cos(2 \pi F_k t + \theta)$ diesselben Abtastwerte $x[n]$ ergeben w"urden.
 Wenn wir nun also behaupten wollen, dass wir im digitalen irgendetwas sinnvolles zu tun gedenken, dann k"onnen wir dies gerade nicht so ohne weiteres.
 Denn bis jetzt haben wir keine M"oglichkeit das wahre analoge Signal zu rekonstruieren.
-Diese missliche Lage wird in \Cref{py:aliasing} dargestellt, wo ein m"ogliches $x_a$, dessen Abtastwerte $x[n]$ und zwei m"gliche Aliase dargestellt sind.
+Diese missliche Lage wird in \Cref{py:aliasing} dargestellt, wo ein m"ogliches
+$x_a$, dessen Abtastwerte $x[n]$ und zwei m"ogliche Aliase dargestellt sind.
 Man sieht, wie die Aliase so geschaffen sind, dass auch sie Ursprung f"ur die Abtastwerte $x[n]$ sein k"onnten.
 %
 \begin{listing}
@@ -357,7 +358,7 @@ Gegeben sei ein analoges Signal $x_a$ mit Frequezen in $[-F_{\rm max},+F_{\rm ma
 Falls $F_s > 2 F_{\rm max}$, dann gilt
 \begin{equation}\label{eq:sampling_theorem}
     x_a(t) = \Sum{n \in \Z}{}{
-        x[n] \cdot g(t - n T),
+        x[n] \cdot g_{F_s}(t - n T),
     }
 \end{equation}
 wobei der Interpolationskern $g : \R \rightarrow \R$ gegeben ist durch

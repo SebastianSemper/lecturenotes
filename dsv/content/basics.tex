@@ -21,7 +21,7 @@ die "aquivalente Darstellung im komplexen Basisband
     s_B(t) = x(t) + \jmath y(t) \Text{mit} \Re(s_B(t)\exp(\jmath \omega t)) = s(t).
 \end{equation}
 
-existiert. Man sagt auch, dass $s_B \exp(\jmath \omega \cdot)$ das analytische Signal zu $s$ darstellt.Dass komplexe Zahlen viele \"Uberaschungen bereithalten sieht man wenn man sich simuliert f\"ur welche $c \in \C$ die Folge
+existiert. Man sagt auch, dass $s_B \exp(\jmath \omega \cdot)$ das analytische Signal zu $s$ darstellt. Dass komplexe Zahlen viele \"Uberaschungen bereithalten sieht man wenn man simuliert f\"ur welche $c \in \C$ die Folge
 \[
 z_{n+1} = z_{n}^2 + c
 \]
@@ -60,7 +60,8 @@ Versuchen sie f\"ur m\"oglichst viele verschiedene Kombinationen von $D$ und $B$
 \subsubsection{Signale als Vektoren}\label{sec:signals_vec}
 %
 Um mit Signalen gut umgehen zu k\"onnen, ist es wichtig ihre Eigenschaften als mathematische Objekte zu kennen.
-Intuitiv stellt man sich vor, dass man Signale in ihrer Intensit\"at ver\"andern k\"onnen sollte, und f\"ur beliebige \"Anderung der Intsit\"at wieder ein Signal erh\"alt.
+Intuitiv stellt man sich vor, dass man Signale in ihrer Intensit\"at ver\"andern
+k\"onnen sollte, und f\"ur beliebige \"Anderung der Intensit\"at wieder ein Signal erh\"alt.
 Wir gehen hier zun\"acht der Einfachheit halber von $D = B = \R$ aus.
 
 Definiert man f\"ur $a \in \R$ das Objekt $a \cdot s$ als $t \mapsto a \cdot s(t)$ so erh\"alt man wieder ein Signal.
@@ -110,7 +111,8 @@ Ist nun die Transformation so, dass wir schreiben k\"onnen
     \{Ts\}(t) = \{T (a_1 s_1 + a_2 s_2)\}(t) = a_1 \{Ts_1\}(t) + a_2 \{Ts_2\}(t),
 \]
 so nennen wir $T$ eine \emph{lineare} Transformation.
-Zusammen mit der Superpositionseigenschaft von Signalen sieht man nun, warum Linearit\"t so wichtig f\"ur Transformationen ist, weil es einfach zur Vektorraumstruktur von Signalen passt.
+Zusammen mit der Superpositionseigenschaft von Signalen sieht man nun, warum
+Linearit\"at so wichtig f\"ur Transformationen ist, weil es einfach zur Vektorraumstruktur von Signalen passt.
 Die Linearit\"at erlaubt es uns beispielsweise auch das obige Signal $b$ ganz einfach zu transformieren.
 Nehmen wir es in seiner Darstellung als
 \[
@@ -181,7 +183,7 @@ Uns werden immer wieder einige spezielle Signale begegnen, die wir hier kurz auf
     und wir uns im Verlauf des Semesters noch einige Male begegnen. Beispielsweise gilt $s^\ast(t) = s(-t)$.
     \item Der \emph{diskrete $\delta$-Sto\ss{}} $\delta[k]$ ist definiert als
     \[\dots, 0, \Start{1}, 0, \dots\]
-    \item Endliche Signale k\"onnen wir entweder durch
+    \item Endliche, diskrete Signale k\"onnen wir entweder durch
     \[
         s = [0,1,2,\Start{3},2,1,0]
     \]
