@@ -19,8 +19,33 @@
 \pagenumbering{arabic}
 
 \begin{center}
-    \begin{minipage}{0.6\textwidth}
-        Die Idee hinter dem Skript zur Vorlesung ist, dass es die Zuh\"orer der B\"urde des Mitschreibens entledigt und Zeit und Platz zum Folgen der Vorlesung frei macht.
-        Das Skript sollte deshalb immer zur Vorlesung und \"Ubung mitgebracht und im Idealfall mit Notizen versehen werden, bzw. zum Nachschlagen verwendet werden.
+    \begin{minipage}{0.75\textwidth}
+        \begin{center}
+            \textbf{\large Allgemeine Hinweise}
+        \end{center}
+        Die Idee hinter dem Skript zur Vorlesung ist, dass es die Zuh"orer der B"urde des Mitschreibens entledigt und Zeit und Platz zum Folgen der Vorlesung frei macht.
+        Das Skript sollte deshalb immer zur Vorlesung und "Ubung mitgebracht und im Idealfall mit Notizen versehen werden, bzw. zum Nachschlagen verwendet werden.
+
+        Eine stetig aktualisierte Version des Skriptes findet man unter \url{https://github.com/SebastianSemper/lecturenotes}.
+
+        Als Begleitmaterial ist auch eine Auswahl an Codeschnipseln bereitgestellt, die einerseits in Ausz"ugen im Skript direkt eingebunden sind, aber auch unter dem obigen Link aufzufinden sind.
+
+        Zum Ausf"uhren der Codeschnipsel empfehlen wir ein Python-Environment\footnote{\url{https://github.com/conda-forge/miniforge}}, in welchem folgende Pakete installiert sein sollten:
+        \begin{itemize}
+            \item \texttt{numpy} -- \url{https://numpy.org}
+            \item \texttt{scipy} -- \url{https://scipy.org}
+            \item \texttt{matplotlib} -- \url{https://matplotlib.org}
+            \item \texttt{cupy} -- \url{https://cupy.dev} (optional f"ur ZOOMG GPU speed)
+            \item \texttt{sympy} -- \url{https://sympy.org} (optional f"ur symbolisches Rechnen in Python)
+        \end{itemize}
+        Diese k"onnen ganz einfach via
+        \begin{minted}{bash}
+        conda create -n dsv python=3.10
+        conda activate dsv
+        python -m pip install numpy scipy matplotlib
+        \end{minted}
+        installiert werden.
+
+        Alternativ steht unter \url{https://jup.rz.tu-ilmenau.de/hub/login} ein Jupyter-Hub zur Verf"ugung, der eine Python IDE im Browser bereitstellt.
     \end{minipage}
 \end{center}

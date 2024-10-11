@@ -373,7 +373,7 @@ g(t) = \frac{\sin(2 \pi B t)}{2 \pi B t}.
 gegeben. Doch in diesem Falle w"urde der Interpolationskern von der Bandbreite des Signals $x_a$, aber nicht von der Abtastrate $F_s$ abh"angen. 
 Die angegebe Definition ist nur korrekt, falls $F_s = 2 B$, wir also mit der \emph{minimalen} Samplerate abgetastet haben.
 In diesem Fall spricht man auch von \emph{kritischer Abtastung}.
-
+%
 \begin{listing}
     \begin{minipage}{0.49\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -386,4 +386,7 @@ In diesem Fall spricht man auch von \emph{kritischer Abtastung}.
     \codecaption{code/sampling_theorem.py}{Berechnung und Darstellung von \Cref{stm:sampling_theorem}}\label{py:sampling_theorem}
 \end{listing}
 
+Es ist weiterhin noch zu erw"ahnen, dass wir genau genommen immer noch nicht wissen, wie wir "uberpr"ufen k"onnen, welche maximale Frequenz $F_{\rm max}$ von einem Signal belegt wird. 
+Das hei"st, dass wir auch noch nicht "uberpr"ufen k"onnen, ob wir das Samplingtheorem eingehalten haben.
+Wir werden sp"ter darauf zur"uckkommen.
 \FloatBarrier
