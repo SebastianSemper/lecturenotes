@@ -256,7 +256,7 @@ Wenn wir \eqref{eq:disc_fourier_lincomb} genau betrachten sehen wir, dass wir di
 Wenn wir noch sicher sein k"onnten, dass $\bm M$ invertierbar ist, k"onnten wir sogar aus $\bm x$ via $\bm c = \bm M^{-1} \cdot \bm x$ die Fourierkoeffizienten $\bm c$ direkt aus einem gegebenen $N$-periodischen Signal $x[\cdot]$ bestimmen.
 %
 %
-\subsection{Finally: Abtastung von Signalen}
+\subsection{Abtastung von harmonischen Signalen}\label{sec:sample_harm}
 %
 Es gibt viele M"oglichkeiten ein analoges Signal zu digitalisieren.
 Wir beschr"anken uns auf Abtastung, welche ein analoges Signal auf eine regelm"a"sige Art und Weise \emph{direkt} auswertet.
@@ -337,7 +337,7 @@ Das hei"st, wenn wir nur analoge Signale betrachten, bei welchen
 \]
 gilt, dann sind wir in der Lage aus $x[\cdot]$ das originale $x_a$ zu rekonstruieren, weil wir wissen, auf welche der Aliase wir uns beschr"anken m"ussen.
 
-\emph{Eine M"oglichkeit der perfekten Rekonstruktion von analogen Signalen aus uniformen digitalen Abtastwerten ist die Einschr"ankung auf einen bestimmten Frequenzbereich.}
+\emph{Eine M"oglichkeit der perfekten Rekonstruktion von analogen mit einzelnen Frequenzen Signalen aus uniformen digitalen Abtastwerten ist die Einschr"ankung auf einen bestimmten Frequenzbereich.}
 
 Umgekehrt k"onnen wir auch bei Vorwissen "uber die maximale Frequenz $F_{\rm max}$, also $F \in [-F_{\rm max},+F_{\rm max}]$ in einem Signal $x_a$ die Samplingrate ermitteln, sodass im Digitalen die Aliase $f + k$ f"ur $k \neq 0$ nicht im Bereich $[-F_{\rm max},+F_{\rm max}]$ liegen.
 Damit
@@ -350,8 +350,192 @@ gilt, muss also auch
 \]
 gelten.
 Deshalb muss schlussendlich $F_s > 2 F_{\rm max}$ gelten.
+Es ist zu beachten, dass wir diese "Uberlegungen erst einmal \q{nur} f"ur Signale der Form \eqref{eq:analog_cosine} und \eqref{eq:discrete_cosine} durchgef"uhrt haben.
+Im n"achsten Abschnitt werden wir das Abtasttheorem f"ur beliebige aperiodische Signale herleiten.
+%
+%
+\subsection{Das Sampling Theorem}
+%
+Wir besch"aftigen uns nun also allgemein mit dem Problem der Abtastung eine beliebigen analogen aperiodischen Signals $x_a$ zur Folge
+\[
+    x[n] = x_a(nT).
+\]
+F"ur die bequeme Analyse von kontinuierlichen Signalen und ihrem Anteil an harmonischen Komponenten, benutzen wir die \gls{ft} $\mathcal{F}$, welche ein Signal $x : \R \rightarrow \C$ transformiert in $x \mapsto \mathcal{F} x = X : \R \rightarrow \C$, wobei $X$ definiert durch
+%
+\begin{equation}\label{eq:fourier_trafo}
+    X(F) = \Int{-\infty}{+\infty}{x(t) \exp(-\jmath 2 \pi F t)}{t}
+\end{equation}
+%
+definiert ist.
+Wir werden versuchen immer die Kombination von Klein- und Gro"sbuchstaben $x \leftrightarrow X$ als \gls{ft}-Paar beizubehalten.
+Die zugeh"orige inverse \gls{ft}, also die Abbildung von $X$ auf $x$ ist gegeben durch
+%
+\begin{equation}\label{eq:inv_fourier_trafo}
+    x(t) = \Int{-\infty}{+\infty}{X(F) \exp(\jmath 2 \pi F t)}{F}.
+\end{equation}
+%
+Wir wollen darauf hinweisen, dass man diese Art Integral-Transformation rein mathematisch interpretieren kann.
+%  und wir betrachten den Raum aller Signale, f"ur welche 
+% \[
+%     E(x) = \Int{-\infty}{+\infty}{\Abs{x(t)}^2}{t} 
+%     = \Int{-\infty}{+\infty}{x(t)x^\ast(t)}{t} < \infty
+% \]
+% gilt.
+% Man nennt diese Signale mit endlicher Energie.
+% Wir gehen nun einen Schritt weiter und definieren 
+Betrachten wir das Signal $x$ als Vektor in einem Vektorraum, in dem ein \emph{Skalarprodukt} definiert ist.
+Starten wir mit etwas bekanntem.
+Im endlich-dimensionalen Fall, also wenn $\bm x, \bm y \in \C^N$, dann ist ein m"ogliches Skalarprodukt $\ScPr{\cdot}{\cdot} : \C^N \times \C^N \R$ durch
+\[
+ \ScPr{\bm x}{\bm y} 
+    = \Sum{i = 1}{N}{x_i \cdot y^\ast_i} 
+    = y^\herm \cdot x
+\]
+gegeben, wobei der letzte Ausdruck das Matrix-Vektor-Produkt einer $\C^{N \times 1}$ Matrix und einem Vektor in $\C^N$ darstellt.
+Man kann nun $\ScPr{\bm x}{\bm y}$ betrachten, um zu ermitteln, wie \q{"ahnlich} die Vektoren $\bm x$ und $\bm y$ sind.
+Beispielsweise nennen wir die beiden Vektoren orthogonal/senkrecht, falls $\ScPr{\bm x}{\bm y} = 0$. 
+In diesem Fall interpretieren wir dies intuitiv so, dass $\bm x$ und $\bm y$ keine \q{gemeinsamen} Anteile haben.
+Beispielsweise, wenn wir einen dritten Vektor $\bm z = \alpha \bm x + \beta \bm y$ betrachten und es gilt, dass $\ScPr{\bm x}{\bm y} =0$, dann schl"agt sich dies auch auf das Skalarprodukt von $\ScPr{\bm x}{\bm z}$ nieder, da
+%
+\[
+    \ScPr{\bm x}{\bm z} 
+        = \ScPr{\bm x}{\alpha \bm x + \beta \bm y}
+        = \alpha \ScPr{\bm x}{\bm x}.
+\]
+%
+Beim Bilden von $\ScPr{\bm x}{\bm y}$ k"onnen wir also einen etwas asymmetrischen Standpunkt einnehmen und uns vorstellen, dass wir ermitteln, wie viele \q{Anteile} von $\bm x$ in $\bm y$ zu finden sind.
 
-Was nun noch fehlt ist eine analytische Formel f"ur die Rekonstruktion von dem Signal $x_a$ aus $x[\cdot]$.
+Man sieht, dass dies in gewisser Weise erlaubt mit hochdimensionalen Objekten eine Art Geometrie zu betreiben.
+Man kann noch weiter gehen und mit einem Skalarprodukt Korrelationen, Winkel und L"angen definieren.
+
+Wir wollen nun dieses Konzept auf kontinuierliche Signale erweitern und dann die \gls{ft} in diesem Licht interpretieren.
+Man kann zeigen, dass f"ur zwei Funktionen $x,y : \R \rightarrow \C$ die Abbildung $(x,y) \mapsto \ScPr{x}{y}$ mit
+%
+\begin{equation}\label{eq:cont_scpr}
+    \ScPr{x}{y} = \Int{-\infty}{+\infty}{
+        x(t) \cdot y^\ast(t)
+    }{t}
+\end{equation}
+%
+ein Skalarprodukt definiert. 
+Auch hier halten wir an der Interpretation fest, dass wir damit berechnen, wie "ahnlich sich $x$ und $y$ sind.
+Definieren wir nun die Signale $k_F: \R \rightarrow \C$ durch $k_F(t) = \exp(\jmath 2 \pi F t)$, dann k"onnen wir \eqref{eq:fourier_trafo} umschreiben zu
+\[
+\ScPr{x}{k_F} 
+    = \Int{-\infty}{+\infty}{
+        x(t) \cdot \exp(\jmath 2 \pi F t)^\ast
+    }{t}
+    = \Int{-\infty}{+\infty}{
+        x(t) \cdot \exp(-\jmath 2 \pi F t)
+    }{t}
+    = X(f).
+\]
+Dies suggeriert uns also, dass wir die \gls{ft} als Skalarprodukt von dem zu transformierenden Signal und einem geeignet gew"ahlten Transformationskern interpretieren k"onnen.
+Die Zuordnung von $F \mapsto \ScPr{x}{k_F}$ definiert dann im Grunde die Funktion $X$ f"ur alle $F$.
+
+Genauso erhalten wir f"ur die Folge der Abtastwerte $x[\cdot]$ die \gls{dtft} als Skalarprodukt von $x[\cdot]$ und der Folge $k_f[n] = \exp(\jmath 2 \pi f n)$, also
+\[
+X(f) = \Sum{n \in \Z}{}{
+        x[n] k_f[n]^\ast
+    }
+    = \Sum{n \in \Z}{}{
+        x[n] exp(-\jmath 2 \pi f n)
+    }.
+\]
+Die inverse \gls{dtft} ergibt sich durch
+\[
+x[n] = \Int{-1/2}{+1/2}{X(f) \exp(\jmath 2 \pi f n)}{f}.
+\]
+Wir haben nun alle Werkzeuge zusammen, um genauer zu Analysieren, was bei Abtastung von $x_a$ zu $x[\cdot]$ geschieht.
+Wir erinnern uns, dass gilt f"ur die Abtastpunkte gilt, dass $t = nT = n/F_s$ gilt.
+Wir erhalten dann mit $x[n] = x_a(nT)$ und der inversen \gls{ft} angewandt auf $X_a$, dass
+\[
+x[n] = x_a(nT) = \Int{-\infty}{+\infty}{X_a(F) \exp(\jmath 2 \pi F/F_s)}{F}
+\]
+gelten muss.
+Setzen wir nun auch f"ur $x[\cdot]$ die inverse \gls{dtft} ein, erhalten wir mit $f = F/F_s$ (siehe \Cref{sec:sample_harm}) und einer Variablentransformation, dass
+\[
+    \frac{1}{F_s} \Int{-1/2}{+1/2}{X(f) \exp(\jmath 2 \pi n F/F_s)}{F}
+    = \Int{-\infty}{+\infty}{X_a(F) \exp(\jmath 2 \pi F/F_s)}{F}
+\]
+gilt. 
+Wichtig ist an diesem Ausdruck, dass wir nun einen Zusammenhang von $X$ un $X_a$ gefunden haben.
+Die Integration auf beiden Seiten ist auch bez"uglich desselben Integrationskernes $\exp(\jmath 2 \pi n/F_s \cdot)$.
+Das hei"st, dass es m"oglich sein sollte, einen Ausdruck herzuleiten, der $X$ in Abh"angigkeit von $X_a$ ausdr"uckt.
+Mit ein wenig algebraischem Grindwork findet man
+\begin{equation}\label{eq:spectrum_sampled}
+    X(f) = F_s \Sum{k \in \Z}{}{
+        X_a((f - k) F_s)
+    }.
+\end{equation}
+
+Wie ist dies nun zu interpretieren? 
+Im Grunde best"atigt \eqref{eq:spectrum_sampled} f"ur beliebige Signale, was wir bereits f"ur Signale mit einzelnen Frequenzen (siehe \eqref{eq:analog_cosine}) gefunden hatten.
+Das Spektrum wird durch die Abtastung periodifiziert und zwar entsteht das periodische Spektrum $X$ durch Wiederholung von um $1/F_s$ gestauchte Kopien von $X_a$ mit Abstand $1/F_s$.
+Man sieht nun auch wieder sch"on, dass unsere obige Argumentation zum Verh"altnis von Samplingfrequenz und maximaler Frequenz im Signal immernoch gilt, da nun gelten muss, dass \emph{alle} belegten Frequenzen von $x_a$ sich im Intervall $[-F_s/2,+F_s/2]$ befinden m"ussen, da sich sonst die Kopien von $X_a$ in \eqref{eq:spectrum_sampled} "uberlappen.
+Dies ist "aquivalent zur Forderung, dass
+\[
+\Abs{X_a(F)} = 0 \Text{f"ur} \Abs{F} > F_s/2
+\]
+gelten muss. 
+In diesem Fall spricht man davon, dass $X_a$ \emph{bandbegrenzt} ist.
+Das kleinste $F \in \R$, was obige Ungleichung erf"ullt, nennen wir $F_{\rm max}$.
+
+Wir sind nun beinahe am Ziel angelangt, dass wir das Samplingtheorem formulieren k"onnen.
+Wir ben"otigen lediglich noch eine M"oglichkeit aus den Abtastwerten $x[\cdot]$ das Signal $x_a$ zu rekonstruieren.
+Wenn kein Aliasing vorliegt, also $F_{\rm max} < F_s/2$, dann k"onnen wir $X_a$ aus $X$ berechnen, indem wir
+\[
+X_a(F) = \begin{cases}
+    \frac{X(f)}{F_s}, \Abs{F} \leqslant F_s/2, \\
+    0 \Text{sonst}
+\end{cases}
+\]
+setzen.
+Wir wissen au"serdem, dass sich $X$ durch die \gls{dtft} durch
+\[
+    X(f) = \Sum{n \in \Z}{}{
+        x[n] \exp(-\jmath 2 \pi n F/F_s)
+    }
+\]
+berechnen l"asst.
+Weiter k"onnen wir nun auch $x_a$ durch Integration "uber einen endlichen Bereich durch
+\[
+    x_a(t) = \Int{-F_s/2}{+F_s/2}{X_a(F) \exp(\jmath 2 \pi F t)}{F}.
+\]
+erhalten. 
+Wir setzen nun einfach alles ein und erhalten
+\[
+x_a(t) = \frac{1}{F_s}\Int{-F_s/2}{+F_s/2}{
+    \Sum{n \in \Z}{}{
+        x[n] \exp(-\jmath 2 \pi n F/F_s)
+    } 
+    \exp(\jmath 2 \pi F t)}{F}.
+\]
+Toll, aber wir m"ussen dies nun noch ein wenig umformen. Zuerst vertauschen wir Integration und Summation, weil wir es d"urfen und nutzen $x[n] = x_a(n/F_s)$. Dies ergibt
+\[
+x_a(t) = \frac{1}{F_s}\Sum{n \in \Z}{}{
+            x_a(n/F_s)
+            \Int{-F_s/2}{+F_s/2}{
+                \exp(-\jmath 2 \pi n F/F_s)
+                \exp(\jmath 2 \pi F t)
+            }{F}
+        }.
+\]
+Wir sind nicht wirklich schlauer, aber wir wissen aus unserer Erfahrung von Integration von komplexen Funktionen, dass
+\[
+    \frac{1}{F_s}\Int{-F_s/2}{+F_s/2}{
+        \exp(-\jmath 2 \pi n F/F_s)
+        \exp(\jmath 2 \pi F t)
+    }{F} = \frac{\sin(\pi F_s (n - n/Fs))}{\pi F_s (t - n/F_s)}.
+\]
+Wir nutzen nun wiederum die Interpretation von Integration eines Produktes von Funktionen als deren Skalarprodukt.
+Wir bilden also das Skalarprodukt von zwei Funktionen mit Periode $F_s$, d.h. es gen"ugt das Integral im Intervall $[-F_s/2, +F_s/2]$ zu bilden.
+Sehen wir genauer hin, bilden wir also das Skalarprodukt $\ScPr{k_t}{k_{n/F_s}}$, wobei "ahnlich wie oben
+\[
+k_t(F) = \exp(\jmath 2 \pi F t)
+\]
+definiert wurde.
+
 \begin{Thm}[Sampling Theorem]\label{stm:sampling_theorem}
 Gegeben sei ein analoges Signal $x_a$ mit Frequezen in $[-F_{\rm max},+F_{\rm max}]$ und dessen Abtastwerte $x[\cdot]$ mit $x[n] = x_a(nT)$, wobei $T = 1/F_s$.
 
@@ -387,7 +571,9 @@ In diesem Fall spricht man auch von \emph{kritischer Abtastung}.
     \codecaption{code/sampling_theorem.py}{Berechnung und Darstellung von \Cref{stm:sampling_theorem}}\label{py:sampling_theorem}
 \end{listing}
 
-Es ist weiterhin noch zu erw"ahnen, dass wir genau genommen immer noch nicht wissen, wie wir "uberpr"ufen k"onnen, welche maximale Frequenz $F_{\rm max}$ von einem Signal belegt wird. 
-Das hei"st, dass wir auch noch nicht "uberpr"ufen k"onnen, ob wir das Samplingtheorem eingehalten haben.
-Wir werden sp"ter darauf zur"uckkommen.
+Es ist weiterhin noch zu erw"ahnen, dass wir genau genommen immer noch nicht wissen, wie wir "uberpr"ufen k"onnen, welche maximale Frequenz $F_{\rm max}$ von einem analogen Signal $x_a$ belegt wird. 
+Das hei"st, dass wir auch noch nicht "uberpr"ufen k"onnen, ob wir das Samplingtheorem eingehalten haben, oder einhalten werden, falls wir Abtasten sollten.
+Au"serdem ist nicht intuitiv klar, weshalb $g_{F_s}$ die behauptete Form haben sollte.
+
+
 \FloatBarrier
