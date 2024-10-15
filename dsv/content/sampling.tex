@@ -17,12 +17,12 @@ Die zentralen Fragen sind nun:
 \begin{itemize}
     \item Wie muss der Vorgang der Abtastung gestaltet sein, dass keine Information verloren geht?
     \item Wie k\"onnen wir die Eigenschaften des analogen Signals in dessen abgetasteter Version wiederfinden?
-    \item Welche Operationen k"onnen wir auf digitalen Signalen wie effizient ausf"uhren?
+    \item Wie k"onnen wir eine Intuition f"ur den Vorgang der Abtastung entwickeln?
 \end{itemize}
 %
 \subsection{Frequenz von Signalen}
 %
-\subsubsection{Zeit-Kontinuierliche Harmonische}
+\subsubsection{Zeit-Kontinuierliche Sinussignale}
 %
 Meistens werden wir uns in der Vorlesung mit reell- oder komplexwertigen Zeitsignalen befassen, d.h. wir modellieren unsere Signale als $x_a : \R \rightarrow \R$ oder $x_a: \R \rightarrow \C$.
 Wobei physikalische Signale nat"urlich nur reellwertig sind, doch manchmal ist die Darstellung als komplexwertige Funktion besser handhabbar, siehe \eqref{complex_baseband}.
@@ -76,7 +76,7 @@ Ein kleines Beispiel findet man in \Cref{py:cont_harms}.
 \end{listing}
 \FloatBarrier
 %
-\subsubsection{Zeit-Diskrete Harmonische}
+\subsubsection{Zeit-Diskrete Sinussignale}
 %
 Als n"achstes gehen wir zu dem eigentlich interessanten Fall "uber, bei welchem wir von zeitdiskreten harmonischen Signalen sprechen.
 Dabei gehen wir vorerst \emph{nicht} davon aus, dass das Signal durch Abtastung eines analogen Signals entstanden ist, sondern betrachten es ganz losgel"ost f"ur sich.
@@ -145,7 +145,7 @@ Selbst wenn wir wissen, dass nur \emph{eine} Frequenz in diesem Signal vor Abtas
 %
 \FloatBarrier
 %
-\subsection{Zeit-Kontinuierliche Komplexe Harmonische}\label{sec:cont_complex_harm}
+\subsection{Zeit-Kontinuierliche Komplexe Sinussignale}\label{sec:cont_complex_harm}
 %
 Wir wollen eine bestimmte Menge an Funktionen betrachten. Wir wollen kontinuierliche komplexe Schwingungen betrachten, welche mit einer Frequenz $F_k$ schwingen, welche ein ganzzahliges Vielfaches einer Frequenz $F_0$ ist.
 Das hei"st, wir betrachten dann
@@ -174,19 +174,23 @@ Die erste Schreibweise ist absichtlich ohne das Argument $t$, um zu verdeutliche
 Nat"urlich ist \eqref{eq:cont_fourier_series} als Fourierreihe von $x_a$ bekannt, und die $c_k$ sind die Fourierkoeffizienten von $x_a$.
 Wie in \Cref{sec:signals_vec} k"onnen wir also die $c_k$ durch \eqref{eq:cont_fourier_series} mit $x_a$ \emph{identifizieren}, da uns die $c_k$ eine alternative Darstellung von $x_a$ liefern.
 %
-\subsection{Zeit-Diskrete Komplexe Harmonische}
+\subsection{Zeit-Diskrete Komplexe Sinussignale}
 %
 Analog zu \Cref{sec:cont_complex_harm}, wollen wir uns zeit-diskrete komplexe Schwingungen herleiten, die von einer bestimmten Grundfrequenz definiert werden.
 Da wir, im Unterschied zum kontinuierlichen Fall, nicht f"ur alle $f \in \R$ eine periodische Funktion erhalten, w"ahlen wir $f_0 = 1/N$ f"ur ein $N \in \N$. 
 Die Intension ist, dass wir so $1/N$ Perioden pro Abtastwert erhalten werden. 
 Demzufolge wird die Schwingung mit Frequenz $f_0$ genau Periodenl"ange $N$ haben.
 Dann definieren wir die Signale $x_k[\cdot]: \N \rightarrow \C$ als
-\[
- x_k[n] = \exp\left(
+%
+\begin{equation}\label{eq:disc_harms_comp}
+    x_k[n] = \exp\left(
         \jmath 2 \pi k f_0 n
     \right) \Text{mit} k \in \Z.
-\]
+\end{equation}
+%
 Man sieht nun leicht, dass $f_k = k/N$ immer eine rationale Zahl ist und $x_k[\cdot]$ Periodenl"ange $k/N$ hat, falls $k/N \in \Z$.
+Dies ist in \Cref{py:disc_harms_comp} dargestellt.
+
 Au"serdem findet man wieder, dass $x_k[\cdot]$ ein Alias von $x_{k+N}[\cdot]$ sein muss, denn mit $f_0 = 1/N$ ergibt sich
 \[
  x_{k+N}[n] = \exp\left(
@@ -205,6 +209,22 @@ Au"serdem findet man wieder, dass $x_k[\cdot]$ ein Alias von $x_{k+N}[\cdot]$ se
 \]
 Das hei"st, dass nur $N$ verschiedene $x_k[\cdot]$ existieren.
 Normalerweise nimmt man jene $x_k[\cdot]$ f"ur $k = 0, 1, \ldots, N-1$.
+
+\begin{listing}
+    \noindent
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=4]{python3}{code/disc_harms_comp.py}
+    \end{minipage}%
+    \begin{minipage}{0.3\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/disc_harms_comp.png}
+
+        \includegraphics[width=\textwidth]{code/disc_harms_comp_e.png}
+    \end{minipage}
+    \codecaption{code/disc_harms_comp.py}{Berechnung und Darstellung von \eqref{eq:disc_harms_comp} f"ur $f_0 = 1/16$ und $f_0 = 1/(5 e)$}\label{py:disc_harms_comp}
+\end{listing}
+
 Nun k"onnen wir auch wieder, wie in \eqref{eq:cont_fourier_series} eine Linearkombination der $x_k[\cdot]$ bilden.
 Man beachte, dass in diesem Fall die Summation nat"urlich \emph{endlich} sein wird, da wir nur $N$ verschiedene $x_k[\cdot]$ zur Verf"ugung haben.
 Wir bilden also
@@ -256,7 +276,7 @@ Wenn wir \eqref{eq:disc_fourier_lincomb} genau betrachten sehen wir, dass wir di
 Wenn wir noch sicher sein k"onnten, dass $\bm M$ invertierbar ist, k"onnten wir sogar aus $\bm x$ via $\bm c = \bm M^{-1} \cdot \bm x$ die Fourierkoeffizienten $\bm c$ direkt aus einem gegebenen $N$-periodischen Signal $x[\cdot]$ bestimmen.
 %
 %
-\subsection{Abtastung von harmonischen Signalen}\label{sec:sample_harm}
+\subsection{Abtastung von Sinussignalen}\label{sec:sample_harm}
 %
 Es gibt viele M"oglichkeiten ein analoges Signal zu digitalisieren.
 Wir beschr"anken uns auf Abtastung, welche ein analoges Signal auf eine regelm"a"sige Art und Weise \emph{direkt} auswertet.
@@ -354,7 +374,7 @@ Es ist zu beachten, dass wir diese "Uberlegungen erst einmal \q{nur} f"ur Signal
 Im n"achsten Abschnitt werden wir das Abtasttheorem f"ur beliebige aperiodische Signale herleiten.
 %
 %
-\subsection{Das Sampling Theorem}
+\subsection{Das Samplingtheorem}
 %
 Wir besch"aftigen uns nun also allgemein mit dem Problem der Abtastung eine beliebigen analogen aperiodischen Signals $x_a$ zur Folge
 \[
@@ -373,18 +393,10 @@ Die zugeh"orige inverse \gls{ft}, also die Abbildung von $X$ auf $x$ ist gegeben
 \begin{equation}\label{eq:inv_fourier_trafo}
     x(t) = \Int{-\infty}{+\infty}{X(F) \exp(\jmath 2 \pi F t)}{F}.
 \end{equation}
-%
-Wir wollen darauf hinweisen, dass man diese Art Integral-Transformation rein mathematisch interpretieren kann.
-%  und wir betrachten den Raum aller Signale, f"ur welche 
-% \[
-%     E(x) = \Int{-\infty}{+\infty}{\Abs{x(t)}^2}{t} 
-%     = \Int{-\infty}{+\infty}{x(t)x^\ast(t)}{t} < \infty
-% \]
-% gilt.
-% Man nennt diese Signale mit endlicher Energie.
-% Wir gehen nun einen Schritt weiter und definieren 
-Betrachten wir das Signal $x$ als Vektor in einem Vektorraum, in dem ein \emph{Skalarprodukt} definiert ist.
-Starten wir mit etwas bekanntem.
+
+Wir wollen nun ausarbeiten, wie man diese Art Integral-Transformation rein mathematisch interpretieren kann, um eine alternative Sicht auf solche Art Transformation zu erhalten.
+Betrachten wir dazu das Signal $x$ wieder als Vektor in einem Vektorraum, in dem ein \emph{Skalarprodukt} definiert ist.
+Um zu erl"autern, was das bringt, starten wir mit etwas Bekanntem.
 Im endlich-dimensionalen Fall, also wenn $\bm x, \bm y \in \C^N$, dann ist ein m"ogliches Skalarprodukt $\ScPr{\cdot}{\cdot} : \C^N \times \C^N \R$ durch
 \[
  \ScPr{\bm x}{\bm y} 
@@ -395,7 +407,7 @@ gegeben, wobei der letzte Ausdruck das Matrix-Vektor-Produkt einer $\C^{N \times
 Man kann nun $\ScPr{\bm x}{\bm y}$ betrachten, um zu ermitteln, wie \q{"ahnlich} die Vektoren $\bm x$ und $\bm y$ sind.
 Beispielsweise nennen wir die beiden Vektoren orthogonal/senkrecht, falls $\ScPr{\bm x}{\bm y} = 0$. 
 In diesem Fall interpretieren wir dies intuitiv so, dass $\bm x$ und $\bm y$ keine \q{gemeinsamen} Anteile haben.
-Beispielsweise, wenn wir einen dritten Vektor $\bm z = \alpha \bm x + \beta \bm y$ betrachten und es gilt, dass $\ScPr{\bm x}{\bm y} =0$, dann schl"agt sich dies auch auf das Skalarprodukt von $\ScPr{\bm x}{\bm z}$ nieder, da
+Beispielsweise, wenn wir einen dritten Vektor $\bm z = \alpha \bm x + \beta \bm y$ betrachten und es gilt, dass $\ScPr{\bm x}{\bm y} = 0$, dann schl"agt sich dies auch auf das Skalarprodukt von $\ScPr{\bm x}{\bm z}$ nieder, da
 %
 \[
     \ScPr{\bm x}{\bm z} 
@@ -403,7 +415,7 @@ Beispielsweise, wenn wir einen dritten Vektor $\bm z = \alpha \bm x + \beta \bm 
         = \alpha \ScPr{\bm x}{\bm x}.
 \]
 %
-Beim Bilden von $\ScPr{\bm x}{\bm y}$ k"onnen wir also einen etwas asymmetrischen Standpunkt einnehmen und uns vorstellen, dass wir ermitteln, wie viele \q{Anteile} von $\bm x$ in $\bm y$ zu finden sind.
+Beim Bilden von $\ScPr{\bm x}{\bm z}$ k"onnen wir also einen etwas asymmetrischen Standpunkt einnehmen und uns vorstellen, dass wir ermitteln, wie viele \q{Anteile} von $\bm x$ in $\bm z$ zu finden sind.
 
 Man sieht, dass dies in gewisser Weise erlaubt mit hochdimensionalen Objekten eine Art Geometrie zu betreiben.
 Man kann noch weiter gehen und mit einem Skalarprodukt Korrelationen, Winkel und L"angen definieren.
@@ -526,7 +538,7 @@ Wir sind nicht wirklich schlauer, aber wir wissen aus unserer Erfahrung von Inte
     \frac{1}{F_s}\Int{-F_s/2}{+F_s/2}{
         \exp(-\jmath 2 \pi n F/F_s)
         \exp(\jmath 2 \pi F t)
-    }{F} = \frac{\sin(\pi F_s (n - n/Fs))}{\pi F_s (t - n/F_s)}.
+    }{F} = \frac{\sin(\pi F_s (t - n/Fs))}{\pi F_s (t - n/F_s)} = \Sinc(F_s (t - n/Fs)).
 \]
 Wir nutzen nun wiederum die Interpretation von Integration eines Produktes von Funktionen als deren Skalarprodukt.
 Wir bilden also das Skalarprodukt von zwei Funktionen mit Periode $F_s$, d.h. es gen"ugt das Integral im Intervall $[-F_s/2, +F_s/2]$ zu bilden.
@@ -535,8 +547,15 @@ Sehen wir genauer hin, bilden wir also das Skalarprodukt $\ScPr{k_t}{k_{n/F_s}}$
 k_t(F) = \exp(\jmath 2 \pi F t)
 \]
 definiert wurde.
+Das hei"st nun in der Sprache von Skalarprodukten, dass wir die $\Sinc$-Funktion erhalten, als
+\[
+    \Sinc(F_s (t - n/Fs)) = \ScPr{k_t}{k_{n/F_s}}.
+\]
+Wenn man es ein wenig allgemeiner Formuliert, kann man sagen, dass die $\Sinc$-Funktion nur ein spezieller \emph{Interpolationskern} ist, der sich aus der Definition von $k_t$ ergibt.
+Wir werden sp"ater noch ein weiteres Beispiel f"ur so einen Kern betrachten.
 
-\begin{Thm}[Sampling Theorem]\label{stm:sampling_theorem}
+Zusammenfassend f"ur diesen \Cref{sec:sampling} steht nun folgendes Theorem.
+\begin{Thm}[Samplingtheorem]\label{stm:sampling_theorem}
 Gegeben sei ein analoges Signal $x_a$ mit Frequezen in $[-F_{\rm max},+F_{\rm max}]$ und dessen Abtastwerte $x[\cdot]$ mit $x[n] = x_a(nT)$, wobei $T = 1/F_s$.
 
 Falls $F_s > 2 F_{\rm max}$, dann gilt
@@ -551,11 +570,12 @@ g_{F_s}(t) = \frac{\sin(\pi F_s t)}{\pi F_s t}.
 \]
 \end{Thm}
 
-\textbf{Hinweis:} Das Sampling Theorem, wie es in \cite{proakis2013} formuliert ist, beinhaltet einen Fehler. Die Definition des Interpolationskernes ist dort mit
+\textbf{Hinweis:} Das Samplingtheorem, wie es in \cite{proakis2013} formuliert ist, beinhaltet einen kleinen, aber entscheidenden Fehler. Die Definition des Interpolationskernes $g_F$ ist dort mit
 \[
 g(t) = \frac{\sin(2 \pi B t)}{2 \pi B t}.
 \]
-gegeben. Doch in diesem Falle w"urde der Interpolationskern von der Bandbreite des Signals $x_a$, aber nicht von der Abtastrate $F_s$ abh"angen. 
+gegeben. 
+Doch in diesem Falle w"urde der Interpolationskern von der Bandbreite des Signals $x_a$, aber nicht von der Abtastrate $F_s$ abh"angen. 
 Die angegebe Definition ist nur korrekt, falls $F_s = 2 B$, wir also mit der \emph{minimalen} Samplerate abgetastet haben.
 In diesem Fall spricht man auch von \emph{kritischer Abtastung}.
 %
@@ -571,9 +591,9 @@ In diesem Fall spricht man auch von \emph{kritischer Abtastung}.
     \codecaption{code/sampling_theorem.py}{Berechnung und Darstellung von \Cref{stm:sampling_theorem}}\label{py:sampling_theorem}
 \end{listing}
 
-Es ist weiterhin noch zu erw"ahnen, dass wir genau genommen immer noch nicht wissen, wie wir "uberpr"ufen k"onnen, welche maximale Frequenz $F_{\rm max}$ von einem analogen Signal $x_a$ belegt wird. 
+Es ist weiterhin noch zu erw"ahnen, dass wir genau genommen immer noch nicht wissen, wie wir "uberpr"ufen k"onnen, welche maximale Frequenz $F_{\rm max}$ von einem analogen Signal $x_a$ belegt wird.
+Dies liegt daran, dass wir im Vorhinein -- also vor Abtastung -- keinen Zugriff auf das abzutastende Signal haben.
 Das hei"st, dass wir auch noch nicht "uberpr"ufen k"onnen, ob wir das Samplingtheorem eingehalten haben, oder einhalten werden, falls wir Abtasten sollten.
-Au"serdem ist nicht intuitiv klar, weshalb $g_{F_s}$ die behauptete Form haben sollte.
-
+Man muss sich also f"ur ein gegebenes System, das einem Signale produziert, die abgetastet werden sollen, auf anderem Weg "uberlegen, wie man die Bedingung $\Abs{X_a(F)} = 0 \Text{f"ur} \Abs{F} > F_s/2$ "uberpr"ufen kann.
 
 \FloatBarrier

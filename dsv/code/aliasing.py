@@ -15,9 +15,13 @@ def x_a(t, F, theta):
 T = np.linspace(0, 3, 301, endpoint=True) # s
 n = np.arange(4) * T_s # none
 
-plt.plot(T, x_a(T, F, theta), label="x_a")
-plt.plot(T, x_a(T, F_alias1, theta), label="x_alias1")
-plt.plot(T, x_a(T, F_alias2, theta), label="x_alias2")
-plt.scatter(n, x_a(n, F, theta), color="r", label="x[n]")
+plt.plot(T, x_a(T, F, theta), 
+         label="x_a")
+plt.plot(T, x_a(T, F_alias1, theta), 
+         label="x_alias1")
+plt.plot(T, x_a(T, F_alias2, theta), 
+         label="x_alias2")
+plt.scatter(n, x_a(n, F, theta), color="r", 
+            label="x[n]")
 plt.legend()
 plt.show()
