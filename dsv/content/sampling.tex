@@ -380,14 +380,14 @@ Wir besch"aftigen uns nun also allgemein mit dem Problem der Abtastung eine beli
 \[
     x[n] = x_a(nT).
 \]
-F"ur die bequeme Analyse von kontinuierlichen Signalen und ihrem Anteil an harmonischen Komponenten, benutzen wir die \gls{ft} $\mathcal{F}$, welche ein Signal $x : \R \rightarrow \C$ transformiert in $x \mapsto \mathcal{F} x = X : \R \rightarrow \C$, wobei $X$ definiert durch
+F"ur die bequeme Analyse von kontinuierlichen Signalen und ihrem Anteil an harmonischen Komponenten, benutzen wir die \gls{ft} $\mathcal{F}$, welche ein Signal $x : \R \rightarrow \C$ transformiert in $x \mapsto \mathcal{F} x = X : \R \rightarrow \C$, wobei $X$ durch
 %
 \begin{equation}\label{eq:fourier_trafo}
     X(F) = \Int{-\infty}{+\infty}{x(t) \exp(-\jmath 2 \pi F t)}{t}
 \end{equation}
 %
 definiert ist.
-Wir werden versuchen immer die Kombination von Klein- und Gro"sbuchstaben $x \leftrightarrow X$ als \gls{ft}-Paar beizubehalten.
+Wir werden versuchen, die Kombination von Klein- und Gro"sbuchstaben $x \leftrightarrow X$ als \gls{ft}-Paar beizubehalten.
 Die zugeh"orige inverse \gls{ft}, also die Abbildung von $X$ auf $x$ ist gegeben durch
 %
 \begin{equation}\label{eq:inv_fourier_trafo}
@@ -446,14 +446,16 @@ Dies suggeriert uns also, dass wir die \gls{ft} als Skalarprodukt von dem zu tra
 Die Zuordnung von $F \mapsto \ScPr{x}{k_F}$ definiert dann im Grunde die Funktion $X$ f"ur alle $F$.
 
 Genauso erhalten wir f"ur die Folge der Abtastwerte $x[\cdot]$ die \gls{dtft} als Skalarprodukt von $x[\cdot]$ und der Folge $k_f[n] = \exp(\jmath 2 \pi f n)$, also
-\[
-X(f) = \Sum{n \in \Z}{}{
-        x[n] k_f[n]^\ast
-    }
-    = \Sum{n \in \Z}{}{
-        x[n] exp(-\jmath 2 \pi f n)
-    }.
-\]
+%
+\begin{equation}\label{eq:dtft_inner_prod}
+    X(f) = \Sum{n \in \Z}{}{
+            x[n] k_f[n]^\ast
+        }
+        = \Sum{n \in \Z}{}{
+            x[n] exp(-\jmath 2 \pi f n)
+        }.
+\end{equation}
+%
 Die inverse \gls{dtft} ergibt sich durch
 \[
 x[n] = \Int{-1/2}{+1/2}{X(f) \exp(\jmath 2 \pi f n)}{f}.
@@ -552,9 +554,7 @@ Das hei"st nun in der Sprache von Skalarprodukten, dass wir die $\Sinc$-Funktion
     \Sinc(F_s (t - n/Fs)) = \ScPr{k_t}{k_{n/F_s}}.
 \]
 Wenn man es ein wenig allgemeiner Formuliert, kann man sagen, dass die $\Sinc$-Funktion nur ein spezieller \emph{Interpolationskern} ist, der sich aus der Definition von $k_t$ ergibt.
-Wir werden sp"ater noch ein weiteres Beispiel f"ur so einen Kern betrachten.
-
-Zusammenfassend f"ur diesen \Cref{sec:sampling} steht nun folgendes Theorem.
+Wir werden sp"ater noch ein weiteres Beispiel f"ur so einen Kern betrachten. Zusammenfassend f"ur diesen \Cref{sec:sampling} steht nun folgendes
 \begin{Thm}[Samplingtheorem]\label{stm:sampling_theorem}
 Gegeben sei ein analoges Signal $x_a$ mit Frequezen in $[-F_{\rm max},+F_{\rm max}]$ und dessen Abtastwerte $x[\cdot]$ mit $x[n] = x_a(nT)$, wobei $T = 1/F_s$.
 
