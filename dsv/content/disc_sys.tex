@@ -148,7 +148,7 @@ Au"serdem gilt
 x[n] = x_g[n] + x_u[n].
 \]
 Wir haben das Signal $x[\cdot]$ also in einen geraden und einen ungeraden Teil zerlegt.
-Wie man an \Cref{py:even_odd} gut sehen kann, muss gelten $x_u[0] =0$, $x_u[0] = x[0] - x[0] = 0$.
+Wie man an \Cref{py:even_odd} gut sehen kann, muss gelten $x_u[0] =0$, da $x_u[0] = x[0] - x[0] = 0$ und $x_e[0] = x[0]$, da $2 x_e[0] = x[0] + x[0]$.
 %
 \begin{listing}
     \noindent
@@ -164,19 +164,132 @@ Wie man an \Cref{py:even_odd} gut sehen kann, muss gelten $x_u[0] =0$, $x_u[0] =
 \end{listing}
 %
 \subsection{Diskrete Systeme}
+%
+%
+Nachdem wir uns nun ein wenig mit diskreten Signalen vertraut gemacht haben, sind wir in der Lage und mit diskreten Systemen zu befassen.
+Ganz allgemein kann man fast jeden Prozess an dessen Anfang ein diskretes Signal steht und dessen Ergebnis wiederum ein diskretes Signal ist, als ein System auffassen.
+Sobald man dieses System nun einmal vorliegen hat, will man Techniken und Werkzeugen entwickeln, wie man dieses System systematisch untersuchen kann -- eine Systematik der Systeme.
+
+Ein System $\mathcal{T}$ wird mathematisch als Abbildung eines (Eingabe-)Signals $x[\cdot]$ auf ein anderes (Ausgabesignal) $y[\cdot]$ aufgefasst. Wir schreiben daf"ur also
+%
+\begin{equation}
+    x[\cdot] \mapsto \mathcal{T}(x[\cdot])[\cdot] = y[\cdot].
+\end{equation}
+%
+Betrachten wir folgendes
+\begin{Bsp}\label{ex:simple_sys}
+    Gegeben sei das Eingabesignal
+    \[
+    x[n] = \begin{cases}
+        \Abs{n}, \Text{falls} -3 \leqslant n \leqslant +3, \\
+        0 \Text{sonst.}
+    \end{cases}
+    \]
+    Wir sind nun an den Werten der Ausgabesignals $y[\cdot]$ interessiert, f"ur
+    \begin{enumerate}[a)]
+        \item das Einheitssystem $y[n] = x[n]$,
+        \item das Einheitsdelay-System $y[n] = x[n-1]$,
+        \item das Einheitsadvance-System $y[n] = x[n+1]$
+    \end{enumerate}
+    interessiert.
+\end{Bsp}
+Diese Systeme waren noch ein wenig simpel und man ist vielleicht noch nicht "uberzeugt, dass eine genauere Analyse von diskreten Systemen notwendig sein sollte.
+Dies liegt vor allem daran, dass die Systeme in \Cref{ex:simple_sys} nur \q{lokal} gearbeitet haben, da Werte $y[n]$ nur von Werten $x[n-1]$, $x[n]$ und $x[n+1]$ abh"angen.
+
+Betrachten wir wiederum das System
+\[
+    y[n+1] = y[n]^2 + x[n]
+\]
+f"ur verschiedene Parameter $x[n] = c \in \C$ f"ur $y[0] = 0$.
+Wir sind nun an solchen $c$ interessiert f"ur welche das System divergiert, also $\Abs{y[n]} > 2$.
+Wir wollen aber solche $c$ finden, f"ur welche wir in einem gewissen Bereich $n \in [n_{\rm low}, n_{\rm hgh}]$ divergieren.
+Das in \Cref{py:buddhabrot} gezeigte Beispiel ist hierbei am anderen Ende des Spektrums, da man bei diesem System eher von einem \q{chaotischen} System sprechen sollte. Kleine Ver"anderungen an $x[n] = c$ haben gro"sen Einfluss auf das Divergenzverhalten der Folge $y[n]$\footnote{\url{https://erleuchtet.org/2010/07/ridiculously-large-buddhabrot.html}}.
+\begin{listing}
+    \noindent
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5,lastline=26]{python3}{code/buddhabrot.py}
+    \end{minipage}%
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=29,lastline=53]{python3}{code/buddhabrot.py}
+    \end{minipage}
+
+    \begin{center}
+        \includegraphics[width=0.55\textwidth]{code/buddhabrot.png}
+    \end{center}
+    \codecaption{code/buddhabrot.py}{Sp"at divergierende Orbits der Mandelbrot-Iteration.}\label{py:buddhabrot}
+\end{listing}
+
+Wir wollen hierf"ur ein etwas einfacheres Beispiel betrachten. 
+Gegeben ist das System
+\[
+y[n] = \Sum{k=-\infty}{n}{x[k]}.
+\]
+Wir sehen hier, dass es f"ur die Berechnung von $y[n]$ nicht ausreicht den Zustand des Eingangs zum Zeitpunkt $n$, also $x[n]$ zu kennen, schlie"slich m"ussen wir die gesamte Vergangenheit von $x[\cdot]$ bis $n$ in die Berechnung einflie"sen lassen.
+Wir k"onnen das System aber umschreiben in 
+\[
+y[n] = \Sum{k=-\infty}{n-1}{x[k]} + x[n] = y[n-1] + x[n],
+\]
+wobei wir nun auch sehen, warum dieses System \emph{Akkumulator} genannt wird, da $y[\cdot]$ im Prinzip die Werte von $x[\cdot]$ \q{aufsammelt}.
+
+Stellen wir uns nun vor, dass wir dieses System modellieren/simulieren wollen f"ur $n \leqslant n_0$, so ben"otigen wir entweder die Werte $x[n]$ f"ur $n < n_0$, oder die sogenannte \emph{Anfangsbedingung} $y[n_0] = y_0$.
+Dies erinnert an das L"osen einer Differentialgleichung
+\[
+\dot{y}(t) = x(t),
+\]
+wonach dann gilt, dass
+\[
+y(t) = \Int{-\infty}{t}{x(s)}{s} 
+\Text{oder}
+y(t) = y_0 + \Int{t_0}{t}{x(s)}{s},
+\]
+damit $y(t_0) = y_0$.
+Ein Beispiel f"ur die Wirkung von einem Akkumulator ist in \Cref{py:accumulator} gegeben. Man sieht sehr gut, welchen Einfluss die Anfangsbedingung auf $x_2[\cdot]$ hat, da dies den Grenzwert $\lim_{n \rightarrow \infty} y[n]$ ma"sgeblich beeinflusst.
+Falls gilt, dass $y_0 = 0$, so spricht man vom Ruhezustand, beziehungsweise dem Nullzustand in dem sich das System zum Zeitpunkt $n = n_0$ befindet.
+%
+\begin{listing}
+    \noindent
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=4,lastline=18]{python3}{code/accumulator.py}
+    \end{minipage}%
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/accumulator.png}
+    \end{minipage}%
+    \codecaption{code/accumulator.py}{Akkumulator f"ur zwei verschiedene Eingangsignale.}\label{py:accumulator}
+\end{listing}
+
+Man kann Systeme nun auf verschiedene Arten klassifizieren. 
+\paragraph{Statisch vs. Dynamisch} Beispielsweise nennen wir Systeme \emph{statisch}, wenn der Wert $y[n]$ nur von $x[n]$ abh"angt, aber nicht von vergangenen oder gar zuk"unftigen Werten entweder von $y[\cdot]$ oder $x[\cdot]$.
+Die Systeme
+\[
+y[n] = a x[n], \Text{oder} y[n] = \sqrt{x[n]} + x^4[n]
+\]
+sind statisch.
+H"angt nun $y[n]$ von seiner eigenen Vergangenheit oder der von $x[n]$ ab, so nennen wir diese Systeme dynamisch, oder Systeme mit Ged"achtnis.
+Die Systeme
+\[
+y[n] = x[n] + a x[n-1] \Text{,} y[n] = \Sum{k=0}{N}{x[n-k]}
+\]
+sind dynamisch und haben jeweils Ged"achtnis der L"ange $g = 1$, beziehungsweise $g = N-1$.
+Man sieht bereits an \Cref{py:accumulator}, dass dynamische System im Allgemeinen interessanter sein werden.
+
+\paragraph{Kausal vs. Akausal} H"angen die Werte $y[n]$ nur von $x[n], x[n-1], \dots$ ab, also nicht auch von $x[n+1], x[n+1], \dots$, so nennen wir das System kausal.
+Intuitiv bedeutet dies die bekannte Kausalit"at in dem Sinne, dass nur die Zeitliche Vergangenheit notwendig ist, um den aktuellen Zustand des Systems zu bestimmen.
+Ist die nicht gegeben, so nennt man das System \emph{akausal} oder \emph{nicht-kausal}.
+
+Was die Realisierung von akausalen Systemen angeht, wird es nicht m"oglich sein, diese in Echtzeit umzuseten, da man diese nur mit einer Verz"ogerung, oder gar nicht f"ur sequentiell verf"ugbares $x[\cdot]$ implementieren kann.
+Sind die Werte $x[n]$ jedoch durch Messung entstanden und \q{offline} verf"ugbar, so k"onnen solche Systeme durchaus angewandt werden und n"utzlich sein.
+
+\paragraph{Stabil vs. Instabil}
+
 \begin{itemize}
-    \item JEDE manipulation eines signals kann als system aufgefasst werden
-    \item system $\mathcal{T}$ ist als abbildung zu verstehen. signal rein, anderes signal raus: $y[n] = (\mathcal{T}x)[n]$ (auf bedeutung von schreibweise eingehen)
-    \item beispiele: \cite[ex. 2.2.1]{proakis2013} (a-c vorlesung, rest uebung)
-    \item vergangenheit der systeme: akkumulator
-    \item blockschaltbilder: adder, multiplikator, scaler, delay, uebung \cite[ex 2.2.3]{proakis2013}(per hand, per modularem code)
-    \item statisch vs. dynamisch (gedaechtnislos, mit gedaechtnis)
-    \item causal, antikausal, relaxed state
-    \item stabilitaet
     \item zeitvariant vs zeitinvariant: definition
 \end{itemize}
 
-\subsection{Diskrete \texorpdfstring{\acrshort{lti}}{LTI} Systeme}\label{disc_lti}
+\subsubsection{Diskrete \texorpdfstring{\acrshort{lti}}{LTI} Systeme}\label{disc_lti}
 
 \begin{itemize}
     \item wiederholung der eigenschaften: shift-invarianz, linearitaet
@@ -192,7 +305,7 @@ Wie man an \Cref{py:even_odd} gut sehen kann, muss gelten $x_u[0] =0$, $x_u[0] =
     \item beispiel 2.3.6. (fuer uebung irgendwas ausdenken)
 \end{itemize}
 
-\subsection{Cross- und Autokorrelation}\label{corr}
+\subsubsection{Cross- und Autokorrelation}\label{corr}
 
 \begin{itemize}
     \item Definition
