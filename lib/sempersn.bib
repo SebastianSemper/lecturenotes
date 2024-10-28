@@ -4047,6 +4047,32 @@ url="https://doi.org/10.1007/978-3-319-42056-1_7"
   url       = {https://doi.org/10.1016/b978-0-12-466606-1.x5000-4},
   year      = {1999}
 }
+@article{perez2024multiple_scattering,
+  title = {Misspecification of Multiple Scattering in Scalar Wave Fields and its Impact in Ultrasound Tomography},
+  ISSN = {2169-3536},
+  url = {http://dx.doi.org/10.1109/ACCESS.2024.3471430},
+  DOI = {10.1109/access.2024.3471430},
+  journal = {IEEE Access},
+  publisher = {Institute of Electrical and Electronics Engineers (IEEE)},
+  author = {Pérez,  Eduardo and Semper,  Sebastian and Kodera,  Sayako and Römer,  Florian and Galdo,  Giovanni Del},
+  year = {2024},
+  pages = {1–1},
+  abstract = {In this work, we investigate the localization of point-like targets in the presence of multiple scattering. We focus on the often omitted scenario in which measurement data is affected by multiple scattering, and a simpler model is employed in the estimation. We study the impact of such model mismatch by means of the Misspecified Cramer-Rao Bound (MCRB). In numerical simulations inspired by tomographic inspection in Ultrasound Nondestructive Testing (UNDT), the MCRB is shown to correctly describe the estimation variance of localization parameters under misspecification of the wave propagation model. We provide extensive discussion on the utility of the MCRB in the practical task of verifying whether a chosen misspecified model is suitable for localization based on the properties of the maximum likelihood estimator and the nuanced distinction between bias and parameter space differences. Finally, we highlight that careful interpretation is needed whenever employing the classical CRB in the presence of mismatch through numerical examples based on the Born approximation and other simplified propagation models stemming from it. Although motivated by UNDT, the analysis and discussion throughout this work generally apply to localization tasks based on scalar wave field measurements.},
+}
+
+@article{semper2024medicas,
+  title = {Distributed Computing and Model-Based Estimation for Integrated Communications and Sensing: A Roadmap},
+  ISSN = {2644-125X},
+  url = {http://dx.doi.org/10.1109/OJCOMS.2024.3467683},
+  DOI = {10.1109/ojcoms.2024.3467683},
+  journal = {IEEE Open Journal of the Communications Society},
+  publisher = {Institute of Electrical and Electronics Engineers (IEEE)},
+  author = {Semper,  Sebastian and Naviliat,  Joël and Gedschold,  Jonas and Döbereiner,  Michael and Schieler,  Steffen and Thomä,  Reiner S.},
+  year = {2024},
+  pages = {1–1},
+  abstract = {The recent advances in Integrated Sensing and Communications (ICAS) essentially transform mobile radio networks into a diverse, dynamic and heterogeneous sensing network. For the application of localization, the acquired sensing data needs to be processed to estimates of the state vectors of the targets in a timely manner. This paper aims at providing a roadmap for the development of a suitable computing system for ICAS. We propose to embed the signal processing into the concept of edge computing. It provides the necessary theoretical computing framework, since it alleviates the need for communication with a remote cloud. To obtain localization information in such a distributed, asynchronous and heterogeneous scenario, we study how existing maximum likelihood estimation techniques can be transformed into algorithms that can be orchestrated close to the edge. The advantage of these approaches is that they have well studied statistical properties and efficient algorithmic implementations exist. We propose to study how to derive a graph that encodes these algorithms' processing by relating individual and isolated computations in terms of the input/output-behavior of so-called compute nodes. This compute graph structure can then be flexibly distributed across multiple devices and even whole processing/sensing units. Moreover, modern computing architectures leverage such graph structures to optimize the efficient use of computing hardware. Additionally, once this graph is constructed we have laid the groundwork for the possibility to exchange certain compute steps by deep learning architectures.  For instance, this allows to sidestep some costly iterative part of traditional maximum likelihood estimators, which further contributes to the low-latency of the localization task.  Moreover, deep learning methods bear the promise of being more robust to model mismatches in contrast to the conventional model based approaches. As a consequence, we can then study the relation between those classical methods and the new deep learning based methods and analyze the achievable performance. One key final result will be a deeper understanding of how well the maximum likelihood approach can be applied to ICAS and how much it profits from the combination with modern deep learning techniques.},
+}
+
 @INPROCEEDINGS{wang2024superres_sensing,
   author={Wang, Jian and Chuang, Jack and Semper, Sebastian and Golmie, Nada},
   booktitle={2024 33rd International Conference on Computer Communications and Networks (ICCCN)}, 
@@ -4142,7 +4168,7 @@ url="https://doi.org/10.1007/978-3-319-42056-1_7"
 @inproceedings{schieler2023joint_harmonic_4d,
   title = {{{4D Joint Harmonic Retrieval}} and {{Model Order Estimation}} with {{Convolutional Neural Networks}}},
   booktitle = {Proceedings of the 5th International Conference on Advances in Signal Processing and Artificial Intelligence (ASPAI' 2023)},
-  author = {Schieler, Steffen and Semper, Sebastian and Faramarzahangari, Reza and Schneider, Christian and Thomae, Reiner S.},
+  author = {Schieler, Steffen and Semper, Sebastian and Faramarzahangari, Reza and Schneider, Christian and Thomä, Reiner S.},
   year = {2023},
   keywords={myown,peer},
   pages = {204--208},

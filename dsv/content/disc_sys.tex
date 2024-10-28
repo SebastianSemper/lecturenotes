@@ -6,7 +6,7 @@ Dabei folgend wir weitestgehend~\cite[Kap.~2.1]{proakis2013}.
 In \cref{sec:spec_sig} haben wir bereits den Einheitssto"s $\delta[\cdot]$ und die Heavy-Side-Funktion $u[\cdot]$ kennengelernt.
 
 \begin{itemize}
-    \item Eine linear ansteigende Version $u_r[\cdot]$ von $u[\cdot]$ is gegeben durch
+    \item Eine linear ansteigende Version $u_r[\cdot]$ von $u[\cdot]$ ist gegeben durch
     \[
         u_r[n] = n \cdot u[n] = \begin{cases}
             n, \Text{f"ur} n \geqslant 0 \\
@@ -38,7 +38,7 @@ Beispielsweise erhalten wir das Signal $x_k$ aus \eqref{eq:disc_harms_comp} inde
 Eine Implementierung von $x[n]$ is in \Cref{py:complex_exp} gegeben.
 Es ist sicher interessant f"ur verschiedene Werte von $a$ und $\bm n$ die Ausgabe zu betrachten.
 
-Beispielsweise kann man sehen, dass f"ur $a \in \R$ gelten muss, dass $\lim_{n \rightarrow \infty} x[n] = 0$, falls $a < 0$, aber $\lim_{n \rightarrow -\infty} x[n] = \infty$.
+Beispielsweise kann man sehen, dass f"ur $a \in \R$ gelten muss, dass $\lim_{n \rightarrow \infty} x[n] = 0$, falls $a < 0$, aber $\lim_{n \rightarrow -\infty} \Abs{x[n]} = \infty$ andernfalls.
 Weiterhin gilt f"ur $a \in \C$ und $\Abs{a} = 1$, dass dann auch $\Abs{x[n]} = 1$ f"ur alle $n$.
 \end{itemize}
 %
@@ -58,6 +58,7 @@ Weiterhin gilt f"ur $a \in \C$ und $\Abs{a} = 1$, dass dann auch $\Abs{x[n]} = 1
 \subsubsection{Energie Diskreter Signale}
 
 Oft ist es interessant zu bemessen, wie viel Energie in einem Signal vorhanden ist.
+F"ur eine physikalisch korrekte Bemessung dieser Energie, m"usste man das Signal zwar mit Einheiten versehen, aber diese ergeben nur einen entsprechenden Proportionalit"atsfaktor.
 Hierzu betrachten wir
 \begin{equation}\label{eq:disc_sig_energy}
     E(x[\cdot]) 
@@ -89,7 +90,7 @@ Definieren wir f"ur zwei Signale endlicher Energie die Abbildung $\ScPr{\cdot}{\
         = \Sum{n \in \Z}{}{x[n]^\ast \cdot y[n]},
 \end{equation}
 dann kann man sich "uberlegen, dass dies die Bedingungen an ein \emph{Skalarprodukt} erf"ullt.
-Beispielsweise kann man sich "uberlegen, dass die unendliche Summe in \eqref{eq:disc_inner_prod} immer endlich ist, falls $x[\cdot], y[\cdot] \in \mathcal{E}$, da
+Beispielsweise kann man nachrechnen, dass die unendliche Summe in \eqref{eq:disc_inner_prod} immer endlich ist, falls $x[\cdot], y[\cdot] \in \mathcal{E}$, da
 \[
 \Abs{\ScPr{x[\cdot]}{y[\cdot]}} \leqslant E(x[\cdot]) \cdot E(y[\cdot]) < \infty
 \]
@@ -105,7 +106,7 @@ Dann berechnet sich $E(x[\cdot])$ durch
 \[
 E(x[\cdot]) 
     = \Sum{n \geqslant 0}{}{\Abs{a^n}^2} 
-    = \Sum{n \geqslant 0}{}{\left(r^2\right)^n}
+    = \Sum{n \geqslant 0}{}{\left(r^2\right)^n}.
 \]
 Ist nun $r \geqslant 1$, dann $E(x[\cdot]) = \infty$, falls aber $r < 1$, dann ergibt sich aus der geometrischen Reihe, dass
 \[
@@ -117,7 +118,7 @@ Das hei"st auch, dass das Heavy-Side-Signal $u[\cdot]$ keine endliche Energie be
 %
 \subsubsection{Periodische Signale}
 %
-Gilt f\"ur ein Signal $x[\cdot]$, dass $x[n + N] = x[n]$ f"ur ein $N \in \N$ und \emph{alle} $n \in \Z$, so nennt man $x[\cdot]$ periodisch mit Periodenl"ange/Periode $N$, oder kurz $N$-periodisch.
+Gilt f\"ur ein Signal $x[\cdot]$, dass $x[n + N] = x[n]$ f"ur ein $N \in \N$ und \emph{alle} $n \in \Z$, so nennt man $x[\cdot]$ periodisch mit Periodenl"ange/Periode $N$, oder kurz $N$-periodisch, siehe beispielsweise \Cref{eq:disc_harms_comp}.
 Falls $x[\cdot]$ nun $N$-periodisch ist, dann ist $x[\cdot]$ auch $kN$-periodisch, falls $k \in \N$.
 Das hei"st, dass es sinnvoller ist, das \emph{kleinste} $N \in \N$ zu betrachten, sodass $x[\cdot]$ dann $N$-periodisch ist. 
 Man nennt $N$ dann Fundamentalperiode.
@@ -148,6 +149,7 @@ Au"serdem gilt
 x[n] = x_g[n] + x_u[n].
 \]
 Wir haben das Signal $x[\cdot]$ also in einen geraden und einen ungeraden Teil zerlegt.
+Dies ist manchmal sinnvoll, wenn man solch ein Signal linear transformiert und wei"s, dass die lineare Transformation f"ur gerade oder ungerade Signale gewisse Eigenschaften hat.
 Wie man an \Cref{py:even_odd} gut sehen kann, muss gelten $x_u[0] =0$, da $x_u[0] = x[0] - x[0] = 0$ und $x_e[0] = x[0]$, da $2 x_e[0] = x[0] + x[0]$.
 %
 \begin{listing}
@@ -167,15 +169,17 @@ Wie man an \Cref{py:even_odd} gut sehen kann, muss gelten $x_u[0] =0$, da $x_u[0
 %
 %
 Nachdem wir uns nun ein wenig mit diskreten Signalen vertraut gemacht haben, sind wir in der Lage und mit diskreten Systemen zu befassen.
-Ganz allgemein kann man fast jeden Prozess an dessen Anfang ein diskretes Signal steht und dessen Ergebnis wiederum ein diskretes Signal ist, als ein System auffassen.
+Ganz allgemein kann man fast jeden Prozess, an dessen Anfang ein diskretes Signal steht und dessen Ergebnis wiederum ein diskretes Signal ist, als ein diskretes System auffassen.
 Sobald man dieses System nun einmal vorliegen hat, will man Techniken und Werkzeugen entwickeln, wie man dieses System systematisch untersuchen kann -- eine Systematik der Systeme.
 
-Ein System $\mathcal{T}$ wird mathematisch als Abbildung eines (Eingabe-)Signals $x[\cdot]$ auf ein anderes (Ausgabesignal) $y[\cdot]$ aufgefasst. Wir schreiben daf"ur also
+Ein System $\mathcal{T}$ wird mathematisch als Abbildung eines (Eingabe-)Signals $x[\cdot]$ auf ein anderes (Ausgabesignal) $y[\cdot]$ aufgefasst. Wir schreiben daf"ur dann
 %
-\begin{equation}
+\begin{equation}\label{eq:gen_disc_sys}
     x[\cdot] \mapsto \mathcal{T}(x[\cdot])[\cdot] = y[\cdot].
 \end{equation}
 %
+Das System $\mathcal{T}$ bildet also die Paare $(x[\cdot], \mathcal{T}(x[\cdot])) = (x[\cdot], y[\cdot])$.
+
 Betrachten wir folgendes
 \begin{Bsp}\label{ex:simple_sys}
     Gegeben sei das Eingabesignal
@@ -196,14 +200,15 @@ Betrachten wir folgendes
 Diese Systeme waren noch ein wenig simpel und man ist vielleicht noch nicht "uberzeugt, dass eine genauere Analyse von diskreten Systemen notwendig sein sollte.
 Dies liegt vor allem daran, dass die Systeme in \Cref{ex:simple_sys} nur \q{lokal} gearbeitet haben, da Werte $y[n]$ nur von Werten $x[n-1]$, $x[n]$ und $x[n+1]$ abh"angen.
 
-Betrachten wir wiederum das System
+Betrachten wir wiederum die Mandelbrot-Iteration, aber diesmal als System
 \[
     y[n+1] = y[n]^2 + x[n]
 \]
-f"ur verschiedene Parameter $x[n] = c \in \C$ f"ur $y[0] = 0$.
-Wir sind nun an solchen $c$ interessiert f"ur welche das System divergiert, also $\Abs{y[n]} > 2$.
+f"ur verschiedene Eingangssignale $x[n] = c \in \C$ mit $y[0] = 0$.
+Wir sind nun an solchen $c$ interessiert f"ur welche das System divergiert, also $\Abs{y[n]} > 2$ ab einem gewissen $n$.
 Wir wollen aber solche $c$ finden, f"ur welche wir in einem gewissen Bereich $n \in [n_{\rm low}, n_{\rm hgh}]$ divergieren.
-Das in \Cref{py:buddhabrot} gezeigte Beispiel ist hierbei am anderen Ende des Spektrums, da man bei diesem System eher von einem \q{chaotischen} System sprechen sollte. Kleine Ver"anderungen an $x[n] = c$ haben gro"sen Einfluss auf das Divergenzverhalten der Folge $y[n]$\footnote{\url{https://erleuchtet.org/2010/07/ridiculously-large-buddhabrot.html}}.
+Das in \Cref{py:buddhabrot} gezeigte Beispiel ist hierbei am anderen Ende des Komplexit"atsspektrums, da man bei diesem System eher von einem \q{chaotischen} System sprechen sollte. 
+Kleine Ver"anderungen an $x[n] = c$ haben gro"sen Einfluss auf das Divergenzverhalten der Folge $y[n]$\footnote{\url{https://erleuchtet.org/2010/07/ridiculously-large-buddhabrot.html}}.
 \begin{listing}
     \noindent
     \begin{minipage}{0.49\textwidth}
@@ -221,12 +226,13 @@ Das in \Cref{py:buddhabrot} gezeigte Beispiel ist hierbei am anderen Ende des Sp
     \codecaption{code/buddhabrot.py}{Sp"at divergierende Orbits der Mandelbrot-Iteration.}\label{py:buddhabrot}
 \end{listing}
 
-Wir wollen hierf"ur ein etwas einfacheres Beispiel betrachten. 
+Um zu sehen, wie Systeme von ihrem Anfangszustand abh"angen k"onnen, wollen hierf"ur ein etwas einfacheres Beispiel betrachten. 
 Gegeben ist das System
 \[
 y[n] = \Sum{k=-\infty}{n}{x[k]}.
 \]
-Wir sehen hier, dass es f"ur die Berechnung von $y[n]$ nicht ausreicht den Zustand des Eingangs zum Zeitpunkt $n$, also $x[n]$ zu kennen, schlie"slich m"ussen wir die gesamte Vergangenheit von $x[\cdot]$ bis $n$ in die Berechnung einflie"sen lassen.
+Wir sehen hier, dass es f"ur die Berechnung von $y[n]$ nicht ausreicht, den Zustand des Eingangs zum Zeitpunkt $n$, also $x[n]$ zu kennen.
+Schlie"slich m"ussen wir die gesamte Vergangenheit von $x[\cdot]$ bis zum Zeitpunkt $n$ in die Berechnung einflie"sen lassen.
 Wir k"onnen das System aber umschreiben in 
 \[
 y[n] = \Sum{k=-\infty}{n-1}{x[k]} + x[n] = y[n-1] + x[n],
@@ -245,7 +251,8 @@ y(t) = \Int{-\infty}{t}{x(s)}{s}
 y(t) = y_0 + \Int{t_0}{t}{x(s)}{s},
 \]
 damit $y(t_0) = y_0$.
-Ein Beispiel f"ur die Wirkung von einem Akkumulator ist in \Cref{py:accumulator} gegeben. Man sieht sehr gut, welchen Einfluss die Anfangsbedingung auf $x_2[\cdot]$ hat, da dies den Grenzwert $\lim_{n \rightarrow \infty} y[n]$ ma"sgeblich beeinflusst.
+Ein Beispiel f"ur die Wirkung von einem Akkumulator ist in \Cref{py:accumulator} gegeben. 
+Man sieht sehr gut, welchen Einfluss die Anfangsbedingung auf $x_2[\cdot]$ hat, da dies den Grenzwert $\lim_{n \rightarrow \infty} y[n]$ ma"sgeblich beeinflusst.
 Falls gilt, dass $y_0 = 0$, so spricht man vom Ruhezustand, beziehungsweise dem Nullzustand in dem sich das System zum Zeitpunkt $n = n_0$ befindet.
 %
 \begin{listing}
@@ -261,8 +268,9 @@ Falls gilt, dass $y_0 = 0$, so spricht man vom Ruhezustand, beziehungsweise dem 
     \codecaption{code/accumulator.py}{Akkumulator f"ur zwei verschiedene Eingangsignale.}\label{py:accumulator}
 \end{listing}
 
-Man kann Systeme nun auf verschiedene Arten klassifizieren. 
-\paragraph{Statisch vs. Dynamisch} Beispielsweise nennen wir Systeme \emph{statisch}, wenn der Wert $y[n]$ nur von $x[n]$ abh"angt, aber nicht von vergangenen oder gar zuk"unftigen Werten entweder von $y[\cdot]$ oder $x[\cdot]$.
+\paragraph{Statisch vs. Dynamisch}
+Man kann Systeme nun auf verschiedene Arten klassifizieren.
+Beispielsweise nennen wir Systeme \emph{statisch}, wenn der Wert $y[n]$ nur von $x[n]$ abh"angt, aber nicht von vergangenen oder gar zuk"unftigen Werten (entweder von $y[\cdot]$ oder $x[\cdot]$).
 Die Systeme
 \[
 y[n] = a x[n], \Text{oder} y[n] = \sqrt{x[n]} + x^4[n]
@@ -276,21 +284,107 @@ y[n] = x[n] + a x[n-1] \Text{,} y[n] = \Sum{k=0}{N}{x[n-k]}
 sind dynamisch und haben jeweils Ged"achtnis der L"ange $g = 1$, beziehungsweise $g = N-1$.
 Man sieht bereits an \Cref{py:accumulator}, dass dynamische System im Allgemeinen interessanter sein werden.
 
-\paragraph{Kausal vs. Akausal} H"angen die Werte $y[n]$ nur von $x[n], x[n-1], \dots$ ab, also nicht auch von $x[n+1], x[n+1], \dots$, so nennen wir das System kausal.
-Intuitiv bedeutet dies die bekannte Kausalit"at in dem Sinne, dass nur die Zeitliche Vergangenheit notwendig ist, um den aktuellen Zustand des Systems zu bestimmen.
+\paragraph{Kausal vs. Akausal} 
+H"angen die Werte $y[n]$ nur von $x[n], x[n-1], \dots$ ab, also nicht auch von $x[n+1], x[n+1], \dots$, so nennen wir das System kausal.
+Intuitiv bedeutet dies die intuitiv bekannte Kausalit"at in dem Sinne, dass nur die Zeitliche Vergangenheit notwendig ist, um den aktuellen Zustand des Systems zu bestimmen.
 Ist die nicht gegeben, so nennt man das System \emph{akausal} oder \emph{nicht-kausal}.
 
-Was die Realisierung von akausalen Systemen angeht, wird es nicht m"oglich sein, diese in Echtzeit umzuseten, da man diese nur mit einer Verz"ogerung, oder gar nicht f"ur sequentiell verf"ugbares $x[\cdot]$ implementieren kann.
-Sind die Werte $x[n]$ jedoch durch Messung entstanden und \q{offline} verf"ugbar, so k"onnen solche Systeme durchaus angewandt werden und n"utzlich sein.
+Was die Realisierung von akausalen Systemen angeht, wird es nicht m"oglich sein, diese in Echtzeit umzusetzen, da man diese nur mit einer Verz"ogerung, oder gar nicht f"ur sequentiell verf"ugbares $x[\cdot]$ implementieren kann.
+Sind die Werte $x[n]$ jedoch beispielsweise durch Messung oder Simulation entstanden und \q{offline} verf"ugbar, so k"onnen solche Systeme durchaus angewandt werden und n"utzlich sein.
 
-\paragraph{Stabil vs. Instabil}
+\paragraph{Stabil vs. Instabil} Eine der zentralen Eigenschaften, die auch bei analogen Systemen eine Rolle spielt ist Stabilit"at.
+Zwar hat man normalerweise bereits einen intuitiven Begriff f"ur Stabilit"t im Sinn, doch formal gibt es hiervon verschiedene Auspr"agungen.
+Wir beschr"anken uns auf die Version der \gls{bibo}-Stabilit"at, welche fordert, dass f"ur beschr"anktes Eingangssignal $x[\cdot]$ der Ausgang $y[\cdot]$ ebenfalls beschr"ankt bleibt.
+Formal fordern wir also, dass falls
+\[
+\Abs{x[n]} \leqslant M_x \Text{f"ur alle} n \in \Z
+\]
+f"ur eine Konstante $M_x \in \R$ gilt, dann auch 
+\[
+\Abs{y[n]} \leqslant M_y \Text{f"ur alle} n \in \Z
+\]
+gelten muss. 
+Man sieht, dass $M_x$ und $M_y$ an $x[\cdot]$ und $y[\cdot]$ gebunden sind, also keine \q{universellen} Konstanten sind.
+Andersherum reicht es also f"ur Instabilt"at nur \emph{ein} beschr"anktes Eingangssignal $x[\cdot]$ konstruiert werden muss, f"ur welches $y[\cdot]$ nicht beschr"ankt bleibt.
+Betrachten wir folgendes
+\begin{Exm}
+Gegeben sei
+\[
+y[n] = C \cdot y[n-1]^2 + x[n]
+\]
+und wir nutzen als Eingang den Einheitssto"s $x[\cdot] = C \delta[\cdot]$, welcher beschr"ankt ist, mit $M_x = \Abs{C}$ f"ur $C \in \R$.
+Doch dieser produziert f"ur $y[n] = 0$ f"ur $n \leqslant -1$ die Folge
+\[
+y[n] = \{0, \Start{C}, C^2, C^4, \dots, C^{2n}\},
+\]
+welche f"ur $\Abs{C} > 1$ gegen $\infty$ divergiert.
+\end{Exm}
 
-\begin{itemize}
-    \item zeitvariant vs zeitinvariant: definition
-\end{itemize}
+\paragraph{Zeitvariant vs. Zeitinvariant} Systeme deren Eingabe-Ausgabe-Verhalten nicht zeitlich konstant ist, nennt man \emph{zeitvariant}.
+Systeme, die f"ur zeit verz"ogerte Eingaben, die um den gleichen Zeitraum verz"ogerte Ausgaben produzieren, nennt man \emph{zeitinvariant}, siehe \Cref{exm:cont_lit}.
+Formal fordern wir f"ur Zeitinvarianz, dass wenn f"ur beliebige Eingabe $x[\cdot]$
+\[
+x[\cdot] \overset{\mathcal{T}}{\rightarrow} y[\cdot]
+\]
+gilt, dass dann f"ur jedes $k \in Z$ auch gilt, dass
+\[
+x[\cdot -k] \overset{\mathcal{T}}{\rightarrow} y[\cdot - k]
+\]
+erf"ullt ist.
+In der Schreibweise von \eqref{eq:gen_disc_sys} hei"st dies, dass f"ur 
+\[
+    y[n] = \mathcal{T}(x[\cdot])[n]
+\]
+auch gelten muss, dass
+\[
+    y[n - k] = \mathcal{T}(x[\cdot - k])[n]
+\]
+und zwar f"ur alle $x[\cdot]$ und $k$.
 
-\subsubsection{Diskrete \texorpdfstring{\acrshort{lti}}{LTI} Systeme}\label{disc_lti}
+Was erst einmal relativ abstrakt daherkommt, ist eigentlich eine sehr intuitive Sache. 
+Wenn wir beispielsweise an ein Audiointerface denken, so h"atten wir schon gerne, dass es egal ist, zu welchem Zeitpunkt jemand ins Mikrophon singt -- unabh"angig vom Zeitpunkt sollte die Aufnahme \q{gleich klingen}.
+Das System, welches die Aufnahme und eventuelle Audioverarbeitung realisiert, sollte keine zeitlichen Ver"anderungen zeigen.
+Auch in der umgekehrten Richtung, beim Abspielen von Ton, sollte es irrelevant sein, zu welchem Zeitpunkt man ein gewisses St"uck h"oren m"ochte -- das H"orerlebnis sollte davon nicht beeinflusst sein.
 
+Im Grunde ist Zeitinvarianz also etwas, das wir normalerweise von einem System \q{erwarten} und nicht untersuchen wollen.
+
+\paragraph{Linear vs. Nicht-Linear} Kommen wir zum Schluss dieser Klassifikationen zu einer der wichtigsten Unterscheidungen.
+Ein System, das f"ur Eing"ange $x_1[\cdot]$ und $x_2[\cdot]$ die Antworten
+\[
+    y_1[n] = \mathcal{T}(x_1[\cdot])[n]
+    \Text{und}
+    y_2[n] = \mathcal{T}(x_2[\cdot])[n]
+\]
+produziert, nennen wir \emph{linear}, falls die Antwort des Systems auf den Eingang
+\[
+    x[\cdot] = a_1 x_1[\cdot] + a_2 x_2[\cdot]
+\]
+sich durch
+\[
+    y[n]
+        = \mathcal{T}(x[\cdot])[n] 
+        = \mathcal{T}(a_1 x_1[\cdot] + a_2 x_2[\cdot])[n] 
+        = a_1 \mathcal{T}(x_1[\cdot])[n] 
+            + a_2 \mathcal{T}(x_2[\cdot])[n] 
+\]
+ausdr"ucken l"asst.
+%
+\begin{figure}
+    \centering\includegraphics[width=0.6\textwidth]{img/disc_sys/linear_sys.png}
+    \caption{zeigt zwei verschiedene systemtheoretische Interpretation von linearen Systemen. Quelle: \cite{proakis2013}}\label{img:disc_sys:linear_sys}
+\end{figure}
+%
+
+\Cref{img:disc_sys:linear_sys} zeigt die beiden m"oglichen Interpretationen dieser Eigenschaft.
+Man kann sich also vorstellen, dass die Eing"ange \emph{erst} skaliert und addiert werden und dann das System durchlaufen, oder man prozessiert beide Eing"ange durch $\mathcal{T}$ und skaliert und addiert die \emph{Ausg"ange nachdem} das System im Grund \q{zweifach} angewandt wurde.
+
+Anders gesagt \q{passen} lineare Systeme genau zu der linearen Struktur von Signalen, wenn wir sie als Vektoren in einem Vektorraum auffassen.
+Als Konsequenz ergibt sich, dass sich lineare Systeme deutlich einfacher analysieren lassen, weil wir Werkzeuge der linearen Algebra benutzen k"onnen.
+Diese Eigenschaft ist so attraktiv, dass man oft versucht nichtlineare Systeme durch geeignete lineare System zu approximieren (Bsp: Pendel $\sin(x) \approx x$).
+Man nimmt also Fehler in der Analyse in Kauf, ist damit aber immerhin in der Lage "uberhaupt Aussagen treffen zu k"onnen.
+%
+\subsubsection{Diskrete \texorpdfstring{\acrshort{lti}}{LTI} Systeme}\label{sec:disc_sys:disc_lti}
+Wir schr"anken nun die Menge der Systeme ein, die wir betrachten wollen, indem wir fordern, dass das System $\mathcal{T}$ gleichzeitig linear und zeitinvariant ist.
 \begin{itemize}
     \item wiederholung der eigenschaften: shift-invarianz, linearitaet
     \item reaktion auf signal, das aus bausteinsignalen zusammengesetzt wurde
