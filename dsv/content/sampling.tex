@@ -397,7 +397,7 @@ Die zugeh"orige inverse \gls{ft}, also die Abbildung von $X$ auf $x$ ist gegeben
 Wir wollen nun ausarbeiten, wie man diese Art Integral-Transformation rein mathematisch interpretieren kann, um eine alternative Sicht auf solche Art Transformation zu erhalten.
 Betrachten wir dazu das Signal $x$ wieder als Vektor in einem Vektorraum, in dem ein \emph{Skalarprodukt} definiert ist.
 Um zu erl"autern, was das bringt, starten wir mit etwas Bekanntem.
-Im endlich-dimensionalen Fall, also wenn $\bm x, \bm y \in \C^N$, dann ist ein m"ogliches Skalarprodukt $\ScPr{\cdot}{\cdot} : \C^N \times \C^N \R$ durch
+Im endlich-dimensionalen Fall, also wenn $\bm x, \bm y \in \C^N$, dann ist ein m"ogliches Skalarprodukt $\ScPr{\cdot}{\cdot} : \C^N \times \C^N \rightarrow \R$ durch
 \[
  \ScPr{\bm x}{\bm y} 
     = \Sum{i = 1}{N}{x_i \cdot y^\ast_i} 
@@ -464,17 +464,17 @@ Wir haben nun alle Werkzeuge zusammen, um genauer zu Analysieren, was bei Abtast
 Wir erinnern uns, dass gilt f"ur die Abtastpunkte gilt, dass $t = nT = n/F_s$ gilt.
 Wir erhalten dann mit $x[n] = x_a(nT)$ und der inversen \gls{ft} angewandt auf $X_a$, dass
 \[
-x[n] = x_a(nT) = \Int{-\infty}{+\infty}{X_a(F) \exp(\jmath 2 \pi F/F_s)}{F}
+x[n] = x_a(nT) = \Int{-\infty}{+\infty}{X_a(F) \exp(\jmath 2 \pi F/F_s n)}{F}
 \]
 gelten muss.
-Setzen wir nun auch f"ur $x[\cdot]$ die inverse \gls{dtft} ein, erhalten wir mit $f = F/F_s$ (siehe \Cref{sec:sample_harm}) und einer Variablentransformation, dass
+Setzen wir nun auch f"ur $x[\cdot]$ die inverse \gls{dtft} ein, erhalten wir mit $f = F/F_s$ (siehe \Cref{sec:sample_harm}) als Variablentransformation, dass
 \[
-    \frac{1}{F_s} \Int{-1/2}{+1/2}{X(f) \exp(\jmath 2 \pi n F/F_s)}{F}
+    \frac{1}{F_s} \Int{-{F_s}/2}{+{F_s}/2}{X(f) \exp(\jmath 2 \pi F/F_s n)}{F}
     = \Int{-\infty}{+\infty}{X_a(F) \exp(\jmath 2 \pi F/F_s)}{F}
 \]
 gilt. 
-Wichtig ist an diesem Ausdruck, dass wir nun einen Zusammenhang von $X$ un $X_a$ gefunden haben.
-Die Integration auf beiden Seiten ist auch bez"uglich desselben Integrationskernes $\exp(\jmath 2 \pi n/F_s \cdot)$.
+Wichtig ist an diesem Ausdruck, dass wir nun einen Zusammenhang zwischen der \gls{dtft} $X$ und der \gls{ft} $X_a$ gefunden haben.
+Die Integration auf beiden Seiten ist auch bez"uglich desselben Integrationskernes $\exp(\jmath 2 \pi \cdot/F_s n)$.
 Das hei"st, dass es m"oglich sein sollte, einen Ausdruck herzuleiten, der $X$ in Abh"angigkeit von $X_a$ ausdr"uckt.
 Mit ein wenig algebraischem Grindwork findet man
 \begin{equation}\label{eq:spectrum_sampled}
@@ -486,6 +486,11 @@ Mit ein wenig algebraischem Grindwork findet man
 Wie ist dies nun zu interpretieren? 
 Im Grunde best"atigt \eqref{eq:spectrum_sampled} f"ur beliebige Signale, was wir bereits f"ur Signale mit einzelnen Frequenzen (siehe \eqref{eq:analog_cosine}) gefunden hatten.
 Das Spektrum wird durch die Abtastung periodifiziert und zwar entsteht das periodische Spektrum $X$ durch Wiederholung von um $1/F_s$ gestauchte Kopien von $X_a$ mit Abstand $1/F_s$.
+
+Andererseits kann man es auch so sehen, dass der Wert $X(f)$ sich ergibt aus Summation der Werte $X_a(f \cdot F_s - k F_s)$ f"ur alle $k \in \Z$. 
+Also an der Stelle $f$ erscheinen die Werte von $X_a$ an den Stellen $f F_s - k F_s$.
+Das hei"st, wie die Periodifizierung vonstatten geht h"ngt ma"sgeblich von der Samplingfrequenz $F_s$ ab!
+
 Man sieht nun auch wieder sch"on, dass unsere obige Argumentation zum Verh"altnis von Samplingfrequenz und maximaler Frequenz im Signal immernoch gilt, da nun gelten muss, dass \emph{alle} belegten Frequenzen von $x_a$ sich im Intervall $[-F_s/2,+F_s/2]$ befinden m"ussen, da sich sonst die Kopien von $X_a$ in \eqref{eq:spectrum_sampled} "uberlappen.
 Dies ist "aquivalent zur Forderung, dass
 \[

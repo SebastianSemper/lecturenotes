@@ -383,29 +383,3 @@ Als Konsequenz ergibt sich, dass sich lineare Systeme deutlich einfacher analysi
 Diese Eigenschaft ist so attraktiv, dass man oft versucht nichtlineare Systeme durch geeignete lineare System zu approximieren (Bsp: Pendel $\sin(x) \approx x$).
 Man nimmt also Fehler in der Analyse in Kauf, ist damit aber immerhin in der Lage "uberhaupt Aussagen treffen zu k"onnen.
 %
-\subsubsection{Diskrete \texorpdfstring{\acrshort{lti}}{LTI} Systeme}\label{sec:disc_sys:disc_lti}
-Wir schr"anken nun die Menge der Systeme ein, die wir betrachten wollen, indem wir fordern, dass das System $\mathcal{T}$ gleichzeitig linear und zeitinvariant ist.
-\begin{itemize}
-    \item wiederholung der eigenschaften: shift-invarianz, linearitaet
-    \item reaktion auf signal, das aus bausteinsignalen zusammengesetzt wurde
-    \item darstellung als summe von skalierten, geshifteten einheitsstoessen
-    \item faltungsformel
-    \item algorithmus zur berechnung
-    \item exerzieren von beispiel 2.3.2, uebung programmieren (naiv summieren, scipy convolve)
-    \item exerzieren von beispiel 2.3.3, uebung programmieren der approximation
-    \item assoziativitaet, kommmutativitaet
-    \item cascadierung von mehreren systemen
-    \item stabilitaet: $h[n]$ muss absolut summierbar sein, gegen $0$ gehen
-    \item beispiel 2.3.6. (fuer uebung irgendwas ausdenken)
-\end{itemize}
-
-\subsubsection{Cross- und Autokorrelation}\label{corr}
-
-\begin{itemize}
-    \item Definition
-    \item eigenschaften
-    \item synthetisches beispiel schwingung + noise, akf zeigt periodizitaet
-    \item beispiel mit woelfer sunspot numbers
-    \item beispiel mit m-sequenzen, niklas einladen, schaltung zeigen
-    \item monster uebung: 2.65
-\end{itemize}

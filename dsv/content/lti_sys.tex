@@ -1,0 +1,94 @@
+
+Wir schr"anken nun die Menge der Systeme ein, die wir betrachten wollen, indem wir fordern, dass das System $\mathcal{T}$ gleichzeitig linear und zeitinvariant ist.
+Das hei"st, es gilt einerseits, dass ein Eingang $x[\cdot]$ zum System $\mathcal{T}$ mit Ausgang $y[\cdot]$ bei Verz"ogerung zu $x[\cdot - k]$ den entsprechend verz"ogerten Ausgang $y[\cdot - k]$ zur Folge hat.
+Gleichzeitig kann der Ausgang des Systems $\mathcal{T}$ f"ur Eingange, die lineare Superpositionen sind als lineare Superposition von den entsprechenden Ausg"angen ausgedr"uckt werden, siehe \Cref{img:disc_sys:linear_sys}.
+
+Als erstes verallgemeinern wir \Cref{img:disc_sys:linear_sys} zu beliebigen, aber endlichen Summen, also gegeben ist ein Eingang $x[\cdot]$ der Form
+\begin{equation}\label{eq:lti_sys:input}
+    x[n] = \Sum{k=1}{K}{a_k \cdot x_k[n]},
+\end{equation}
+
+wobei wir wissen, wie die Ausg"ange von jedem $x_k[\cdot]$ zu berechnen sind, also
+\[
+    y_k[n] = (\mathcal{T}x_k[\cdot])[n].
+\]
+Dann wissen wir wegen der Linearit"at und \eqref{eq:lti_sys:input}, dass
+\begin{equation}\label{eq:lti_sys:superpos}
+    y[n] 
+        = \left[\mathcal{T}\left(
+            \Sum{k=1}{K}{a_k \cdot x_k[\cdot]}
+        \right)\right][n] 
+        = \Sum{k=1}{K}{
+            a_k (\mathcal{T}x_k[\cdot])[n]
+        }
+        = \Sum{k=1}{K}{
+            a_k y_k[n]
+        }
+\end{equation}
+gelten muss.
+Es lohnt sich einige Zeit "uber diese Sache zu meditieren und es gibt verschiedene Interpretationen.
+\begin{itemize}
+    \item Wie bereits erw"ahnt passt diese lineare Struktur des Systems $\mathcal{T}$.
+    \item Ist ein Eingangssignal aus anderen Signalen zusammengesetzt, dann setzt sich die Reaktion des Systems auf dieses zusammengesetzte Signal aus den Reaktionen auf die Signalbausteine zusammen. 
+    Wichtig ist hierbei, dass die Art der Zusammensetzung sich nicht "andert. Die $a_k$ in \eqref{eq:lti_sys:superpos} sind die gleichen, wie in \eqref{eq:lti_sys:input}.
+\end{itemize}
+
+Wir wollen nun einen Schritt weiter gehen und eine Menge von $x_k[\cdot]$ angeben, die es erlauben \emph{alle} m"oglichen Signale darzustellen.
+Dazu betrachten wir, was geschieht, wenn wir den Einheitssto"s $\delta[\cdot]$ mit einem beliebigen Signal multiplizieren.
+Wir rechnen demzufolge f"ur ein beliebiges Signal
+\[
+x[n] \cdot \delta[n] = \begin{cases}
+    x[0] \Text{f"ur} n = 0 \\
+    0 \Text{sonst.}
+\end{cases}
+\]
+Wenn wir nun die Einheitsst"o"se verschieben um $k \in \Z$ erhalten wir
+\[
+    x[n] \cdot \delta[n-k] = \begin{cases}
+        x[k] \Text{f"ur} n = k \\
+        0 \Text{sonst.}
+    \end{cases}
+\]
+Im Grunde \q{pickt} $\delta[\cdot-k]$ bei Multiplikation den Wert von $x[\cdot]$ an der Stelle $k$ heraus.
+Deshalb k"onnen wir nun schreiben
+\begin{equation}
+    x[n] = \Sum{k \in \Z}{}{
+        x[k] \cdot \delta[n-k],
+    }
+\end{equation}
+was nach Definition von $x_k[\cdot] = \delta[\cdot - k]$ genau die Form von \eqref{eq:lti_sys:input} mit $a_k = x[k]$ annimmt.
+Die Kernbeobachtung ist nun, dass jedes $x_k[\cdot]$ eine verschobene Kopie von $\delta[\cdot]$ ist. 
+Das hei"st, dass wir nun die \gls{lti}-Eigenschaft ausnutzen k"onnen, weil \eqref{eq:lti_sys:superpos} impliziert, dass wir nur $(\mathcal{T}\delta[\cdot])[\cdot]$ berechnen m"ussen und $(\mathcal{T}\delta[\cdot - k])[\cdot]$ sich als $(\mathcal{T}\delta[\cdot])[\cdot - k]$ ergibt.
+
+Wir geben dem Kind nun einen Namen, also definieren wir $h: \Z \rightarrow \C$ als die Antwort des Systems $\mathcal{T}$ auf $\delta[\cdot]$, also
+\begin{equation}\label{eq:lti_sys:ir}
+    h[n] = (\mathcal{T} \delta[\cdot])[n].
+\end{equation}
+Dann k"onnen wir also mit \eqref{eq:lti_sys:superpos} folgern, dass
+\begin{equation}\label{eq:lti_sys:conv}
+    y[n] 
+        = (\mathcal{T} x[\cdot])[n] 
+        = \Sum{k \in \Z}{}{
+            x[k] h[n-k]
+        }
+\end{equation}
+\begin{itemize}
+    \item algorithmus zur berechnung
+    \item exerzieren von beispiel 2.3.2, uebung programmieren (naiv summieren, scipy convolve)
+    \item exerzieren von beispiel 2.3.3, uebung programmieren der approximation
+    \item assoziativitaet, kommmutativitaet
+    \item cascadierung von mehreren systemen
+    \item stabilitaet: $h[n]$ muss absolut summierbar sein, gegen $0$ gehen
+    \item beispiel 2.3.6. (fuer uebung irgendwas ausdenken)
+\end{itemize}
+
+\subsubsection{Cross- und Autokorrelation}\label{corr}
+
+\begin{itemize}
+    \item Definition
+    \item eigenschaften
+    \item synthetisches beispiel schwingung + noise, akf zeigt periodizitaet
+    \item beispiel mit woelfer sunspot numbers
+    \item beispiel mit m-sequenzen, niklas einladen, schaltung zeigen
+    \item monster uebung: 2.65
+\end{itemize}
