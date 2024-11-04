@@ -60,10 +60,11 @@ was nach Definition von $x_k[\cdot] = \delta[\cdot - k]$ genau die Form von \eqr
 Die Kernbeobachtung ist nun, dass jedes $x_k[\cdot]$ eine verschobene Kopie von $\delta[\cdot]$ ist. 
 Das hei"st, dass wir nun die \gls{lti}-Eigenschaft ausnutzen k"onnen, weil \eqref{eq:lti_sys:superpos} impliziert, dass wir nur $(\mathcal{T}\delta[\cdot])[\cdot]$ berechnen m"ussen und $(\mathcal{T}\delta[\cdot - k])[\cdot]$ sich als $(\mathcal{T}\delta[\cdot])[\cdot - k]$ ergibt.
 
-Wir geben dem Kind nun einen Namen, also definieren wir $h: \Z \rightarrow \C$ als die Antwort des Systems $\mathcal{T}$ auf $\delta[\cdot]$, also
+Wir geben dem Kind nun einen Namen, also definieren wir $h: \Z \rightarrow \C$ als die Antwort des Systems $\mathcal{T}$ auf den Eingang $\delta[\cdot]$, also
 \begin{equation}\label{eq:lti_sys:ir}
     h[n] = (\mathcal{T} \delta[\cdot])[n].
 \end{equation}
+Man nennt $h[\cdot]$ die \emph{Impulsantwort} des Systems.
 Dann k"onnen wir also mit \eqref{eq:lti_sys:superpos} folgern, dass
 \begin{equation}\label{eq:lti_sys:conv}
     y[n] 
@@ -72,17 +73,48 @@ Dann k"onnen wir also mit \eqref{eq:lti_sys:superpos} folgern, dass
             x[k] h[n-k]
         }
 \end{equation}
+gelten muss.
+
+Das hei"st, dass sich die Antwort $y[\cdot]$ eines diskreten \gls{lti}-Systems aus der \emph{Faltung} des Einganges $x[\cdot]$ mit der Impulsantwort $h[\cdot]$ ergibt.
+Wir schreiben in Kurzform
+\[
+y[n] = (x \ast h)[n] = (h \ast x)[n].
+\]
+
+In \Cref{py:moving_average} zeigen wir das Verhalten eines gleitenden Mittelwertes (\emph{moving average}), welches sich durch
+\[
+y[n] = \frac{1}{\ell} \Sum{k=0}{k=\ell}{x[n-k]}
+\]
+ergibt.
+Man sieht sch"on, dass durch das Mitteln die (in diesem Fall) zuf"allige Eingabe-Sequenz am Ausgang gegl"attet erscheint.
+Wichtig bei diesem Beispiel ist die Tatsache, dass wir direkt einsehen, dass Anwenung der direkten Formel f"ur das gleitende Mittel aus eine Eingabe $x[\cdot]$ denselben Effekt hat, wie die Faltung mit $h[\cdot]$, das sich aus der Anwendung der Mittelung auf $\delta[\cdot]$ ergibt.
+%
+\begin{listing}
+    \noindent
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=10,lastline=22]{python3}{code/moving_average.py}
+    \end{minipage}%
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/moving_average.png}
+    \end{minipage}
+    \codecaption{code/moving_average.py}{Gleitendes Mittel mit L"ange $\ell=4$. Wir vergleichen die direkte Berechnung mit der Berechnung "uber die Faltung}\label{py:moving_average}
+\end{listing}
+
+Es lohnt sich, sich einige Eigenschaften der Faltung zu merken. 
+Diese sind:
 \begin{itemize}
-    \item algorithmus zur berechnung
-    \item exerzieren von beispiel 2.3.2, uebung programmieren (naiv summieren, scipy convolve)
-    \item exerzieren von beispiel 2.3.3, uebung programmieren der approximation
-    \item assoziativitaet, kommmutativitaet
-    \item cascadierung von mehreren systemen
+    \item assoziativitaet: cascadierung von mehreren systemen
+    \item kommmutativitaet: vertauschung der Reihenfolge von mehreren systemen
+\end{itemize}
+
+\begin{itemize}
     \item stabilitaet: $h[n]$ muss absolut summierbar sein, gegen $0$ gehen
     \item beispiel 2.3.6. (fuer uebung irgendwas ausdenken)
 \end{itemize}
 
-\subsubsection{Cross- und Autokorrelation}\label{corr}
+\subsection{Kreuz- und Autokorrelation}\label{corr}
 
 \begin{itemize}
     \item Definition
