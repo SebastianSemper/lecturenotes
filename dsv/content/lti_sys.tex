@@ -96,7 +96,7 @@ Das hei"st, dass $h[\cdot]$ in gewisser Weise das System $\mathcal{T}$ repr"asen
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/moving_average.png}
     \end{minipage}
-    \codecaption{code/moving_average.py}{Gleitendes Mittel mit L"ange $\ell=4$. Wir vergleichen die direkte Berechnung mit der Berechnung "uber die Faltung}\label{py:moving_average}
+    \codecaption{dsv/code/moving_average.py}{Gleitendes Mittel mit L"ange $\ell=4$. Wir vergleichen die direkte Berechnung mit der Berechnung "uber die Faltung}\label{py:moving_average}
 \end{listing}
 
 In \Cref{py:moving_average} zeigen wir das Verhalten eines gleitenden Mittelwertes (\emph{moving average}), welches sich durch
@@ -105,7 +105,7 @@ y[n] = \frac{1}{\ell} \Sum{k=0}{k=\ell}{x[n-k]}
 \]
 ergibt.
 Man sieht sch"on, dass durch das Mitteln die (in diesem Fall) zuf"allige Eingabe-Sequenz am Ausgang gegl"attet erscheint.
-Wichtig bei diesem Beispiel ist die Tatsache, dass wir direkt einsehen, dass Anwenung der direkten Formel f"ur das gleitende Mittel aus eine Eingabe $x[\cdot]$ denselben Effekt hat, wie die Faltung mit $h[\cdot]$, das sich aus der Anwendung der Mittelung auf $\delta[\cdot]$ ergibt.
+Wichtig bei diesem Beispiel ist die Tatsache, dass wir direkt einsehen, dass Anwendung der direkten Formel f"ur das gleitende Mittel aus eine Eingabe $x[\cdot]$ denselben Effekt hat, wie die Faltung mit $h[\cdot]$, das sich aus der Anwendung der Mittelung auf $\delta[\cdot]$ ergibt.
 
 Es lohnt sich, sich einige Eigenschaften der Faltung zu merken. 
 Diese sind:
@@ -132,7 +132,7 @@ Diese sind:
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/ramp_ma.png}
     \end{minipage}
-    \codecaption{code/ramp_ma.py}{Verkettung von mehreren Moving Averages der L"ange $\ell = 3$.}\label{py:ramp_ma}
+    \codecaption{dsv/code/ramp_ma.py}{Verkettung von mehreren Moving Averages der L"ange $\ell = 3$.}\label{py:ramp_ma}
 \end{listing}
 %
 In \Cref{py:ramp_ma} untersuchen wir einige der oben genannten Eigenschaften.
@@ -144,19 +144,67 @@ Au"serdem best"atigt \Cref{py:ramp_ma} bei Vergleich der verschiedenen Ausg"ange
 %
 \subsubsection{Eigenschaften von \texorpdfstring{\acrshort{lti}}{LTI}-Systemen}
 %
-\begin{itemize}
-    \item stabilitaet: $h[n]$ muss absolut summierbar sein, gegen $0$ gehen
-    \item beispiel 2.3.6. (fuer uebung irgendwas ausdenken)
-    \item \gls{fir} vs. \gls{iir}
-\end{itemize}
+\paragraph{\texorpdfstring{\gls{bibo}}{BIBO}-Stabilit"at}
+Wir hatten vorher schon diesen Begriff der Stabili"at eingef"uhrt und formulieren nun eine Bedingung an $h[\cdot]$, die es uns erlaubt auf Stabilit"at zu pr"ufen.
+Wir nennen die Eingabe beschr"ankt, falls ein $M_x < \infty$ existiert, sodass
+\[
+\Abs{x{n}} \leqslant M_x \Text{f"ur alle} n \in \Z
+\]
+erf"ullt ist.
+Dann k"onnen wir mit der Faltungsformel \eqref{eq:lti_sys:conv} berechnen, dass
+\[
+\Abs{y[n]} 
+    = \Abs{\Sum{k\in\Z}{}{x[n] h[n-k]}} 
+    \leqslant \Sum{k\in\Z}{}{\Abs{x[n] h[n-k]}} 
+    \leqslant M_x \Sum{k\in\Z}{}{\Abs{h[n-k]}} 
+\]
+gilt.
+Damit nun $\Abs{y[n]} < \infty$, muss also gelten, dass
+\[
+    \Sum{k\in\Z}{}{\Abs{h[n-k]}} < \infty.
+\]
+Das hei"st, \emph{wenn} $h[\cdot]$ absolut summierbar ist, dann ist das System mit $h[\cdot]$ als Impulsantwort \gls{bibo}-stabil.
 
-\subsection{Kreuz- und Autokorrelation}\label{corr}
-
-\begin{itemize}
-    \item Definition
-    \item eigenschaften
-    \item synthetisches beispiel schwingung + noise, akf zeigt periodizitaet
-    \item beispiel mit woelfer sunspot numbers
-    \item beispiel mit m-sequenzen, niklas einladen, schaltung zeigen
-    \item monster uebung: 2.65
-\end{itemize}
+Wie ist es um die umgekehrte Schlussfolgerung bestellt?
+Impliziert \gls{bibo}-Stabilit"at, dass $h[\cdot]$ absolut summierbar sein muss?
+Erinnern wir uns daran, dass man \gls{bibo}-Stabilit"at widerlegen kann, indem man \emph{einen} beschr"ankten Eingang $x[\cdot]$ findet, f"ur welchen der Ausgang $y[\cdot]$ nicht beschr"ankt bleibt.
+Nehmen wir an, dass 
+\[
+\Sum{k\in\Z}{}{\Abs{h[n-k]}} = \infty
+\]
+und betrachten wir den Eingang
+\[
+x[n] = \begin{cases}
+    \frac{h[-n]^\ast}{\Abs{h[-n]}}, \Text{f"ur} h[n] \neq 0 \\
+    0 \Text{sonst.}
+\end{cases}
+\]
+Man sieht, dass $\Abs{x[n]} \leqslant 1$, es ist also beschr"ankt.
+Dann berechnen wir einfach den ersten Wert am Ausgang mit \eqref{eq:lti_sys:conv} und der Definition des Einganges $x[\cdot]$, also
+\[
+y[0] 
+    = \Sum{k\in\Z}{}{x[-k] h[k]}
+    = \Sum{k\in\Z}{}{
+        \frac{\Abs{h[k]}^2}{\Abs{h[k]}}
+    }
+    = \Sum{k\in\Z}{}{
+        \Abs{h[k]}
+    }
+    = \infty,
+\]
+wobei das letzte Gleichheitszeichen gilt, weil wir angenommen hatten, dass $h[\cdot]$ nicht absolut summierbar ist.
+Man kann also schlussfolgern, dass sich Stabilit"at vollst"andig durch die Impulsantwort $h[\cdot]$ bestimmen l"asst.
+Eine tolle Sache!
+%
+\paragraph{\texorpdfstring{\acrshort{fir}}{FIR} vs. \texorpdfstring{\acrshort{iir}}{IIR}}
+%
+Gilt f"ur die Impulsantwort $h[\cdot]$, dass
+\[
+h[n] = 0, \Text{f"ur} n < m, M \leqslant n
+\]
+f"ur zwei Zahlen $m \leqslant M$, dann bezeichnet man das zugeh"orige System $\mathcal{T}$ als \gls{fir}-System.
+Ist obige Bedingung nicht erf"ullt, so nennt man $\mathcal{T}$ ein \gls{iir}-System.
+Bei \gls{fir}-Systemen sind f"ur die Berechnung von $y[n]$ nur endlich viele Werte, maximal $M - m$ viele, notwendig.
+Das System hat also ein endliches Ged"chtnis der L"ange $M - m$, wobei \gls{iir}-Systeme ein unendlich langes Ged"achtnis haben.
+Sobald bei einem \gls{fir}-System $\Abs{h[n]} < \infty$ f"ur alle $n \in \Z$ gilt, ist es auch stabil -- also sind in der Praxis \emph{alle} \gls{fir}-Systeme stabil.
+Bei einem \gls{iir}-System ist die Frage nach Stabilit"at nicht so einfach zu beantworten, doch wir werden im Folgenden ein Werkzeug kennenlernen, mit welchem dies einfach nachzupr"ufen sein wird.

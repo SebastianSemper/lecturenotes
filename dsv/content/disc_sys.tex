@@ -52,7 +52,7 @@ Weiterhin gilt f"ur $a \in \C$ und $\Abs{a} = 1$, dass dann auch $\Abs{x[n]} = 1
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/complex_exp.png}
     \end{minipage}
-    \codecaption{code/complex_exp.py}{Berechnung und Darstellung eines komplexen exponentiellen Signals}\label{py:complex_exp}
+    \codecaption{dsv/code/complex_exp.py}{Berechnung und Darstellung eines komplexen exponentiellen Signals}\label{py:complex_exp}
 \end{listing}
 %
 \subsubsection{Energie Diskreter Signale}
@@ -162,7 +162,7 @@ Wie man an \Cref{py:even_odd} gut sehen kann, muss gelten $x_u[0] =0$, da $x_u[0
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/even_odd.png}
     \end{minipage}
-    \codecaption{code/even_odd.py}{Zerlegung eines Signals in seinen geraden und ungeraden Anteil.}\label{py:even_odd}
+    \codecaption{dsv/code/even_odd.py}{Zerlegung eines Signals in seinen geraden und ungeraden Anteil.}\label{py:even_odd}
 \end{listing}
 %
 \subsection{Diskrete Systeme}
@@ -200,7 +200,9 @@ Betrachten wir folgendes
 Diese Systeme waren noch ein wenig simpel und man ist vielleicht noch nicht "uberzeugt, dass eine genauere Analyse von diskreten Systemen notwendig sein sollte.
 Dies liegt vor allem daran, dass die Systeme in \Cref{ex:simple_sys} nur \q{lokal} gearbeitet haben, da Werte $y[n]$ nur von Werten $x[n-1]$, $x[n]$ und $x[n+1]$ abh"angen.
 
-Betrachten wir wiederum die Mandelbrot-Iteration, aber diesmal als System
+Betrachten wir wiederum die Mandelbrot-Iteration\footnote{siehe \href{%
+https://github.com/SebastianSemper/lecturenotes/blob/main/dsv/code/mandelbrot.py
+}{\path{dsv/code/mandelbrot.py}}}, aber diesmal als System
 \[
     y[n+1] = y[n]^2 + x[n]
 \]
@@ -223,7 +225,7 @@ Kleine Ver"anderungen an $x[n] = c$ haben gro"sen Einfluss auf das Divergenzverh
     \begin{center}
         \includegraphics[width=0.55\textwidth]{code/buddhabrot.png}
     \end{center}
-    \codecaption{code/buddhabrot.py}{Sp"at divergierende Orbits der Mandelbrot-Iteration}\label{py:buddhabrot}
+    \codecaption{dsv/code/buddhabrot.py}{Sp"at divergierende Orbits der Mandelbrot-Iteration}\label{py:buddhabrot}
 \end{listing}
 
 Um zu sehen, wie Systeme von ihrem Anfangszustand abh"angen k"onnen, wollen hierf"ur ein etwas einfacheres Beispiel betrachten. 
@@ -265,7 +267,7 @@ Falls gilt, dass $y_0 = 0$, so spricht man vom Ruhezustand, beziehungsweise dem 
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/accumulator.png}
     \end{minipage}%
-    \codecaption{code/accumulator.py}{Akkumulator f"ur zwei verschiedene Eingangsignale.}\label{py:accumulator}
+    \codecaption{dsv/code/accumulator.py}{Akkumulator f"ur zwei verschiedene Eingangsignale.}\label{py:accumulator}
 \end{listing}
 
 \paragraph{Statisch vs. Dynamisch}
@@ -307,7 +309,7 @@ gelten muss.
 Man sieht, dass $M_x$ und $M_y$ an $x[\cdot]$ und $y[\cdot]$ gebunden sind, also keine \q{universellen} Konstanten sind.
 Andersherum reicht es also f"ur Instabilt"at nur \emph{ein} beschr"anktes Eingangssignal $x[\cdot]$ konstruiert werden muss, f"ur welches $y[\cdot]$ nicht beschr"ankt bleibt.
 Betrachten wir folgendes
-\begin{Exm}
+\begin{Bsp}
 Gegeben sei
 \[
 y[n] = C \cdot y[n-1]^2 + x[n]
@@ -318,7 +320,7 @@ Doch dieser produziert f"ur $y[n] = 0$ f"ur $n \leqslant -1$ die Folge
 y[n] = \{0, \Start{C}, C^2, C^4, \dots, C^{2n}\},
 \]
 welche f"ur $\Abs{C} > 1$ gegen $\infty$ divergiert.
-\end{Exm}
+\end{Bsp}
 
 \paragraph{Zeitvariant vs. Zeitinvariant} Systeme deren Eingabe-Ausgabe-Verhalten nicht zeitlich konstant ist, nennt man \emph{zeitvariant}.
 Systeme, die f"ur zeit verz"ogerte Eingaben, die um den gleichen Zeitraum verz"ogerte Ausgaben produzieren, nennt man \emph{zeitinvariant}, siehe \Cref{exm:cont_lit}.

@@ -10,7 +10,7 @@ def complex_exp(
     )
 
 
-n = np.linspace(-2, +6, 9, dtype=int)
+n = np.linspace(-2, +10, 13, dtype=int)
 a = 0.4 + 1j * 0.6
 plt.stem(
     n,
@@ -19,7 +19,7 @@ plt.stem(
     label="real",
 )
 plt.stem(
-    n + 0.01,
+    n + 0.1,
     complex_exp(n, a).imag,
     linefmt="b",
     label="imag",

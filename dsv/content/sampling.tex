@@ -72,7 +72,7 @@ Ein kleines Beispiel findet man in \Cref{py:cont_harms}.
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/cont_harms.png}
     \end{minipage}
-    \codecaption{code/cont_harms.py}{Berechnung und Darstellung von \eqref{eq:analog_cosine}}\label{py:cont_harms}
+    \codecaption{dsv/code/cont_harms.py}{Berechnung und Darstellung von \eqref{eq:analog_cosine}}\label{py:cont_harms}
 \end{listing}
 \FloatBarrier
 %
@@ -118,7 +118,7 @@ Man kann interessante Ergebnisse erzielen, wenn man diesen Plot f"ur $\omega=0,\
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/disc_harms.png}
     \end{minipage}
-    \codecaption{code/disc_harms.py}{Berechnung und Darstellung von \eqref{eq:discrete_cosine}}\label{py:disc_harms}
+    \codecaption{dsv/code/disc_harms.py}{Berechnung und Darstellung von \eqref{eq:discrete_cosine}}\label{py:disc_harms}
 \end{listing}
 
 Die Signale der Form \eqref{eq:discrete_cosine} haben noch eine andere interessante Eigenschaft, die sich wieder aus der $2\pi$-Periodizit"at von $\cos$ ergibt. 
@@ -222,7 +222,7 @@ Normalerweise nimmt man jene $x_k[\cdot]$ f"ur $k = 0, 1, \ldots, N-1$.
 
         \includegraphics[width=\textwidth]{code/disc_harms_comp_e.png}
     \end{minipage}
-    \codecaption{code/disc_harms_comp.py}{Berechnung und Darstellung von \eqref{eq:disc_harms_comp} f"ur $f_0 = 1/16$ und $f_0 = 1/(5 e)$}\label{py:disc_harms_comp}
+    \codecaption{dsv/code/disc_harms_comp.py}{Berechnung und Darstellung von \eqref{eq:disc_harms_comp} f"ur $f_0 = 1/16$ und $f_0 = 1/(5 e)$}\label{py:disc_harms_comp}
 \end{listing}
 
 Nun k"onnen wir auch wieder, wie in \eqref{eq:cont_fourier_series} eine Linearkombination der $x_k[\cdot]$ bilden.
@@ -344,7 +344,7 @@ Man sieht, wie die Aliase so geschaffen sind, dass auch sie Ursprung f"ur die Ab
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/aliasing.png}
     \end{minipage}
-    \codecaption{code/aliasing.py}{Visualisierung von $F_k = F + k \cdot F_s$}\label{py:aliasing}
+    \codecaption{dsv/code/aliasing.py}{Visualisierung von $F_k = F + k \cdot F_s$}\label{py:aliasing}
 \end{listing}
 
 Die Frage ist nun, wie wir das Sampling gestalten m"ussen, dass wir aus $x[n]$ eindeutig das Signal $x_a$ rekonstruieren k"onnen.
@@ -505,7 +505,7 @@ Wir ben"otigen lediglich noch eine M"oglichkeit aus den Abtastwerten $x[\cdot]$ 
 Wenn kein Aliasing vorliegt, also $F_{\rm max} < F_s/2$, dann k"onnen wir $X_a$ aus $X$ berechnen, indem wir
 \[
 X_a(F) = \begin{cases}
-    \frac{X(f)}{F_s}, \Abs{F} \leqslant F_s/2, \\
+    \frac{X(F/{F_s})}{F_s}, \Abs{F} \leqslant F_s/2, \\
     0 \Text{sonst}
 \end{cases}
 \]
@@ -593,7 +593,7 @@ In diesem Fall spricht man auch von \emph{kritischer Abtastung}.
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/sampling_theorem.png}
     \end{minipage}
-    \codecaption{code/sampling_theorem.py}{Berechnung und Darstellung von \Cref{stm:sampling_theorem}}\label{py:sampling_theorem}
+    \codecaption{dsv/code/sampling_theorem.py}{Berechnung und Darstellung von \Cref{stm:sampling_theorem}}\label{py:sampling_theorem}
 \end{listing}
 
 Es ist weiterhin noch zu erw"ahnen, dass wir genau genommen immer noch nicht wissen, wie wir "uberpr"ufen k"onnen, welche maximale Frequenz $F_{\rm max}$ von einem analogen Signal $x_a$ belegt wird.

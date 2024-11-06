@@ -73,7 +73,15 @@ giveninits=true,]{biblatex}
 
 \newcommand{\q}[1]{{\glqq{}#1\grqq{}}}
 \newcommand{\myemph}[1]{\emph{#1}}
-\newcommand{\codecaption}[2]{\caption[#2]{#2, siehe \url{#1}}}
+\newcommand{\codecaption}[2]{
+  \caption[#2]{%
+    #2,% 
+    siehe \href{%
+      https://github.com/SebastianSemper/lecturenotes/blob/main/#1
+      }{
+        \path{#1}
+      }
+}}
 
 \crefname{Thm}{Theorem}{Theorems}
 
