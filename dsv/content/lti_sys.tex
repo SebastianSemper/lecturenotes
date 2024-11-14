@@ -148,7 +148,7 @@ Au"serdem best"atigt \Cref{py:ramp_ma} bei Vergleich der verschiedenen Ausg"ange
 Wir hatten vorher schon diesen Begriff der Stabili"at eingef"uhrt und formulieren nun eine Bedingung an $h[\cdot]$, die es uns erlaubt auf Stabilit"at zu pr"ufen.
 Wir nennen die Eingabe beschr"ankt, falls ein $M_x < \infty$ existiert, sodass
 \[
-\Abs{x{n}} \leqslant M_x \Text{f"ur alle} n \in \Z
+\Abs{x[n]} \leqslant M_x \Text{f"ur alle} n \in \Z
 \]
 erf"ullt ist.
 Dann k"onnen wir mit der Faltungsformel \eqref{eq:lti_sys:conv} berechnen, dass
@@ -207,4 +207,131 @@ Ist obige Bedingung nicht erf"ullt, so nennt man $\mathcal{T}$ ein \gls{iir}-Sys
 Bei \gls{fir}-Systemen sind f"ur die Berechnung von $y[n]$ nur endlich viele Werte, maximal $M - m$ viele, notwendig.
 Das System hat also ein endliches Ged"chtnis der L"ange $M - m$, wobei \gls{iir}-Systeme ein unendlich langes Ged"achtnis haben.
 Sobald bei einem \gls{fir}-System $\Abs{h[n]} < \infty$ f"ur alle $n \in \Z$ gilt, ist es auch stabil -- also sind in der Praxis \emph{alle} \gls{fir}-Systeme stabil.
-Bei einem \gls{iir}-System ist die Frage nach Stabilit"at nicht so einfach zu beantworten, doch wir werden im Folgenden ein Werkzeug kennenlernen, mit welchem dies einfach nachzupr"ufen sein wird.
+
+Bei einem \gls{iir}-System ist die Frage nach Stabilit"at nicht so einfach zu beantworten, doch wir werden im Folgenden noch ein Werkzeug kennenlernen, mit welchem dies einfach nachzupr"ufen sein wird.
+Au"serdem haben \gls{iir}-Systeme noch das Problem, dass man die Faltungsformel \eqref{eq:lti_sys:conv} nicht nutzen kann, um ein \gls{iir}-System zu \emph{implementieren}.
+%
+%
+\subsubsection{Rekursive \texorpdfstring{\acrshort{iir}}{IIR}-Systeme}
+%
+%
+Um die Notwendigkeit von \eqref{eq:lti_sys:conv} zu umgehen, betrachten wir eine gewisse Klasse von Systemen, deren Ausgang $y[\cdot]$ auch "uber einen alternativen Weg bestimmt werden kann.
+Hierzu betrachten wir
+\[
+y[n] = \frac{1}{n+1}\Sum{k=0}{n}{x[n]},
+\]
+was ein kumulatives Mittel von $0$ bis $n$ darstellt.
+So wie es hier scheint, muss man f"ur die Berechnung von $y[n]$ alle vergangenen Werte von $x[\cdot]$ bereitliegen haben.
+Doch mit einer einfachen Umformung findet man, dass
+\[
+(n+1)y[n] = n y[n-1] + x[n] 
+\Leftrightarrow 
+y[n] = \frac{n}{n+1} y[n-1] + \frac{1}{n+1} x[n].
+\]
+Wir k"onnen also alternativ $y[n]$ aus $x[n]$ und $y[n-1]$ berechnen.
+Da also $y[n]$ von $y[n-1]$ abh"angt, nennen wir das System \emph{rekursiv}.
+Man sieht deutlich, dass diese Umformulierung deutlich macht, dass wir nur $y[n-1]$ im Speicher halten m"ussen und dieses mit einer Art \emph{zeitverz"ogertem Feedback} ausstatten m"ussen.
+Hierbei ist nat"urlich die Zeitverz"ogerung essenziell, denn m"ussen wir $y[n]$ in Abh"angigkeit von $y[n]$ berechnen, w"urde uns das vor ein halbwegs unl"osbares Problem stellen.
+In \Cref{py:cumulative_sum} sehen wir die beiden unterschiedlichen Implementierungen.
+Es ist hier zu beachten, dass \mintinline{python}|y[nn] = np.sum(x[:nn]) / (nn + 1)| immer auf die komplette Vergangenheit von $x[\cdot]$ zugreift und eben \emph{nicht} auf Werte von $y[\cdot]$.
+
+\begin{listing}
+    \noindent
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5,lastline=20]{python3}{code/cumulative_sum.py}
+    \end{minipage}%
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/cumulative_sum.png}
+    \end{minipage}
+    \codecaption{dsv/code/cumulative_sum.py}{Die beiden m"oglichen Implementierungen eines kumulativen Mittelwertes}\label{py:cumulative_sum}
+\end{listing}
+%
+%
+F"ur rekursive Systeme entsteht noch das Problem, dass wir beispielsweise f"ur den Beginn der rekursiven Berechnung von $y[n]$ ab einem gewissen $n_0 \in \Z$ den Wert $y[n_0-1]$ kennen m"ussen.
+Das hei"st wir ben"otigen einen \emph{Startwert} f"ur die Rekursion.
+Dieser beeinflusst auch ma"sgeblich das Verhalten des Systems.
+
+Eine M"oglichkeit, wie man das produktiv ausnutzen kann, ist f"ur die Berechnung der Quadratwurzel einer positiven reellen Zahl $A$.
+F"ur die Herleitung definieren wir erst die Funktion $f : \R \rightarrow \R$ via
+\[
+f(x) = x^2 - A.
+\]
+Wie man leicht sieht, hat diese Funktion Nullstellen $x_{1,2} = \pm \sqrt{A}$.
+Die sogenannte Newton-Iteration~\footnote{\url{https://encyclopediaofmath.org/index.php?title=Newton_method}} berechnet iterativ via
+\[
+y[n] = y[n-1] - \frac{f(y[n-1])}{f^\prime(y[n-1])}
+\]
+eine Nullstelle der Funktion $f$.
+Setzen wir unsere Funktion ein und definieren $x[\cdot] = A u[\cdot]$, dann erhalten wir
+\[
+y[n] = \frac 12 \left(
+    y[n-1] + \frac{x[n]}{y[n-1]}.
+\right)
+\]
+Nutzen wir einen geeigneten Startwert, beispielsweise $y[-1] = 1$, so erhalten wir eine \emph{sehr schnell} konvergierende Folge von $y[n]$.
+
+\begin{listing}
+    \noindent
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5,lastline=15]{python3}{code/square_root.py}
+    \end{minipage}%
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/square_root.png}
+    \end{minipage}
+    \codecaption{dsv/code/square_root.py}{Iteratives Verfahren zur Berechnung von $\sqrt{A}$}\label{py:square_root}
+\end{listing}
+%
+%
+Die Folge konvergiert so schnell, dass bereits nach $5$ Iterationen der Fehler an der endlichen Genauigkeit von Gleitkommaarithmetik kratzt.
+Es ist auch darauf hinzuweisen, dass das System nur sehr einfache arithmetische Operationen benutzt, um die numerisch nicht ganz triviale Berechnung von $\sqrt{A}$ beliebig genau und sehr schnell zu approximieren.
+
+Abschlie"send ist noch anzumerken, dass man rekursive Systeme auch \q{l"osen} kann, siehe \cite[Kap.~2.4.3]{proakis2013}, indem man aus der rekursiven Vorschrift eine explizite entwickelt. 
+Die dort entwickelte Theorie erinnert der L"osung von Differenzialgleichungen nach Funktionen, nur werden stattdessen Differenzengleichungen nach diskreten Folgen gel"ost.
+%
+%
+\subsubsection{Approximation von \texorpdfstring{\acrshort{iir}}{IIR}-Systemen durch \texorpdfstring{\acrshort{fir}}{FIR}-Systeme}
+Um die Faltungsformel doch anwenden zu k"onnen, kann man f"ur ein \emph{stabiles} \gls{iir}-System mit Impulsantwort $h[\cdot]$ eine \gls{fir}-Approximation finden.
+Ein weiterer Vorteil ergibt sich dann, dass auch dieses resultierende System stabil sein muss.
+F"ur $n_{\rm low} < n_{\rm hgh}$ definieren wir
+\[
+h_{\rm FIR}[n] = \begin{cases}
+    h[n], \Text{falls} n_{\rm low} \leqslant n \leqslant n_{\rm hgh}, \\
+    0 \Text{sonst.}
+\end{cases}
+\]
+Da aus der Stabilit"at von dem System mit Impulsantwort $h[\cdot]$ folgt, dass
+\[
+    \lim\limits_{k \rightarrow \infty} 
+        \Sum{n = k}{\infty}{
+            \left(\Abs{h[n]} + \Abs{h[-n]}\right)
+        } = 0,
+\]
+da sonst
+\[
+    \Sum{n \in \Z}{\infty}{\Abs{h[n]}}
+\]
+nicht endlich sein k"onnte.
+Das hei"st, dass die Werte der Impulsantwort $h[\cdot]$ gegen $0$ konvergieren m"ussen und deshalb kann man $n_{\rm low} < n_{\rm hgh}$ so w"ahlen, dass der Unterschied zwischen $h[\cdot]$ und $h_{\rm FIR}[\cdot]$ beliebig klein wird.
+
+Je nachdem wie schnell $h[\cdot]$ gegen $0$ konvergiert, ben"otigen wir mehr oder von $0$ verschiedene Eintr"age in $h_{\rm FIR}$, was sich auf den Implementierungsaufwand auswirkt.
+
+Ein Beispiel f"ur einen exponentiellen Mittelwert findet man in \Cref{exp_mean}.
+Man sieht, dass f"ur $\alpha=0.5$ der Abschneidefehler deutlicher zutage tritt, da die Faltung mit $h_{\rm FIR}[\cdot]$ in diesem Fall ein deutlich schlechteres Ergebnis liefert als im Falle von $\alpha=0.1$.
+Wir wollen aber darauf hinweisen, dass es eine ganz eigene Theorie f"ur die Approximation von Filtern durch andere Filter gibt, die wir hier nicht einmal anrei"sen wollen.
+
+\begin{listing}
+    \noindent
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5,lastline=33]{python3}{code/exp_mean.py}
+    \end{minipage}%
+    \begin{minipage}{0.49\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/exp_mean.png}
+    \end{minipage}
+    \codecaption{dsv/code/exp_mean.py}{Approximation eines exponentiellen Mittelwertes, also einem \gls{iir}-System durch ein \gls{fir}-System}\label{py:exp_mean}
+\end{listing}
