@@ -319,8 +319,9 @@ Das hei"st, dass die Werte der Impulsantwort $h[\cdot]$ gegen $0$ konvergieren m
 
 Je nachdem wie schnell $h[\cdot]$ gegen $0$ konvergiert, ben"otigen wir mehr oder von $0$ verschiedene Eintr"age in $h_{\rm FIR}$, was sich auf den Implementierungsaufwand auswirkt.
 
-Ein Beispiel f"ur einen exponentiellen Mittelwert findet man in \Cref{exp_mean}.
+Ein Beispiel f"ur einen exponentiellen Mittelwert-Filter findet man in \Cref{py:exp_mean}.
 Man sieht, dass f"ur $\alpha=0.5$ der Abschneidefehler deutlicher zutage tritt, da die Faltung mit $h_{\rm FIR}[\cdot]$ in diesem Fall ein deutlich schlechteres Ergebnis liefert als im Falle von $\alpha=0.1$.
+Dies liegt eben daran, dass bei $\alpha=0.1$ der \gls{iir}-Filter \emph{effektiv} ein \gls{fir}-Filter wird.
 Wir wollen aber darauf hinweisen, dass es eine ganz eigene Theorie f"ur die Approximation von Filtern durch andere Filter gibt, die wir hier nicht einmal anrei"sen wollen.
 
 \begin{listing}
