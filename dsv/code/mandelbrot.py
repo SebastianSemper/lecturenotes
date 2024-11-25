@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 
 Nx = 2**11
 Ny = 2**11
-Rx = (-2.25, +1.25)
-# Rx = (-1.908, -1.906)
-Ry = (-1.75, +1.75)
-# Ry = (-0.001, +0.001)
+# Rx = (-2.25, +1.25)
+Rx = (-1.908, -1.906)
+# Ry = (-1.75, +1.75)
+Ry = (-0.001, +0.001)
 c = np.add.outer(
     np.linspace(*Rx, Nx, endpoint=True),
     1j * np.linspace(*Ry, Ny, endpoint=True),

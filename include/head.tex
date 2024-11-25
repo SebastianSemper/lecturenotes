@@ -11,6 +11,17 @@
 \usepackage[ngerman]{babel}
 \usepackage{fullpage}
 \usepackage{microtype}
+\microtypesetup{
+activate={true,nocompatibility},
+final,
+tracking=true,
+kerning=true,
+spacing=alltext-nott,
+factor=1100,
+stretch=25,
+shrink=25,
+letterspace=-30,
+}
 \usepackage{siunitx}
 
 % \usepackage[hyperref]{xcolor}
@@ -68,6 +79,7 @@ giveninits=true,]{biblatex}
 \usepackage{mathpazo}
 \usepackage{sourcecodepro}
 
+\usepackage{esint}
 \usepackage{mathtools}
 \newcommand{\Start}[1]{\underset{\uparrow}{#1}}
 \newcommand{\z}{{\rm z}}
