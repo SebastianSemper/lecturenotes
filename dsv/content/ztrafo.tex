@@ -193,10 +193,13 @@ Im $z$-Bereich transformiert sich dies wegen \eqref{eq:ztrafo:conv} zu
     Y_\z(z) = H_\z(z) X_\z(z).
 \end{equation}
 Man nennt dann $H_{\z}$ als $z$-Transformation der Impulsantwort die \emph{Transferfunktion} des Systems $\mathcal{T}$.
+Wir haben so eine alternative Sichtweise auf \gls{lti}-Systeme gewonnen, weil man eben durch die $z$-Transformation die Impulsantwort $h[\cdot]$ mit der Transferfunktion $H$ \emph{identifiziert}.
+Das hei"st, dass beide Beschreibungen "aquivalent sind.
+Wir werden uns wie in \Cref{sec:lti_sys:properties} "uberlegen, wie man gewissen Eigenschaften von \gls{lti}-Systemen an $H$ \q{ablesen} kann.
+
 Aus diesem multiplikativen Zusammenhang kann man bei Kenntnis von zwei Gr"o"sen in der Regel die fehlende Dritte bestimmen.
 Kennt man beispielsweise $H_\z$ und $X_\z$, dann kann man sehr einfach $Y_\z$ und damit auch $y[\cdot]$ bestimmen.
-
-In bestimmen Anwendungen der Messtechnik ist man eher daran interessiert durch geschickte Messungen $h[\cdot]$ zu bestimmen.
+In bestimmten Anwendungen der Messtechnik ist man eher daran interessiert durch geschickte Messungen $h[\cdot]$ zu bestimmen.
 Dies kann unter anderem interessant sein, wenn in $h[\cdot]$ gewisse Parameter eines Systems \q{versteckt} sind, die einen aber interessieren.
 Dann ist es oft geschickt das System durch $x[\cdot]$ anzuregen, $y[\cdot]$ zu beobachten und dann die Transferfunktion durch
 \[
@@ -217,21 +220,21 @@ dann ergibt sich durch die Linearit"at, Zeitversatz und geschicktes Umstellen, d
 \]
 Das hei"st, dass Systeme, die durch lineare Differenzengleichungen charakterisiert sind, besitzen eine Transferfunktion, die die Struktur einer rationalen Funktion
 \[
-H_\z(z) = \frac{A(z)}{B(z)}
+H_\z(z) = \frac{B(z)}{A(z)}
 \]
-hat, weil wir fordern, dass $A$ und $B$ Polynome in $z$ sind.
+hat, wenn wir fordern, dass $A$ und $B$ Polynome in $z$ sind.
 Allgemein schreiben wir
 \[
 H(z) = 
     \frac{
-        a_0 + a_1 z^{-1} + \dots + a_M z^{-M}
+        b_0 + b_1 z^{-1} + \dots + b_M z^{-M}
     }{
-        b_0 + b_1 z^{-1} + \dots + b_N z^{-N}
+        a_0 + a_1 z^{-1} + \dots + a_N z^{-N}
     }
     = \frac{
-        \Sum{k = 1}{M}{a_k z^{-k}}
+        \Sum{k = 1}{M}{b_k z^{-k}}
     }{
-        \Sum{k = 1}{N}{b_k z^{-k}}
+        \Sum{k = 1}{N}{a_k z^{-k}}
     }
     = G z^{N - M} \frac{
         (z - z_1) \dots (z - z_M)
@@ -239,15 +242,52 @@ H(z) =
         (z - p_1) \dots (z - p_N)
     }.
 \]
-Dann nennen wir die $z_1, \dots, z_M$ die \q{Nullstellen} des Systems $\mathcal{T}$ und die Menge $p_1,\dots,p_N$ die \emph{Pole}, oder \emph{Polstellen} von $\mathcal{T}$.
-\subsection{Kreuz- und Autokorrelation}\label{corr}
+Dann nennen wir die $z_1, \dots, z_M$ die \q{Nullstellen}, oder \emph{zeros}, des Systems $\mathcal{T}$ und die Menge $p_1 ,\dots, p_N$ die \emph{Pole}, oder \emph{Polstellen}, von $\mathcal{T}$.
+Tritt ein $p_i$ oder $z_i$ mehrfach auf, so sprechen wir von einer mehrfachen Polstelle, bzw.\,Nullstelle.
+Die Anzahl an gleichen Null-/Polstellen nennt man ihre Vielfachheit.
 
-\begin{itemize}
-    \item Anwendung $z$-Trafo: M-Sequenzen? polynome analysieren, wann maximale laenge?
-    \item Definition
-    \item eigenschaften
-    \item synthetisches beispiel schwingung + noise, akf zeigt periodizitaet
-    \item beispiel mit woelfer sunspot numbers
-    \item beispiel mit m-sequenzen, niklas einladen, schaltung zeigen
-    \item monster uebung: 2.65
-\end{itemize}
+Es gibt nun zwei Spezialf"alle, die wir betrachten k"onnen. 
+Erstens, es gilt $a_1 = \dots = a_N = 0$. 
+In diesem Fall gilt 
+\[
+H(z) = z^{-M} \Sum{k = 1}{M}{b_k z^{M-k}}
+\]
+und $H$ besitzt als Polynom vom Grad $M$ dann $M$ Nullstellen~\footnote{\url{https://de.wikipedia.org/wiki/Fundamentalsatz_der_Algebra}} und eine $M$-fache Polstelle bei $z=0$.
+Tritt eine Polstelle bei $z=0$ auf, so nennen wir diese \emph{trivial}, da sie keinen Einfluss auf das System hat.
+Schlie"slich korrespondiert $z^{-M}$ nur zu einer Verschiebung im Zeitbereicht, was bei \gls{lti}-Systemen per definitionem nur eine globale Verschiebung der ganzen Systems bedeutet.
+Da keine nicht-trivialen Polstellen auftreten, hat das System eine \emph{endliche} Impulsantwort.
+Das k"onnen wir daran sehen, dass wir die Werte von $h[\cdot]$ direkt an den Koeffizienten von $H$ ablesbar sind.
+
+Zweitens, kann es vorkommen, dass $b_1 = \dots = b_N = 0$, was wiederum $H$ zu einer rationalen Funktion macht, die keine Nullstellen und dementsprechend ausschlie"slich Polstellen besitzt.
+Um zu bestimmen, welche Implikation dies hat, betrachten wir ein einfaches System mit einem reellen Pol bei $a \in \R$, also
+\[
+H(z) = \frac{1}{1 - a z^{-1}}, ROC: \Abs{z} > \Abs{a}.
+\]
+Wie wir weiter oben schon gesehen haben, ist die zugeh"orige Impulsantwort $h[\cdot]$ gegeben durch
+\[
+h[n] = a^n u[n].
+\]
+%
+\begin{figure}
+    \includegraphics[width=0.9\textwidth]{img/ztrafo/singlepole.png}
+    \caption{Impulsantwort $h[n] = a^n u[n]$ f"ur verschiedene Werte von $a$, Quelle: \cite{proakis2013}}\label{fig:ztrafo:singlepole}
+\end{figure}
+
+Das Verhalten von diesem System ist in \cref{fig:ztrafo:singlepole} dargestellt.
+Man sieht, dass der Einheitskreis in der komplexen Ebene eine entscheidende Rolle spielt.
+Liegt $a$ innerhalb des Einheitskreises, so ergibt sich eine exponentiell abfallende Impulsantwort.
+Falls $a < 0$, stellt sich auch eine Oszillation ein.
+F"ur $\Abs{a} = 1$ entspricht der Betrag der Impulsantwort der Heavyside-Funktion $u[\cdot]$.
+Man sieht, dass im Fall von $\Abs{a} < 1$ die Impulsantwort absolut summierbar ist, also
+\[
+\Sum{n \in \Z}{}{\Abs{h[n]}} < \infty,
+\]
+was impliziert, dass das System stabil ist.
+Entsprechend, ist das System instabil, falls $\Abs{a} > 1$.
+Man sieht also, dass die Position der Pole im $z$-Bereich direkt interpretierbar ist.
+Betrachtet man nochmals die \gls{roc} $\Abs{z} > \Abs{a}$, zusammen mit der Information, dass sich Stabilit"at einstellt, falls $\Abs{a}<1$.
+Geometrisch bedeutet dies, dass das System stabil ist, falls der Einheitskreis in der \gls{roc} enthalten ist.
+
+Diese Resultate lassen sich auf mehrere Polstellen verallgemeinern, da $H$ nur mehr Pole enth"alt und die \gls{roc} dann sich nach dem Betrag der \q{gr"o"sten} Polstelle richtet.
+Das hei"st ultimativ, dass sich f"ur ein System $H$ Stabilit"at einstellt, falls \emph{alle} Polstellen sich im Einheitskreis befinden, \emph{oder} "aquivalent, dass sich der Einheitskreis in der \gls{roc} befinden muss.
+Sp"ater werden wir noch eine Bedingung f"ur Stabilit"at in Bezug auf die Fourier-Transformation finden.
