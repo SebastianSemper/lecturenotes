@@ -53,13 +53,14 @@ giveninits=true,]{biblatex}
 
 \renewcommand{\baselinestretch}{1.2}
 \definecolor{Links}{RGB}{255,93,0}
+
 \usepackage[colorlinks,linktocpage,allcolors=Links]{hyperref}
 \usepackage{cleveref}
+
 \usepackage[acronym,hyperfirst]{glossaries}
 \input{../lib/sempersn.tex}
 \makeglossaries
 
-\newcommand{\fuer}{\Text{f\"ur}}
 
 \usepackage{placeins}
 \usepackage{etoolbox}
@@ -81,8 +82,10 @@ giveninits=true,]{biblatex}
 
 \usepackage{esint}
 \usepackage{mathtools}
+
 \newcommand{\Start}[1]{\underset{\uparrow}{#1}}
 \newcommand{\z}{{\rm z}}
+\newcommand{\fuer}{\Text{f\"ur}}
 
 \newcommand{\q}[1]{{\glqq{}#1\grqq{}}}
 \newcommand{\myemph}[1]{\emph{#1}}
@@ -104,3 +107,7 @@ giveninits=true,]{biblatex}
 ]{Bsp}
 
 \usepackage[shortlabels]{enumitem}
+
+% widows and orphans
+\widowpenalty=1000
+\clubpenalty=1000

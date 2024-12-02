@@ -154,8 +154,8 @@ erf"ullt ist.
 Dann k"onnen wir mit der Faltungsformel \eqref{eq:lti_sys:conv} berechnen, dass
 \[
 \Abs{y[n]} 
-    = \Abs{\Sum{k\in\Z}{}{x[n] h[n-k]}} 
-    \leqslant \Sum{k\in\Z}{}{\Abs{x[n] h[n-k]}} 
+    = \Abs{\Sum{k\in\Z}{}{x[k] h[n-k]}} 
+    \leqslant \Sum{k\in\Z}{}{\Abs{x[k] h[n-k]}} 
     \leqslant M_x \Sum{k\in\Z}{}{\Abs{h[n-k]}} 
 \]
 gilt.
@@ -205,7 +205,7 @@ h[n] = 0, \Text{f"ur} n < m, M \leqslant n
 f"ur zwei Zahlen $m \leqslant M$, dann bezeichnet man das zugeh"orige System $\mathcal{T}$ als \gls{fir}-System.
 Ist obige Bedingung nicht erf"ullt, so nennt man $\mathcal{T}$ ein \gls{iir}-System.
 Bei \gls{fir}-Systemen sind f"ur die Berechnung von $y[n]$ nur endlich viele Werte, maximal $M - m$ viele, notwendig.
-Das System hat also ein endliches Ged"chtnis der L"ange $M - m$, wobei \gls{iir}-Systeme ein unendlich langes Ged"achtnis haben.
+Das System hat also ein endliches Ged"achtnis der L"ange $M - m$, wobei \gls{iir}-Systeme ein unendlich langes Ged"achtnis haben.
 Sobald bei einem \gls{fir}-System $\Abs{h[n]} < \infty$ f"ur alle $n \in \Z$ gilt, ist es auch stabil -- also sind in der Praxis \emph{alle} \gls{fir}-Systeme stabil.
 
 Bei einem \gls{iir}-System ist die Frage nach Stabilit"at nicht so einfach zu beantworten, doch wir werden im Folgenden noch ein Werkzeug kennenlernen, mit welchem dies einfach nachzupr"ufen sein wird.

@@ -22,7 +22,7 @@ def MA2(x, l):
 
 
 delta = np.eye(N)[0, :]
-h = MA(delta, l)
+h1 = MA(delta, l)
 h2 = MA2(delta, l)
 h3 = MA2(MA(delta, l), l)
 h4 = MA(MA2(delta, l), l)
