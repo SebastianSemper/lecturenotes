@@ -1,6 +1,6 @@
 Wir wollen unsere Werkzeuge zur Analyse von Signalen und Systemen nun um das wahrscheinlich wichtigste erweitern.
 Hierbei zerlegen wir Signale, beziehungsweise Systemantworten/Impulsantworten, in ihre \q{harmonischen} Anteile -- wir transformieren in den \emph{Frequenzbereich}.
-Man diese Art der \emph{Analyse} auch oft \emph{Fourieranalyse}.
+Man diese Art der \emph{Analyse} auch oft \emph{Fourier-Analyse}.
 Da wir verschiedene Arten von Signalen bereits kennengelernt haben, muss diese Zerlegung auch auf verschiedene Weisen durchgef"uhrt werden.
 F"ur diskrete Signale, ergibt es beispielsweise wenig Sinn, eine Integraltransformation zu definieren, Aperiodische Signale wiederum k"onnen nicht in einer Fourier-Reihe entwickelt werden, da die inh"arent der Periodizit"at widerspricht.
 Das hei"st, dass f"ur jede \q{Art} von Signal und dessen Eigenschaften, die passende Transformation existiert.
@@ -15,24 +15,24 @@ Wir liefern nun also die Definitionen und Zusammenh"ange der Fourier-Transformat
 
 \subsubsection{Fourier-Transformation kontinuierlicher periodischer Signale}\label{sec:fourier:cont:period}
 
-Wir haben bereits in \Cref{sec:cont_complex_harm} mit \eqref{eq:cont_fourier_series} gesehen, dass man durch Linearkombination der Funktionen
+Wir haben bereits in \Cref{sec:cont_complex_harm} mit \eqref{eq:cont_fourier_series} gesehen, dass man durch Linearkombination der komplexen Sinus-Funktionen
 \[
 \{\exp(\jmath 2 \pi k F_0 t), \fuer k \in \Z\}
 \]
 eine $1/F_0=T_0$-periodische Funktion $x: \R \rightarrow \C$ durch
 \[
-x(t) = 
+x(t) = \Sum{k \in \Z}{}{\exp(\jmath 2 \pi k F_0 t)}
 \]
 erh"alt.
-Dies ist demnach ein Fall von \emph{Fourier-Synthese}.
-Wir wollen nun den umgekehrten Weg gehen.
-Wir starten mit 
+Dies ist demnach ein Fall von \emph{Fourier-Synthese}, da wir aus den Gewichten $c_k$ in der Linearkombination eine Funktion $x$ erhalten.
+Wir wollen nun den umgekehrten Weg gehen, auf welchem wir f"ur eine gegebene Funktion $x$ die Koeffizienten $c_k$ bestimmen k"onnen.
+Wir starten dazu mit 
 \begin{equation}\label{eq:fourier:fourier_series}
     x(t) = \Sum{k \in \Z}{}{
         c_k \exp(\jmath 2 \pi k F_0 t)
     }
 \end{equation}
-und multiplizieren beide Seiten mit $\exp(-\jmath 2 \pi \ell F_0 t)$ und integrieren "uber $[0,T_0]$.
+und multiplizieren beide Seiten mit $\exp(-\jmath 2 \pi \ell F_0 t)$ und integrieren "uber eine Periode $[0,T_0]$.
 Dann erhalten wir
 \[
 \Int{0}{T_0}{
@@ -76,7 +76,7 @@ Final erhalten wir f"ur die Berechnung der Fourier-Koeffizienten $c : \N \righta
         x(t) \exp(-\jmath 2 \pi \ell F_0 t)
     }{t}.
 \]
-Wir haben in diesem Fall also \emph{Fourieranalyse} betrieben.
+Wir haben in diesem Fall also \emph{Fourier-Analyse} betrieben.
 Au"serdem haben wir absichtlich die Schreibweise von $c_\ell$ auf $c[\cdot]$ angepasst, um zu verdeutlichen, dass man nun die $c[\cdot]$ als \emph{komplexes diskretes Signal} auffassen k"onnen.
 Dieses diskrete Signal k"onnen wir nun durch die Fourier-Reihe mit dem Signal $x : \R \rightarrow \C$ \emph{identifizieren}.
 Sowohl $x$ als auch $c[\cdot]$ sind also Darstellungen desselben Sachverhaltes -- im \q{Zeitbereich} und im zugeh"origen \q{Frequenzbereich}.
@@ -216,25 +216,27 @@ x(t) = \Sum{k \in \Z}{}{
 }
 \]
 und setzen dies in $P$ ein, um
-\[
-\frac{1}{T_0}\Int{0}{T_0}{x(t) x(t)^\ast}{t}
-    = \frac{1}{T_0}\Int{0}{T_0}{
-        x(t) 
-        \Sum{k \in \Z}{}{
-            c_k^\ast \exp(-\jmath 2 \pi k F_0 t)
-        }
-    }{t}
-    = \Sum{k \in \Z}{}{
-        c_k^\ast 
-        \frac{1}{T_0}\Int{0}{T_0}{
-            x(t)
-            \exp(-\jmath 2 \pi k F_0 t)
+%
+\begin{equation}\label{eq:fourier:series_parseval}
+    \frac{1}{T_0}\Int{0}{T_0}{x(t) x(t)^\ast}{t}
+        = \frac{1}{T_0}\Int{0}{T_0}{
+            x(t) 
+            \Sum{k \in \Z}{}{
+                c_k^\ast \exp(-\jmath 2 \pi k F_0 t)
+            }
         }{t}
-    }
-    = \Sum{k \in \Z}{}{
-        c_k^\ast c_k
-    }
-\]
+        = \Sum{k \in \Z}{}{
+            c_k^\ast 
+            \frac{1}{T_0}\Int{0}{T_0}{
+                x(t)
+                \exp(-\jmath 2 \pi k F_0 t)
+            }{t}
+        }
+        = \Sum{k \in \Z}{}{
+            c_k^\ast c_k
+        }
+\end{equation}
+%
 als den \emph{Satz von Parseval}\footnote{\url{https://de.wikipedia.org/wiki/Satz\_von\_Parseval}} zu erhalten.
 Die physikalische Interpretation ist, dass $\Abs{c[k]}$ der Leistung des Signals bei der Frequenz $k F_0$ entspricht.
 Jeder Index $k$ hat also eine physikalische Gr"o"se, die mit ihm assoziiert ist.
@@ -263,9 +265,94 @@ In \Cref{py:period_psd} zeigen wir eine Modifikation von \Cref{py:fourier_series
 Auf der Frequenzachse sehen wir, dass demnach diese f"ur $K_{\rm max} = 30$ also von $-15$ bis $+15$ reicht.
 %
 %
+\FloatBarrier
 \subsubsection{Fourier-Transformation von kontinuierlichen aperiodischen Signalen}
 %
-Um die Einschr"ankung auf periodische Signale los zu werden...
+Um die Einschr"ankung auf periodische Signale zu vermeiden, nutzen wir die \acrlong{ft}, wie wir sie bereits in \eqref{eq:sampling:fourier_trafo} f"ur ein Signal $x : \R \rightarrow \C$ durch
+\begin{equation}\label{eq:fourier:fourier_trafo}
+    X(F) = \Int{-\infty}{+\infty}{x(t) \exp(-\jmath 2 \pi F t)}{t}
+\end{equation}
+definiert haben.
+Im Unterschied zu \eqref{eq:fourier:fourier_series} integrieren wir nun "uber ganz $\R$, da sich das Signal nicht mehr periodisch wiederholt.
+Aus diesem Grund ergibt sich auch ein \emph{kontinuierliches} Spektrum, da wir uns nicht mehr auf eine abz"ahlbare Menge von diskreten Frequenzen zur"uckziehen k"onnen.
+Deshalb ergibt sich auch f"ur die Synthese des Signals, dass wir auch in diesem Fall integrieren anstatt summieren m"ussen, es gilt also
+\begin{equation}\label{eq:fourier:inv_fourier_trafo}
+    x(t) = \Int{-\infty}{+\infty}{X(F) \exp(\jmath 2 \pi F t)}{F}.
+\end{equation}
+Da sich f"ur die meisten Signale, die wir betrachten werden, Integration und Summation \q{"ahnlich} verhalten, finden wir auch die obigen Eigenschaften bez"uglich Symmetrien, etc., von \eqref{eq:fourier:fourier_series} wieder.
+
+Es gibt aber eine Verbindung zur Fourier-Reihe, die wir im Folgenden kurz erl"autern wollen.
+Nehmen wir an, es existiert ein $T > 0$, sodass $\Abs{x(t)} = 0$ f"ur alle $t$ mit $\Abs{t} > T$.
+Dann k"onnen wir das Signal $x$ periodifizieren mit Periode $T$, indem wir
+\[
+x_p(t) = \Sum{k \in Z}{}{x(t - kT)}
+\]
+setzen.
+Dies haben wir bereits in "ahnlicher Form in \eqref{eq:spectrum_sampled} gesehen. 
+Dort hat es sich aber aus Berechnungen ergeben und hier \emph{setzen} wir diesen Zusammenhang explizit.
+Dann k"onnen wir $x_p$ in seine Fourier-Reihe 
+\[
+x_p(t) = \Sum{k \in \Z}{}{c_k \exp(\jmath 2 \pi k t/T)}
+\Text{mit}
+T\,c_k = \Int{-T/2}{+T/2}{x_p(t) \exp(- \jmath 2 \pi k t/T)}{t}
+    = \Int{-\infty}{+\infty}{x(t) \exp(- \jmath 2 \pi k t/T)}{t}
+\]
+entwickeln.
+Aus der Definition in \eqref{eq:fourier:fourier_trafo} und der letzten Gleichung sehen wir, dass sich die Koeffizienten der Fourier-Reihe finden lassen durch
+\[
+c_k = \frac 1T X\left(\frac kT\right)
+\]
+auch aus der Fourier-Transformation ablesen lassen.
+Das hei"st, dass wir auch
+\[
+x_p(t) = \Sum{k \in \Z}{}{\frac 1T X\left(\frac kT\right) \exp(\jmath 2 \pi k t/T)}
+       = \Sum{k \in \Z}{}{X\left(k \Delta F\right) \exp(\jmath 2 \pi k t \Delta F) \Delta F}
+\]
+schreiben k"onnen.
+Dabei haben wir im letzten Schritt $1/T = \Delta F$ gesetzt.
+Dies k"onnen wir intuitiv (aber nicht rigoros!) so interpretieren, dass im Falle von $T \rightarrow \infty$ gilt, dass $\Delta F \rightarrow 0$.
+Je l"anger der Bereich der Funktion $x$, auf welchem gilt $x \neq 0$, desto kleiner $\Delta F$.
+Der nicht-periodische Fall $T = \infty$ ergibt sich also als Grenzfall, wo obige Summation zu einer Integration wird und $\Delta F$ zu einem $\mathrm{d}F$.
+Man kann die \acrlong{ft} also als Grenzfall der Fourier-Reihe f"ur $T \rightarrow \infty$ betrachten.
+%
+%
+\subsubsection{Leistungsdichte-Spektrum aperiodischer Signale}
+%
+Analog zum Satz von Parseval f"ur periodische Signale in \eqref{eq:fourier:series_parseval} k"onnen wir auch hier wieder definieren und folgern, dass
+\begin{equation}
+E(x) = \Int{-\infty}{+\infty}{\Abs{x(t)}^2}{t}
+     = \Int{-\infty}{+\infty}{\Abs{X(F)}^2}{F}
+\end{equation}
+auch wieder ein Parseval Theorem f"ur die \acrlong{ft} ergibt.
+
+Andererseits kann man $X$ auch in Betrag und Phase zerlegen, da es im Allgemeinen eine komplexe Gr"o"se ist, also
+\[
+X(F) = \Abs{X(F)} \exp(\jmath \angle(X(F))).
+\]
+Man nennt dann $\Abs{X(F)}^2$ das \emph{Leistungsdichte-Spektrum} von $x$.
+
+\begin{listing}[h]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=6, lastline=45]{python3}{code/fourier_trafo.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/fourier_trafo.png}
+    \end{minipage}
+    \codecaption{dsv/code/fourier_trafo.py}{Berechnung und Darstellung von \eqref{eq:fourier:fourier_trafo}}\label{py:fourier_trafo}
+\end{listing}
+
+In \Cref{py:fourier_trafo} zeigen wir das Vorgehen zur Fourier-Analyse mittels numerischer Integration.
+Es ist hier anzumerken, dass wir \q{nur} die Funktion \texttt{rect} definieren m"ussen und der Rest, also die Funktionen \texttt{kernel}, \texttt{analyse} und \texttt{synthese} unabh"angig hiervon sind.
+Wir haben hier ein \namecref{py:fourier_trafo}, welches sich Methoden der Funktionalen Programmierung bedient.
+Die Funktionen texttt{analyse} und \texttt{synthese} haben als Eingabewert die entweder die Funktion, oder die \acrlong{ft} einer Funktion.
+Au"serdem liefern sie als Ausgabewert wieder \emph{Funktionen}, die wir einfach \q{aufrufen} k"onnen.
+
+\subsection{Fourier-Transformation diskreter periodischer Signale}\label{sec:fourier:dft}
+
+
 \begin{itemize}
     \item Fourier Transform (theoretisches tool, weil digital nicht umsetzbar): kernel, eigenschaften (linear, shift, skalierung), beispiele uebung 
     \item Discrete Time Fourier Transform (theoretisches tool, weil digital nicht umsetzbar)

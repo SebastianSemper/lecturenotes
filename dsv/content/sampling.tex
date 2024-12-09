@@ -382,7 +382,7 @@ Wir besch"aftigen uns nun also allgemein mit dem Problem der Abtastung eine beli
 \]
 F"ur die bequeme Analyse von kontinuierlichen Signalen und ihrem Anteil an harmonischen Komponenten, benutzen wir die \gls{ft} $\mathcal{F}$, welche ein Signal $x : \R \rightarrow \C$ transformiert in $x \mapsto \mathcal{F} x = X : \R \rightarrow \C$, wobei $X$ durch
 %
-\begin{equation}\label{eq:fourier_trafo}
+\begin{equation}\label{eq:sampling:fourier_trafo}
     X(F) = \Int{-\infty}{+\infty}{x(t) \exp(-\jmath 2 \pi F t)}{t}
 \end{equation}
 %
@@ -431,7 +431,7 @@ Man kann zeigen, dass f"ur zwei Funktionen $x,y : \R \rightarrow \C$ die Abbildu
 %
 ein Skalarprodukt definiert. 
 Auch hier halten wir an der Interpretation fest, dass wir damit berechnen, wie "ahnlich sich $x$ und $y$ sind.
-Definieren wir nun die Signale $k_F: \R \rightarrow \C$ durch $k_F(t) = \exp(\jmath 2 \pi F t)$, dann k"onnen wir \eqref{eq:fourier_trafo} umschreiben zu
+Definieren wir nun die Signale $k_F: \R \rightarrow \C$ durch $k_F(t) = \exp(\jmath 2 \pi F t)$, dann k"onnen wir \eqref{eq:sampling:fourier_trafo} umschreiben zu
 \[
 \ScPr{x}{k_F} 
     = \Int{-\infty}{+\infty}{

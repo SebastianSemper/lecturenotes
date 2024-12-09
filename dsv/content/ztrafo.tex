@@ -11,7 +11,7 @@ Die $z$-Transformation $X_\z: \C \rightarrow \C$ eines Signals $x[\cdot] : \N \r
 Wegen der Summation "uber ganz $\Z$ ist $X_\z(z)$ f"ur jedes $z$ ein Grenzwert, der nicht existieren muss.
 Das hei"st, es ist notwendig auch \emph{immer} den Konvergenzbereich, oder Englisch die \gls{roc}, von $X_\z$ anzugeben.
 
-Betrachten wir beispielsweise \[x[\cdot] = \{5,6,\Start{3},4,-\pi\},\] dann ergibt sich \[X_\z(z) = 5 z^2 + 6 z + 3 + 4z^{-1} - \pi z^2 \Text{mit \gls{roc}} \C \setminus \{0\}.\] 
+Betrachten wir beispielsweise \[x[\cdot] = \{5,6,\Start{3},4,-\pi\},\] dann ergibt sich \[X_\z(z) = 5 z^2 + 6 z + 3 + 4z^{-1} - \pi z^{-2} \Text{mit \gls{roc}} \C \setminus \{0\}.\] 
 Im Fall von $x[\cdot] = \delta[\cdot-k]$, ergibt sich $X_\z(z) = z^{-k}$ mit \gls{roc} $\C \setminus \{0\}$, wobei sich bei $x[\cdot] = \delta[\cdot+k]$, sich $X_\z(z) = z^{k}$ mit \gls{roc} $\C$ ergibt.
 Man sieht nun auch, weshalb das System, das ein Signal um einen Abtastwert verz"ogert, oft mit $z^{-1}$ bezeichnet wird, weil dies die $z$-Transformation dessen Impulsantwort ist.
 Au"serdem kann man bei endlichen Signalen im $z$-Bereich deren Werte im Zeitbereich einfach ablesen. 
@@ -34,7 +34,7 @@ Dann folgt, dass
     X_\z(z) = \frac{1}{1 - a z^{-1}},
 \]
 wobei diese Potenzreihe nur konvergiert, wenn $z > a$.
-Das hei"st, dass die \gls{roc} hier alle $z \in \C$ umfasst mit $\Abs{z} > a$.
+Das hei"st, dass die \gls{roc} hier alle $z \in \C$ umfasst mit $\Abs{z} > \Abs{a}$.
 Wir sehen, dass sich eigentlich unendlich lange Signale im $z$-Bereich durch Berechnen des Grenzwertes knapper darstellen lassen.
 Gleichzeitig k"onnen wir so auch die \gls{roc} bestimmen, indem wir ermitteln, wann der ermittelte Grenzwert existiert.
 
@@ -153,7 +153,7 @@ Jetzt nutzen wir die Eigenschaft, die sich aus dem Zeitversatz gibt zusammen mit
         x_1[k] X_{\z, 2}(z) z^{-k}
     }
     = X_{\z, 2}(z) \Sum{k \in \Z}{}{
-        x_1[k] X_{\z, 2}(z) z^{-k}
+        x_1[k] z^{-k}
     }
     = X_{\z,1}(z) X_{\z, 2}(z).
 \]
@@ -173,11 +173,6 @@ Am Ende erlaubt dieser die Herleitung von
 \end{equation}
 als M"oglichkeit der Bestimmung von $x[n]$ aus $X_{\z}$.
 Oft sind diese Integrale jedoch nicht leicht zu Berechnen und man sollte sich auf geeignete Tabellen (siehe~\cite[Tabelle~3.2,~Tabelle~3.3]{proakis2013}) und die restlichen obigen Eigenschaften beziehen, wenn man $z$-Transformationspaare bestimmen m"ochte.
-\begin{itemize}
-    \item uebung: problem 3.6 in \cite{proakis2013}, initial value theorem, some plots aus \cite{proakis2013}
-    \item rationale z-trafos: definition, pole-nullstellen, umkehrung: von pole-nullstellen zu $X(z)$
-    \item ausfuehrliche diskussion von \cite[fig 3.3.5, 3.3.6]{proakis2013} 
-\end{itemize}
 %
 %
 \subsubsection{Anwendung bei diskreten \texorpdfstring{\gls{lti}}{LTI}-Systemen}
