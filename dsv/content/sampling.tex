@@ -171,10 +171,10 @@ Wir k"onnen also f"ur eine Folge von $c_k \in \C$ die Linearkombination der $x_k
 %
 Die erste Schreibweise ist absichtlich ohne das Argument $t$, um zu verdeutlichen, dass Signale \emph{wirklich} als eigenst"andige Signale behandelt werden k"onnen und dass $x_a(t) \in \C$ \q{nur} die Auswertung von $x_a$ an der Stelle $t$ ist, welche \emph{strikt} von dem \emph{Vektor} $x_a$ zu unterscheiden ist.
 
-Nat"urlich ist \eqref{eq:cont_fourier_series} als Fourierreihe von $x_a$ bekannt, und die $c_k$ sind die Fourierkoeffizienten von $x_a$.
+Nat"urlich ist \eqref{eq:cont_fourier_series} als Fourier-Reihe von $x_a$ bekannt, und die $c_k$ sind die Fourierkoeffizienten von $x_a$.
 Wie in \Cref{sec:signals_vec} k"onnen wir also die $c_k$ durch \eqref{eq:cont_fourier_series} mit $x_a$ \emph{identifizieren}, da uns die $c_k$ eine alternative Darstellung von $x_a$ liefern.
 %
-\subsection{Zeit-Diskrete Komplexe Sinussignale}
+\subsection{Zeit-Diskrete Komplexe Sinussignale}\label{sec:sampling:disc_sin}
 %
 Analog zu \Cref{sec:cont_complex_harm}, wollen wir uns zeit-diskrete komplexe Schwingungen herleiten, die von einer bestimmten Grundfrequenz definiert werden.
 Da wir, im Unterschied zum kontinuierlichen Fall, nicht f"ur alle $f \in \R$ eine periodische Funktion erhalten, w"ahlen wir $f_0 = 1/N$ f"ur ein $N \in \N$. 
@@ -241,11 +241,11 @@ und erhalten so ein Signal mit Werten
             \right) 
         },
 \end{equation}
-was die Fourierreihe eines diskreten und periodischen Signals darstellt, wobei in diesem Fall der Vektor $\bm c = [c_k]_{k=0}^{N-1} \in \C^N$ eine alternative Repr"asentation des Signals ist.
+was die Fourier-Reihe eines diskreten und periodischen Signals darstellt, wobei in diesem Fall der Vektor $\bm c = [c_k]_{k=0}^{N-1} \in \C^N$ eine alternative Repr"asentation des Signals ist.
 
 Das Signal $x[\cdot]$ selbst ist periodisch mit Periodenl"ange $N$, d.h. das Signal ist durch die Werte $\bm x = [x[n]]_{n=0}^{N-1} \in \C^N$ \emph{vollst"andig} definiert. Das hei"st wir k\"onnen das Signal $x[\cdot]$ mit dem \emph{endlich-dimensionalen} Vektor $\bm x \in \C^N$ identifizieren.
 Da genauso jedes der $x_k[\cdot]$ auch Periodenl"ange $N$ hat, erhalten wir auf die gleiche Weise Vektoren $\bm x_k \in \C^N$.
-Mit diesen endlich-dimensionalen Vektoren sind wir nun in der Lage die Fourierreihe in \eqref{eq:disc_fourier_series} mit \q{normalen} Vektoren durch
+Mit diesen endlich-dimensionalen Vektoren sind wir nun in der Lage die Fourier-Reihe in \eqref{eq:disc_fourier_series} mit \q{normalen} Vektoren durch
 %
 \begin{equation}\label{eq:disc_fourier_lincomb}
     \bm x = c_1 \bm x_1 + c_2 \bm x_2 + \ldots + c_{N-1} \bm x_{N-1}

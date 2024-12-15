@@ -56,7 +56,7 @@ plt.stem(
 )
 plt.legend()
 
-allT = np.linspace(0, T_0, 201, endpoint=False)
+allT = np.linspace(0, T_0, 401, endpoint=False)
 plt.subplot(122)
 plt.plot(
     allT, [rect(tt) for tt in allT], label="x"

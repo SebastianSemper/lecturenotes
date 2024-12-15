@@ -21,7 +21,7 @@ Wir haben bereits in \Cref{sec:cont_complex_harm} mit \eqref{eq:cont_fourier_ser
 \]
 eine $1/F_0=T_0$-periodische Funktion $x: \R \rightarrow \C$ durch
 \[
-x(t) = \Sum{k \in \Z}{}{\exp(\jmath 2 \pi k F_0 t)}
+x(t) = \Sum{k \in \Z}{}{c_k \exp(\jmath 2 \pi k F_0 t)}
 \]
 erh"alt.
 Dies ist demnach ein Fall von \emph{Fourier-Synthese}, da wir aus den Gewichten $c_k$ in der Linearkombination eine Funktion $x$ erhalten.
@@ -299,10 +299,10 @@ T\,c_k = \Int{-T/2}{+T/2}{x_p(t) \exp(- \jmath 2 \pi k t/T)}{t}
 \]
 entwickeln.
 Aus der Definition in \eqref{eq:fourier:fourier_trafo} und der letzten Gleichung sehen wir, dass sich die Koeffizienten der Fourier-Reihe finden lassen durch
-\[
-c_k = \frac 1T X\left(\frac kT\right)
-\]
-auch aus der Fourier-Transformation ablesen lassen.
+\begin{equation}\label{eq:fourier:c_k_fourier}
+    c_k = \frac 1T X\left(\frac kT\right),
+\end{equation}
+diese sich also auch aus der Fourier-Transformation ablesen lassen.
 Das hei"st, dass wir auch
 \[
 x_p(t) = \Sum{k \in \Z}{}{\frac 1T X\left(\frac kT\right) \exp(\jmath 2 \pi k t/T)}
@@ -312,7 +312,7 @@ schreiben k"onnen.
 Dabei haben wir im letzten Schritt $1/T = \Delta F$ gesetzt.
 Dies k"onnen wir intuitiv (aber nicht rigoros!) so interpretieren, dass im Falle von $T \rightarrow \infty$ gilt, dass $\Delta F \rightarrow 0$.
 Je l"anger der Bereich der Funktion $x$, auf welchem gilt $x \neq 0$, desto kleiner $\Delta F$.
-Der nicht-periodische Fall $T = \infty$ ergibt sich also als Grenzfall, wo obige Summation zu einer Integration wird und $\Delta F$ zu einem $\mathrm{d}F$.
+Der nicht-periodische Fall $T = \infty$ ergibt sich also als Grenzfall, bei welchem obige Summation zu einer Integration wird und $\Delta F$ zu einem $\mathrm{d}F$.
 Man kann die \acrlong{ft} also als Grenzfall der Fourier-Reihe f"ur $T \rightarrow \infty$ betrachten.
 %
 %
@@ -349,12 +349,89 @@ Es ist hier anzumerken, dass wir \q{nur} die Funktion \texttt{rect} definieren m
 Wir haben hier ein \namecref{py:fourier_trafo}, welches sich Methoden der Funktionalen Programmierung bedient.
 Die Funktionen texttt{analyse} und \texttt{synthese} haben als Eingabewert die entweder die Funktion, oder die \acrlong{ft} einer Funktion.
 Au"serdem liefern sie als Ausgabewert wieder \emph{Funktionen}, die wir einfach \q{aufrufen} k"onnen.
+%
+\subsection{Fourier-Transformation diskreter Signale}\label{sec:fourier:disc}
+%
+Wir n"ahern uns langsam der Fourier-Analyse von diskreten Signalen.
+Schlie"slich wollen wir etwaige spektrale Analysen und dergleichen im Digitalen durchf"uhren, um die Vorz"uge von digitalen Rechenwerken dabei nutzen zu k"onnen.
+Die vorher eingef"uhrten Transformationen sind zwar hilfreich f"ur theoretische Argumentation, wie beispielsweise beim Sampling-\Cref{stm:sampling_theorem}. 
+Deshalb wenden wir uns nun der spektralen Analyse von diskreten Signalen zu.
+Wir werden aber im Verlauf auch wieder "ahnliche Zusammenh"ange wie in \eqref{eq:fourier:c_k_fourier} finden.
+%
+\subsubsection{Fourier-Transformation diskreter periodischer Signale}\label{sec:fourier:dft}
+%
+Wir beginnen mit diskreten Signalen, die gleichzeitig periodisch sind, also ein $N$ existiert, sodass
+\[
+x[n] = x[n+N] \Text{f"ur alle} n \in \Z 
+\]
+gilt.
+Aus vorherigen Diskussionen in \Cref{sec:sampling} wissen wir einerseits, dass diskrete Signale ein periodisches Spektrum auf $(0,1)$ besitzen.
+Andererseits wissen wir aus \Cref{sec:fourier:cont:period}, dass periodische Signale ein \emph{diskretes} Spektrum besitzen.
+Wir finden also nun intuitiv, dass das Spektrum von diskreten periodischen Signalen \emph{ebenfalls} diskret und periodisch ist.
+Denken wir zur"uck an \Cref{sec:sampling:disc_sin} so haben wir bereits alles Notwendige betrachtet.
+Ein $N$-periodisches diskretes Signal ergibt sich aus der Linearkombination der diskreten Signale $x_k[\cdot] : \Z \rightarrow \C$ definiert durch
+\[
+x_k[n] = \exp\left(\jmath 2 \pi \frac k N n \right) \Text{mit} k = 0, \ldots, N-1.
+\]
+Das hei"st, f"ur $x[\cdot]$ setzen wir mit
+\[
+x[\cdot] = \Sum{k = 0}{N-1}{c[k] x_k[\cdot]}
+\]
+an.
+Damit sind bereits beide Eigenschaften des Spektrums \q{eingepreist}.
+Denn man erkennt in den $x_{k}[\cdot]$ die vorher erw"ahnte \emph{zweifache} Periodizit"at wieder, weil sowohl $x_{k+N}[\cdot] = x_{k}[\cdot]$ f"ur alle $k$ als auch $x_k[n+N] = x_k[n]$ f"ur alle $n$ gilt.
 
-\subsection{Fourier-Transformation diskreter periodischer Signale}\label{sec:fourier:dft}
+Es ist nun unser Ziel f"ur gegebene Werte $x[n]$ von $x[\cdot]$ die Werte des \emph{ebenfalls periodischen und diskreten} Signals $c[\cdot]$ zu bestimmen.
+Dies verl"auft ganz analog zu \Cref{sec:fourier:cont:period}.
+Wir definieren das Skalarprodukt $\ScPr{\cdot}{\cdot}$ f"ur $N$-periodische und diskrete Signale via
+\[
+\ScPr{x_1[\cdot]}{x_2[\cdot]} 
+    = \Sum{n = 0}{N-1}{x_1[n] x_2[n]^\ast}.
+\]
+Das hei"st, dass wir periodisches Signal $x[\cdot]$ mit dem \emph{endlich-dimensionalen} Vektor $\bm x \in \C^{N}$ identifizieren, wir setzen also die EIntr"age des Vektors als $\bm x_i = x[i-1]$.
+Dann k"onnen wir auch f"ur das entsprechende Skalarprodukt der Vektoren $\bm x_{1,2} \in \C^N$
+\[
+\ScPr{\bm x_1}{\bm x_2} 
+    = \left(\bm x_2^\ast\right)^\trans \cdot \bm x_1 
+    = \bm x_2^\herm \cdot \bm x_1
+\]
+schreiben.
+Analog identifizieren wir die periodische und diskrete Sequenz $c[\cdot]$ mit dem Vektor $\bm c \in \C^N$.
 
-
+Wie in \Cref{sec:fourier:cont:period} m"ussen wir nur 
+\[
+\ScPr{\bm x_k}{\bm x_\ell} 
+    = \Sum{i=0}{N-1}{
+        x_k[i] x_\ell[i]^\ast
+    }
+    = \Sum{i=0}{N-1}{
+        \exp\left(\jmath 2 \pi \frac{i(k-l)}{N} \right)
+    }
+    = \begin{cases}
+        N \Text{falls} k = \ell \\
+        \frac{
+            1 - \exp\left(\jmath 2 \pi \frac{(k-l)}{N} \right)^N   
+        }{
+            1 - \exp\left(\jmath 2 \pi \frac{(k-l)}{N} \right)
+        } \Text{sonst}
+    \end{cases}
+    = \begin{cases}
+        N \Text{falls} k = \ell \\
+        0 \Text{sonst}
+    \end{cases}
+\]
+berechnen.
+Wie dort finden wir, dass also gilt $\ScPr{\bm x_k}{\bm x_\ell} = 0$, falls $k \neq \ell$ und $\ScPr{\bm x_k}{\bm x_k} = N$.
+Damit ergibt sich bei Anwendung auf das eigentliche Signal $\bm x$ f"ur den Vektor $\bm c$, dass
+\[
+\ScPr{\bm x}{\bm x_\ell}
+    = \ScPr{\Sum{k=1}{N}{\bm c_k \bm x_k}}{\bm x_\ell}
+    = \Sum{k=1}{N}{\bm c_k \ScPr{\bm x_k}{\bm x_\ell}}
+    = N \bm c_\ell
+\Rightarrow
+\bm c_\ell = \frac{1}{N}\ScPr{\bm x}{\bm x_\ell}.
+\]
 \begin{itemize}
-    \item Fourier Transform (theoretisches tool, weil digital nicht umsetzbar): kernel, eigenschaften (linear, shift, skalierung), beispiele uebung 
     \item Discrete Time Fourier Transform (theoretisches tool, weil digital nicht umsetzbar)
     \item Discrete Fourier Transform
     \begin{itemize}
