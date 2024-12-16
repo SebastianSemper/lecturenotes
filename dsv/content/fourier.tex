@@ -358,7 +358,7 @@ Die vorher eingef"uhrten Transformationen sind zwar hilfreich f"ur theoretische 
 Deshalb wenden wir uns nun der spektralen Analyse von diskreten Signalen zu.
 Wir werden aber im Verlauf auch wieder "ahnliche Zusammenh"ange wie in \eqref{eq:fourier:c_k_fourier} finden.
 %
-\subsubsection{Fourier-Transformation diskreter periodischer Signale}\label{sec:fourier:dft}
+\subsubsection{Fourier-Transformation diskreter periodischer Signale}\label{sec:fourier:disc_period}
 %
 Wir beginnen mit diskreten Signalen, die gleichzeitig periodisch sind, also ein $N$ existiert, sodass
 \[
@@ -388,7 +388,7 @@ Wir definieren das Skalarprodukt $\ScPr{\cdot}{\cdot}$ f"ur $N$-periodische und 
 \ScPr{x_1[\cdot]}{x_2[\cdot]} 
     = \Sum{n = 0}{N-1}{x_1[n] x_2[n]^\ast}.
 \]
-Das hei"st, dass wir periodisches Signal $x[\cdot]$ mit dem \emph{endlich-dimensionalen} Vektor $\bm x \in \C^{N}$ identifizieren, wir setzen also die EIntr"age des Vektors als $\bm x_i = x[i-1]$.
+Das hei"st, dass wir periodisches Signal $x[\cdot]$ mit dem \emph{endlich-dimensionalen} Vektor $\bm x \in \C^{N}$ identifizieren, wir setzen also die Eintr"age des Vektors als $\bm x_i = x[i-1]$.
 Dann k"onnen wir auch f"ur das entsprechende Skalarprodukt der Vektoren $\bm x_{1,2} \in \C^N$
 \[
 \ScPr{\bm x_1}{\bm x_2} 
@@ -421,7 +421,8 @@ Wie in \Cref{sec:fourier:cont:period} m"ussen wir nur
     \end{cases}
 \]
 berechnen.
-Wie dort finden wir, dass also gilt $\ScPr{\bm x_k}{\bm x_\ell} = 0$, falls $k \neq \ell$ und $\ScPr{\bm x_k}{\bm x_k} = N$.
+Hierbei nutzen wir, dass $\exp(\jmath 2 \pi k) = 1$ f"ur alle $k \in \Z$.
+Wie in \Cref{sec:fourier:cont:period} finden wir, dass also gilt $\ScPr{\bm x_k}{\bm x_\ell} = 0$, falls $k \neq \ell$ und $\ScPr{\bm x_k}{\bm x_k} = N$.
 Damit ergibt sich bei Anwendung auf das eigentliche Signal $\bm x$ f"ur den Vektor $\bm c$, dass
 \[
 \ScPr{\bm x}{\bm x_\ell}
@@ -431,18 +432,118 @@ Damit ergibt sich bei Anwendung auf das eigentliche Signal $\bm x$ f"ur den Vekt
 \Rightarrow
 \bm c_\ell = \frac{1}{N}\ScPr{\bm x}{\bm x_\ell}.
 \]
+Zusammenfassend, kann man also sagen, dass sich folgende Analyse- und Synthesegleichungen ergeben:
+\begin{equation}\label{eq:fourier:disc_analys_synth}
+    x[n] = \Sum{k = 0}{N-1}{c[k]\exp(\jmath 2 \pi k n/N)}, \Text{und}
+    c[k] = \frac{1}{N}\Sum{n = 0}{N-1}{x[n]\exp(-\jmath 2 \pi k n/N)}.
+\end{equation}
+In Vektorschreibweise l"asst sich der erste Teil durch
+\begin{equation}\label{eq:fourier:disc_analys_synth_vec}
+    \bm x = \Sum{k = 0}{N-1}{\ScPr{\bm x}{\bm x_k} \bm x_k}
+\end{equation}
+ausdr"ucken.
+
+Weiterhin, k"onnen wir eine Matrix $\bm F_N \in \C^{N \times N}$ definieren, deren $k$-te Spalte den Vektor $\bm x_k$ beinhaltet.
+Wir definieren also 
+\[
+\bm F_N = \left[
+    \bm x_1, \ldots, \bm x_k, \ldots, \bm x_N 
+\right]
+\]
+Dann k"onnen wir noch einen Schritt weitergehen und sehen, dass
+\[
+\bm c = \frac{1}{N} \bm F_N^\herm \bm x, \Text{und} \bm x = \bm F_N \bm c
+\]
+gilt.
+Das hei"st, dass sich Fourier-Analyse und Fourier-Synthere von diskreten und periodischen Signalen durch eine Matrix-Vektor-Multiplikation durchf"uhren l"asst!
+Das sind erst einmal gute Nachrichten, denn damit wissen wir, dass digitale Rechenwerke sehr gut darin sind, diese Transformation durchzuf"uhren.
+Die hier vorgestellte Transformation nennen wir \gls{dft}.
+
+In \Cref{py:dft_1} zeigen wir ein einfaches Beispiel f"ur $x[\cdot] = u[\cdot] - u[\cdot-k]$.
+Au"serdem zeigen wir auch die beiden Berechungsmethoden der $c[\cdot]$ -- einerseits mit der Definition und andererseits "uber ein Matrix-Vektor-Produkt.
+%
+\begin{listing}[h]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5, lastline=22]{python3}{code/dft_1.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/dft_1.png}
+    \end{minipage}
+    \codecaption{dsv/code/dft_1.py}{Berechnung und Darstellung von \eqref{eq:fourier:disc_analys_synth}}\label{py:dft_1}
+\end{listing}
+%
+\FloatBarrier
+%
+\subsubsection{Fourier-Transformation diskreter aperiodischer Signale}\label{sec:fourier:disc_aperiod}
+%
+Wiederum analog zu \Cref{sec:fourier:cont} ben"otigen wir noch eine Transformation f"ur diskrete Signale, die keine Periodizit"at aufweisen.
+Hierzu definieren wir die zugeh"orige Fourier-Transformation, die wir \gls{dtft} nennen, durch
+\begin{equation}\label{eq:fourier:dtft}
+    X(f) = \Sum{n \in \Z}{}{x[n] \exp(-\jmath 2 \pi f n)},
+\end{equation}
+genau wie in \Cref{sec:sampling} bei der Herleitung von \eqref{stm:sampling_theorem}.
+Im Unterschied zur \q{analogen} Fourier-Transformation \eqref{eq:fourier:fourier_trafo} sehen wir, dass $X$ nur f"ur Frequenzen $f \in (0,1]$ definiert ist, da das diskrete Signal $x_f[n] = \exp(\jmath 2 \pi f n)$ periodisch in $f$ ist.
+Es gilt also $x_{f + k}[\cdot] = x_{f}[\cdot]$ f"ur alle $k \in \Z$.
+Dies \q{passt} auch zur Natur von diskreten Signalen, da deren Frequenzbereich \emph{immer} periodisch sein muss.
+
+Wir k"onnen nun f"ur die inverse Transformation einmal \eqref{eq:fourier:dtft} mit \eqref{eq:fourier:fourier_series} vergleichen. 
+Bis auf das Vorzeichen in der Funktion $\exp()$ gleicht \eqref{eq:fourier:dtft} einer Fourier-Reihe der periodischen Funktion $X$.
+In der Tat, k"onnen wir die Folge $x[\cdot]$ als Fourier-Koeffizienten der Funktion $X$ durch
+\begin{equation}\label{eq:fourier:idtft}
+    x[n] = \Int{-1/2}{+1/2}{X(f)\exp(\jmath 2 \pi f n)}{f}
+\end{equation}
+wiederfinden.
+Diese Synthese-Operation nennen wir dann \gls{idtft}.
+Es ist wiederum anzumerken, dass die \gls{dtft} \q{nur} ein theoretisches Werkzeug ist, da sich im Allgemeinen die unendliche Summe in \eqref{eq:fourier:dtft} praktisch nicht realisieren l"asst, genauso wenig wie deren Resultat, eine kontinuierliche Funktion.
+
+In \Cref{py:dtft} zeigen wir dennoch, wie man die \gls{dtft} einer aperiodischen Folge approximieren kann.
+Wir studieren hierzu das Signal
+\[
+x[n] = \begin{cases}
+    \frac{\omega}{\pi} \Text{f"ur} n = 0,\\
+    \frac{\omega}{\pi} \frac{\sin(\omega n)}{\omega n} \Text{sonst}.
+\end{cases}
+\]
+Dessen analytisch bestimmte \gls{dtft} $X$ ist
+\[
+X(f) = \Rect(f/(2 \pi \omega)),
+\]
+welche wir durch eine endliche Summe "uber die von uns verf"ugbaren Werte von $x[\cdot]$ bestimmen.
+
+Nun treten hierbei mehrere Effekte zutage.
 \begin{itemize}
-    \item Discrete Time Fourier Transform (theoretisches tool, weil digital nicht umsetzbar)
-    \item Discrete Fourier Transform
-    \begin{itemize}
+    \item Die Approximation der \gls{dtft} mittels des \q{abgeschnittenen} Signals $x$ stimmt noch nicht sehr gut mit der analytischen L"osung "uberein. 
+    Ver"andert man den Wert der Variable $N$ im Skript, tritt dieser Effekt st"arker oder schw"acher zutage.
+    \item Auch bei Erh"ohung von $N$ stellt sich immernoch keine Konvergenz von $X_{\rm approx}$ gegen $X_{\rm true}$ ein.
+    Dies liegt daran, dass die \gls{dtftf} von $x[\cdot]$ nicht konvergiert, wie wir in \Cref{py:fourier_series} bereits gesehen hatten.
+    Diesen Effekt bezeichnet man allgemein als Gibbssches Phänomen\footnote{\url{https://de.wikipedia.org/wiki/Gibbssches_Phänomen}}.
+    \item Augenscheinlich ist es besser die \gls{idtft} aus $X_{\rm approx}$ zu berechnen, als aus $X_{\rm true}$. Doch dies liegt legidlich daran, dass die numerische Integration der $\Rect$-Funktion nicht genau genug ist.
+    Erh"oht man die Anzahl der Punkte im Array \texttt{F}, dann stimmen im dritten Plot die drei Graphen besser "uberein.
+\end{itemize}
+\begin{listing}[h]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5, lastline=48]{python3}{code/dtft.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/dtft.png}
+    \end{minipage}
+    \codecaption{dsv/code/dtft.py}{Berechnung und Darstellung von \eqref{eq:fourier:dtft}}\label{py:dtft}
+\end{listing}
+\FloatBarrier
+\begin{itemize}
+    \item \begin{itemize}
         \item eigenschaften der kernel-funktion: perioden, wann reel, ..., was passiert bei abtastung?
-        \item implizite periodifizierung des signals?
         \item zusammenhang zur physik
         \item dc, nyquist-frequenzen, wann vorhanden?
         \item reelles signal: dc und nyquist reell
     \end{itemize}
-    \item zusammenhang zwischen ft, dtft und dft (intuition mit periodifizierung vs. abtastung; non-intuition durch kernel angucken)
-    \item dft als approximation der ft
+    \item dft als approximation der dtft
     \begin{itemize}
         \item $s(t) = \exp(-t/\tau) \cdot \sin(\omega_0 \cdot t)$, 
         \item $s(t) = \exp(-(t - \mu)^2/\sigma^2)$ (Uebung)
