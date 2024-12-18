@@ -8,7 +8,7 @@ Kmax = 30
 
 
 def rect(t: float) -> float:
-    if (t < 0.0) or (t > 0.3):
+    if (t < 0.0) or (t > 0.8):
         return 0
     else:
         return 1

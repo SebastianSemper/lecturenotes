@@ -142,7 +142,7 @@ Aus dem abgetasteten \q{Rechteck} wird nach nochmaliger Anwendung ein abgetastet
 Generell kann man das komplette System als eine dreifache Verkettung gleitender Mittel der L"ange $\ell=3$ verstehen.
 Au"serdem best"atigt \Cref{py:ramp_ma} bei Vergleich der verschiedenen Ausg"ange, dass wiederholtes Mitteln am Ausgang mit Anzahl der Mittelungen zunehmend \q{glattere} Signale erzeugt.
 %
-\subsubsection{Eigenschaften von \texorpdfstring{\acrshort{lti}}{LTI}-Systemen}\label{sec:lti_sys:properties}
+\subsubsection{Eigenschaften von \texorpdfstring{\acrshort*{lti}}{LTI}-Systemen}\label{sec:lti_sys:properties}
 %
 \paragraph{\texorpdfstring{\gls{bibo}}{BIBO}-Stabilit"at}
 Wir hatten vorher schon diesen Begriff der Stabili"at eingef"uhrt und formulieren nun eine Bedingung an $h[\cdot]$, die es uns erlaubt auf Stabilit"at zu pr"ufen.
@@ -196,7 +196,7 @@ wobei das letzte Gleichheitszeichen gilt, weil wir angenommen hatten, dass $h[\c
 Man kann also schlussfolgern, dass sich Stabilit"at vollst"andig durch die Impulsantwort $h[\cdot]$ bestimmen l"asst.
 Eine tolle Sache!
 %
-\paragraph{\texorpdfstring{\acrshort{fir}}{FIR} vs. \texorpdfstring{\acrshort{iir}}{IIR}}
+\paragraph{\texorpdfstring{\acrshort*{fir}}{FIR} vs. \texorpdfstring{\acrshort*{iir}}{IIR}}
 %
 Gilt f"ur die Impulsantwort $h[\cdot]$, dass
 \[
@@ -212,7 +212,7 @@ Bei einem \gls{iir}-System ist die Frage nach Stabilit"at nicht so einfach zu be
 Au"serdem haben \gls{iir}-Systeme noch das Problem, dass man die Faltungsformel \eqref{eq:lti_sys:conv} nicht nutzen kann, um ein \gls{iir}-System zu \emph{implementieren}.
 %
 %
-\subsubsection{Rekursive \texorpdfstring{\acrshort{iir}}{IIR}-Systeme}
+\subsubsection{Rekursive \texorpdfstring{\acrshort*{iir}}{IIR}-Systeme}
 %
 %
 Um die Notwendigkeit von \eqref{eq:lti_sys:conv} zu umgehen, betrachten wir eine gewisse Klasse von Systemen, deren Ausgang $y[\cdot]$ auch "uber einen alternativen Weg bestimmt werden kann.
@@ -293,7 +293,7 @@ Abschlie"send ist noch anzumerken, dass man rekursive Systeme auch \q{l"osen} ka
 Die dort entwickelte Theorie erinnert der L"osung von Differenzialgleichungen nach Funktionen, nur werden stattdessen Differenzengleichungen nach diskreten Folgen gel"ost.
 %
 %
-\subsubsection{Approximation von \texorpdfstring{\acrshort{iir}}{IIR}-Systemen durch \texorpdfstring{\acrshort{fir}}{FIR}-Systeme}
+\subsubsection{Approximation von \texorpdfstring{\acrshort*{iir}}{IIR}-Systemen durch \texorpdfstring{\acrshort*{fir}}{FIR}-Systeme}
 Um die Faltungsformel doch anwenden zu k"onnen, kann man f"ur ein \emph{stabiles} \gls{iir}-System mit Impulsantwort $h[\cdot]$ eine \gls{fir}-Approximation finden.
 Ein weiterer Vorteil ergibt sich dann, dass auch dieses resultierende System stabil sein muss.
 F"ur $n_{\rm low} < n_{\rm hgh}$ definieren wir
@@ -334,5 +334,5 @@ Wir wollen aber darauf hinweisen, dass es eine ganz eigene Theorie f"ur die Appr
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/exp_mean.png}
     \end{minipage}
-    \codecaption{dsv/code/exp_mean.py}{Approximation eines exponentiellen Mittelwertes, also einem \gls{iir}-System, durch ein \gls{fir}-System}\label{py:exp_mean}
+    \codecaption{dsv/code/exp_mean.py}{Approximation eines exponentiellen Mittelwertes, also einem \acrshort*{iir}-System, durch ein \acrshort*{fir}-System}\label{py:exp_mean}
 \end{listing}

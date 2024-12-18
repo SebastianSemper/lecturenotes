@@ -27,7 +27,6 @@ letterspace=-30,
 }
 \usepackage{siunitx}
 
-% \usepackage[hyperref]{xcolor}
 \usepackage{morewrites}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.15}
@@ -35,6 +34,8 @@ letterspace=-30,
 \usetikzlibrary{arrows}
 
 \usepackage{siunitx}
+
+\usepackage[colorlinks,linktocpage,allcolors=Links]{hyperref}
 
 \usepackage[sorting=none,
 maxbibnames=99,
@@ -57,10 +58,9 @@ giveninits=true,]{biblatex}
 \renewcommand{\baselinestretch}{1.2}
 \definecolor{Links}{RGB}{255,93,0}
 
-\usepackage[colorlinks,linktocpage,allcolors=Links]{hyperref}
 \usepackage{cleveref}
 
-\usepackage[acronym,hyperfirst]{glossaries}
+\usepackage[acronym,hyperfirst,nomain]{glossaries}
 \input{../lib/sempersn.tex}
 \makeglossaries
 
@@ -75,7 +75,7 @@ giveninits=true,]{biblatex}
 
 \newcommand{\code}{Codeschnipsel}
 \renewcommand\listingscaption{\code}
-\renewcommand\listoflistingscaption{\code-Verzeichnis}
+\renewcommand\listoflistingscaption{\code{verzeichnis}}
 \crefname{listing}{\code}{\code}  
 \Crefname{listing}{\code}{\code}
 
@@ -94,11 +94,14 @@ giveninits=true,]{biblatex}
 \newcommand{\myemph}[1]{\emph{#1}}
 \newcommand{\codecaption}[2]{
   \caption[#2]{%
+    % \backrefsetup{disable}%
     #2, % 
-    siehe \href{https://github.com/SebastianSemper/lecturenotes/blob/main/#1}{
-        \path{#1}
-      }
-}}
+    siehe \href{https://github.com/SebastianSemper/lecturenotes/blob/main/#1}{%
+        \path{#1}%
+      }%
+    % \backrefsetup{enable}%
+  }%
+}
 
 \crefname{Thm}{Theorem}{Theorems}
 

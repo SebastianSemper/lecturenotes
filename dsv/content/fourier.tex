@@ -142,7 +142,7 @@ Es ist wichtig zu sehen, dass wir nur f"ur die Berechnung von $\ScPr{x_k}{x_\ell
 Das hei"st, dass man ganz allgemein Signale \q{transformieren} beziehungsweise \emph{analysieren} kann, indem man sie als Summe von paarweise orthogonalen Signalen ausdr"uckt.
 Die Fourier-Reihe ist nur ein Spezialfall von diesem allgemeinen Konzept!
 
-\begin{listing}[h]
+\begin{listing}[ht]
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -190,9 +190,9 @@ Im Falle des Beispiels gilt n"amlich
 x(t) 
     = \sin(10 \cdot 2 \pi t) 
     = \frac{1}{2 \jmath} \left(
-        \exp(10 \cdot 2 \pi t) + \exp(-10 \cdot 2 \pi t)
+        \exp(10 \cdot 2 \pi t) - \exp(-10 \cdot 2 \pi t)
     \right) 
-    = \frac{1}{2 \jmath} x_{10} + \frac{1}{2 \jmath} x_{-10}.
+    = \frac{1}{2 \jmath} x_{10} - \frac{1}{2 \jmath} x_{-10}.
 \]
 Das hei"st, dass wir $x$ \emph{direkt} in seine Fourier-Reihe entwickelt haben, da wir es als Linearkombination der $x_k$ dargestellt haben.
 Das hei"st es sind nur $x_{10}$ und $x_{-10}$ notwendig, um $x$ darzustellen und beide Koeffizienten haben ausschlie"slich imagin"are Anteile.
@@ -248,7 +248,7 @@ Beide Argument ergeben sich aus der Fourier-Reihe.
 Damit haben wir das duale Ergebnis zu \eqref{eq:spectrum_sampled} gefunden.
 Dort f"uhrte Diskretisierung im Zeitbereich, also Sampling/Abtastung, zu einer Periodifizierung im Frequenzbereich.
 
-\begin{listing}[h]
+\begin{listing}[ht]
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -285,7 +285,7 @@ Es gibt aber eine Verbindung zur Fourier-Reihe, die wir im Folgenden kurz erl"au
 Nehmen wir an, es existiert ein $T > 0$, sodass $\Abs{x(t)} = 0$ f"ur alle $t$ mit $\Abs{t} > T$.
 Dann k"onnen wir das Signal $x$ periodifizieren mit Periode $T$, indem wir
 \[
-x_p(t) = \Sum{k \in Z}{}{x(t - kT)}
+x_p(t) = \Sum{k \in Z}{}{x(t - 2kT)}
 \]
 setzen.
 Dies haben wir bereits in "ahnlicher Form in \eqref{eq:spectrum_sampled} gesehen. 
@@ -323,7 +323,7 @@ Analog zum Satz von Parseval f"ur periodische Signale in \eqref{eq:fourier:serie
 E(x) = \Int{-\infty}{+\infty}{\Abs{x(t)}^2}{t}
      = \Int{-\infty}{+\infty}{\Abs{X(F)}^2}{F}
 \end{equation}
-auch wieder ein Parseval Theorem f"ur die \acrlong{ft} ergibt.
+auch wieder ein Parseval Theorem f"ur die \acrlong{ft} ergibt, was aber in diesem Fall als Plancherel Theorem\footnote{\url{https://en.wikipedia.org/wiki/Plancherel_theorem}} genannt wird.
 
 Andererseits kann man $X$ auch in Betrag und Phase zerlegen, da es im Allgemeinen eine komplexe Gr"o"se ist, also
 \[
@@ -331,7 +331,7 @@ X(F) = \Abs{X(F)} \exp(\jmath \angle(X(F))).
 \]
 Man nennt dann $\Abs{X(F)}^2$ das \emph{Leistungsdichte-Spektrum} von $x$.
 
-\begin{listing}[h]
+\begin{listing}[ht]
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -362,7 +362,7 @@ Wir werden aber im Verlauf auch wieder "ahnliche Zusammenh"ange wie in \eqref{eq
 %
 Wir beginnen mit diskreten Signalen, die gleichzeitig periodisch sind, also ein $N$ existiert, sodass
 \[
-x[n] = x[n+N] \Text{f"ur alle} n \in \Z 
+x[n] = x[n+kN] \Text{f"ur alle} n,k \in \Z 
 \]
 gilt.
 Aus vorherigen Diskussionen in \Cref{sec:sampling} wissen wir einerseits, dass diskrete Signale ein periodisches Spektrum auf $(0,1)$ besitzen.
@@ -462,7 +462,7 @@ Die hier vorgestellte Transformation nennen wir \gls{dft}.
 In \Cref{py:dft_1} zeigen wir ein einfaches Beispiel f"ur $x[\cdot] = u[\cdot] - u[\cdot-k]$.
 Au"serdem zeigen wir auch die beiden Berechungsmethoden der $c[\cdot]$ -- einerseits mit der Definition und andererseits "uber ein Matrix-Vektor-Produkt.
 %
-\begin{listing}[h]
+\begin{listing}[ht]
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -475,6 +475,23 @@ Au"serdem zeigen wir auch die beiden Berechungsmethoden der $c[\cdot]$ -- einers
     \codecaption{dsv/code/dft_1.py}{Berechnung und Darstellung von \eqref{eq:fourier:disc_analys_synth}}\label{py:dft_1}
 \end{listing}
 %
+\subsubsection{Leichtungsdichte-Spektrum diskreter periodischer Signale}\label{sec:fourier:disc_period_power}
+%
+Da periodische Signale keine endliche Energie besitzen, betrachten wir die durchschnittliche Leistung "uber eine Periode.
+Wir betrachten also f"ur ein $N$-periodisches Signal $x[\cdot]$ das Funktional
+\begin{equation}
+    P(x[\cdot]) = \frac{1}{N}\Sum{i=0}{N-1}{\Abs{x[n]}^2}.
+\end{equation}
+Dann k"onnen wir ganz analog zu vorher wieder herleiten, dass f"ur
+\[
+x[\cdot] = \Sum{i=0}{N-1}{c[k] x_k[\cdot]}
+\]
+und dessen Leistung gilt, dass
+\[
+P(x[\cdot]) = \Sum{i=0}{N-1}{\Abs{c[k]}^2}.
+\]
+Also auch hier finden wir wieder, dass sich die durchschnittliche Leistung einer Periode im Zeitbereich auf die Leistung einer Periode im Frequenzbereich "ubertr"agt.
+Auch hier k"onnen wir die Folge $\Abs{c[\cdot]}^2$ als Leistungsdichte-Spektrum interpretieren.
 \FloatBarrier
 %
 \subsubsection{Fourier-Transformation diskreter aperiodischer Signale}\label{sec:fourier:disc_aperiod}
@@ -514,16 +531,18 @@ X(f) = \Rect(f/(2 \pi \omega)),
 welche wir durch eine endliche Summe "uber die von uns verf"ugbaren Werte von $x[\cdot]$ bestimmen.
 
 Nun treten hierbei mehrere Effekte zutage.
+%
 \begin{itemize}
-    \item Die Approximation der \gls{dtft} mittels des \q{abgeschnittenen} Signals $x$ stimmt noch nicht sehr gut mit der analytischen L"osung "uberein. 
-    Ver"andert man den Wert der Variable $N$ im Skript, tritt dieser Effekt st"arker oder schw"acher zutage.
-    \item Auch bei Erh"ohung von $N$ stellt sich immernoch keine Konvergenz von $X_{\rm approx}$ gegen $X_{\rm true}$ ein.
-    Dies liegt daran, dass die \gls{dtftf} von $x[\cdot]$ nicht konvergiert, wie wir in \Cref{py:fourier_series} bereits gesehen hatten.
-    Diesen Effekt bezeichnet man allgemein als Gibbssches Phänomen\footnote{\url{https://de.wikipedia.org/wiki/Gibbssches_Phänomen}}.
-    \item Augenscheinlich ist es besser die \gls{idtft} aus $X_{\rm approx}$ zu berechnen, als aus $X_{\rm true}$. Doch dies liegt legidlich daran, dass die numerische Integration der $\Rect$-Funktion nicht genau genug ist.
-    Erh"oht man die Anzahl der Punkte im Array \texttt{F}, dann stimmen im dritten Plot die drei Graphen besser "uberein.
+\item Die Approximation der \gls{dtft} mittels des \q{abgeschnittenen} Signals $x$ stimmt noch nicht sehr gut mit der analytischen L"osung "uberein. 
+Ver"andert man den Wert der Variable $N$ im Skript, tritt dieser Effekt st"arker oder schw"acher zutage.
+\item Auch bei Erh"ohung von $N$ stellt sich immernoch keine Konvergenz von $X_{\rm approx}$ gegen $X_{\rm true}$ ein.
+Dies liegt daran, dass die \gls{dtft} von $x[\cdot]$ nicht konvergiert, wie wir in \Cref{py:fourier_series} bereits gesehen hatten.
+Diesen Effekt bezeichnet man allgemein als Gibbssches Ph"anomen\footnote{\url{https://en.wikipedia.org/wiki/Gibbs_phenomenon}}.
+\item Augenscheinlich ist es besser die \gls{idtft} aus $X_{\rm approx}$ zu berechnen, als aus $X_{\rm true}$. Doch dies liegt legidlich daran, dass die numerische Integration der $\Rect$-Funktion nicht genau genug ist.
+Erh"oht man die Anzahl der Punkte im Array \texttt{F}, dann stimmen im dritten Plot die drei Graphen besser "uberein.
 \end{itemize}
-\begin{listing}[h]
+%
+\begin{listing}[ht]
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -535,27 +554,33 @@ Nun treten hierbei mehrere Effekte zutage.
     \end{minipage}
     \codecaption{dsv/code/dtft.py}{Berechnung und Darstellung von \eqref{eq:fourier:dtft}}\label{py:dtft}
 \end{listing}
+%
 \FloatBarrier
-\begin{itemize}
-    \item \begin{itemize}
-        \item eigenschaften der kernel-funktion: perioden, wann reel, ..., was passiert bei abtastung?
-        \item zusammenhang zur physik
-        \item dc, nyquist-frequenzen, wann vorhanden?
-        \item reelles signal: dc und nyquist reell
-    \end{itemize}
-    \item dft als approximation der dtft
-    \begin{itemize}
-        \item $s(t) = \exp(-t/\tau) \cdot \sin(\omega_0 \cdot t)$, 
-        \item $s(t) = \exp(-(t - \mu)^2/\sigma^2)$ (Uebung)
-    \end{itemize}
-    \item spectral leakage;
-\end{itemize}
-\subsection{Anwendung der Transformationen}
-\begin{itemize}
-    \item fft (Uebung 1 jup, uebung 2 8.3.2)
-    \item bild-kompression (DCT, JPEG)
-    \item fensterung \footnote{\url{https://docs.scipy.org/doc/scipy/reference/signal.windows.html}}
-    \item schnelle faltung (cyclic/non-cyclic)
-    \item beliebig lange signale overlap add, overlap save (\"Ubung: irgendwas mit audio prosessing)
-    \item Unschaerfe Relation (Fensterbreite vs. Frequenzaufloesung)\cite[chpt. 4.2]{mallat2008wavelets}
-\end{itemize}
+\subsubsection{Leichtungsdichte-Spektrum diskreter aperiodischer Signale}\label{sec:fourier:disc_aperiod_power}
+%
+Die Energie eines diskreten Signals haben wir in \eqref{eq:disc_sig_energy} durch
+\[
+\mathcal{E}(x[\cdot]) = \Sum{n \in \Z}{}{\Abs{x[n]}^2} 
+\]
+definiert.
+Wiederum k"onnen wir uns "uberlegen, dass dann f"ur die \gls{dtft} $X$ gilt, dass
+\[
+\mathcal{E}(x[\cdot]) = \Int{-1/2}{+1/2}{\Abs{X(f)}^2}{f}.
+\]
+Schlussendlich bezeichnet man dann
+\[
+S_{xx}(f) = \Abs{X(f)}^2
+\]
+als das Leichtungsdichte-Spektrum des Signals $x[\cdot]$.
+In manchen Anwendungen ist es auch wieder sinnvoll Betrag und Phase von $X(f)$ zu analysieren.
+%
+% \begin{itemize}
+%     \item \begin{itemize}
+%         \item reelles signal: dc und nyquist reell
+%     \end{itemize}
+%     \item dft als approximation der dtft
+%     \begin{itemize}
+%         \item $s(t) = \exp(-t/\tau) \cdot \sin(\omega_0 \cdot t)$, 
+%         \item $s(t) = \exp(-(t - \mu)^2/\sigma^2)$ (Uebung)
+%     \end{itemize}
+% \end{itemize}

@@ -8,16 +8,13 @@
 \listoffigures
 \addcontentsline{toc}{section}{Abbildungsverzeichnis}
 \listoflistings
-\addcontentsline{toc}{section}{Code-Schnipsel-Verzeichnis}
+\addcontentsline{toc}{section}{\code{verzeichnis}}
 \clearpage
 %
 \pretocmd{\section}{\FloatBarrier\clearpage}{}{}
 \pretocmd{\subsection}{\FloatBarrier}{}{}
 %
-\glsresetall
-\setcounter{page}{1}
-\pagenumbering{arabic}
-
+%
 \begin{center}
     \begin{minipage}{0.75\textwidth}
         \begin{center}
@@ -49,3 +46,9 @@
         Alternativ steht unter \url{https://jup.rz.tu-ilmenau.de/hub/login} ein Jupyter-Hub zur Verf"ugung, der eine Python IDE im Browser bereitstellt.
     \end{minipage}
 \end{center}
+%
+\clearpage
+%
+\glsresetall
+\setcounter{page}{1}
+\pagenumbering{arabic}
