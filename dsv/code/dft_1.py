@@ -10,7 +10,8 @@ def x_k(k: int, N: int) -> np.ndarray[complex]:
 
 N = 40
 x = np.zeros(N)
-x[: N // 4] += np.ones(N // 4)
+k = N // 4
+x[:k] += np.ones(k)
 
 c1 = np.array(
     [

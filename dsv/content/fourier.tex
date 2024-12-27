@@ -457,7 +457,12 @@ Dann k"onnen wir noch einen Schritt weitergehen und sehen, dass
 gilt.
 Das hei"st, dass sich Fourier-Analyse und Fourier-Synthere von diskreten und periodischen Signalen durch eine Matrix-Vektor-Multiplikation durchf"uhren l"asst!
 Das sind erst einmal gute Nachrichten, denn damit wissen wir, dass digitale Rechenwerke sehr gut darin sind, diese Transformation durchzuf"uhren.
-Die hier vorgestellte Transformation nennen wir \gls{dft}.
+Die hier vorgestellte Transformation nennen wir \gls{dft} und oft definiert man ein diskretes Signal $X[\cdot]$ durch
+\begin{equation}
+    X[k] = \frac{1}{N}\Sum{n = 0}{N-1}{x[n]\exp(-\jmath 2 \pi k n/N)} = c[k] = \bm c_k
+\end{equation}
+und nennt dieses dann die \gls{dft} von $x[\cdot]$.
+Es ist anzumerken, dass der Vorfaktor $N^{-1}$ in manchen Lehrb"uchern oder Ver"offentlichungen auch bei der Synthese anstatt der Analyse auftaucht, oder aber \emph{beide} Gleichungen erhalten einen Faktor $N^{-1/2}$.
 
 In \Cref{py:dft_1} zeigen wir ein einfaches Beispiel f"ur $x[\cdot] = u[\cdot] - u[\cdot-k]$.
 Au"serdem zeigen wir auch die beiden Berechungsmethoden der $c[\cdot]$ -- einerseits mit der Definition und andererseits "uber ein Matrix-Vektor-Produkt.
@@ -466,7 +471,7 @@ Au"serdem zeigen wir auch die beiden Berechungsmethoden der $c[\cdot]$ -- einers
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
-        \inputminted[firstline=5, lastline=22]{python3}{code/dft_1.py}
+        \inputminted[firstline=5, lastline=23]{python3}{code/dft_1.py}
     \end{minipage}%
     \begin{minipage}{0.48\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -506,9 +511,9 @@ Im Unterschied zur \q{analogen} Fourier-Transformation \eqref{eq:fourier:fourier
 Es gilt also $x_{f + k}[\cdot] = x_{f}[\cdot]$ f"ur alle $k \in \Z$.
 Dies \q{passt} auch zur Natur von diskreten Signalen, da deren Frequenzbereich \emph{immer} periodisch sein muss.
 
-Wir k"onnen nun f"ur die inverse Transformation einmal \eqref{eq:fourier:dtft} mit \eqref{eq:fourier:fourier_series} vergleichen. 
+Wir k"onnen nun f"ur die inverse Transformation \eqref{eq:fourier:dtft} mit \eqref{eq:fourier:fourier_series} vergleichen. 
 Bis auf das Vorzeichen in der Funktion $\exp()$ gleicht \eqref{eq:fourier:dtft} einer Fourier-Reihe der periodischen Funktion $X$.
-In der Tat, k"onnen wir die Folge $x[\cdot]$ als Fourier-Koeffizienten der Funktion $X$ durch
+In der Tat, k"onnen wir die Folge $x[\cdot]$, also das urspr"ungliche Signal, als Fourier-Koeffizienten der \gls{dtft} $X$ durch
 \begin{equation}\label{eq:fourier:idtft}
     x[n] = \Int{-1/2}{+1/2}{X(f)\exp(\jmath 2 \pi f n)}{f}
 \end{equation}
@@ -573,6 +578,75 @@ S_{xx}(f) = \Abs{X(f)}^2
 \]
 als das Leichtungsdichte-Spektrum des Signals $x[\cdot]$.
 In manchen Anwendungen ist es auch wieder sinnvoll Betrag und Phase von $X(f)$ zu analysieren.
+%
+\subsection{Eigenschaften der Fourier-Transformationen}\label{sec:fourier:proper}
+%
+Nachdem wir nun die notwendigen Definitionen gesammelt haben, wollen wir uns einige wichtige Eigenschaften der definierten Transformationen ansehen und eventuell auch f"ur \q{praktische} Dinge verwenden.
+%
+\subsubsection{Beziehung der Fourier-Transformationen und der \texorpdfstring{$z$}{z}-Transformation}
+%
+Wie wir in \cref{sec:ztrafo} gesehen haben, ist die $z$-Transformation f"ur ein diskretes Signal $x[\cdot]$ definiert durch
+\[
+X_{\z}(z) = \Sum{n \in \Z}{}{x[n]z^{-n}} \Text{mit \gls{roc}} r_2 < \Abs{z} < r_1.
+\]
+Wenn wir nun $z$ in Polarform $z = r \exp(\jmath 2 \pi f)$ ausdr"ucken und annehmen, dass $r_2 < r , r_1$, dann sehen wir, dass die $z$-Transformation von $x[\cdot]$ nichts anderes ist als die \gls{dtft} von $x[n] r^{-n}$ ist.
+Mit anderen Worten ist die $z$-Transformation an einer Stelle $z=r \exp(\jmath 2 \pi f)$ die \gls{dtft} $X$ eines Signals gewichtet mit der Folge $w[n] = r^{-n}$ an der Stelle $f$.
+Ist nun $1 \in \gls{roc}$, dann gilt
+\begin{equation}\label{eq:fourier:ztrafo}
+    X_{\z}(\exp(\jmath 2 \pi f)) = X(f)
+\end{equation}
+Wir haben uns zwar bis jetzt wenig Gedanken "uber die Existenz der Fourier-Transformation gemacht, doch hier finden wir einen Hinweis. 
+Die \gls{dtft} existiert, beziehungsweise \emph{konvergiert}, falls $1 \in \gls{roc}$.
+Da die \q{Form} der \gls{roc} immer kreisf"ormig ist, ist die gleichbedeutend mit der Tatsache, dass sich der Einheitskreis der komplexen Ebene in der \gls{roc} befindet.
+Au"serdem kann man auch eine Fourier-Analyse von \gls{lti}-Systemen betreiben. 
+Dann ist die \gls{bibo}-Stabilit"at von einem solchen System "aquivalent zur Tatsache, dass der Einheitskreis in der \gls{roc} liegt.
+Wie wir gerade gesehen haben, folgt dann auch, dass \gls{bibo}-Stabilit"at ebenfalls durch die \emph{Existenz} der \gls{dtft} charakterisiert wird.
+%
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5, lastline=46]{python3}{code/dtft_z.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/dtft_z.png}
+    \end{minipage}
+    \codecaption{dsv/code/dtft_z.py}{Berechnung und Darstellung von \eqref{eq:fourier:ztrafo}}\label{py:dtft_z}
+\end{listing}
+
+In \Cref{py:dtft_z} zeigen wir diesen Zusammenhang f"ur das gleiche Signal, wie in \Cref{py:dft_1}, interpretieren es hier aber einmal als aperiodisches Signal bei der Berechnung der \gls{dtft} und als periodisches Signal f"ur die Berechung der \gls{dft}.
+Wir wissen aus den Eigenschaften der $z$-Transformation, dass das Signal $x[n] = u[n] - u[n-k]$ im $z$-Bereich einen $k$-fachen Pol bei $z = 0$ hat und $k-1$ Nullstellen auf dem Einheitskreis.
+
+Wir k"onnen in dem Plot von \Cref{py:dtft_z} direkt sehen, dass die \gls{dtft} auf dem Einheitskreis in der Tat mit der $z$-Transformation "ubereinstimmt.
+Au"serdem sehen wir gut den Pol bei $z=0$ und die $9$ Nullstellen auf dem Einheitskreis.
+In den Plots der \gls{dtft} und der \gls{dft} sehen wir auch, dass sich die \gls{dft} durch Auswertung der \gls{dtft} ergibt.
+Wir hatten vorher in \Cref{eq:fourier:c_k_fourier} schon gesehen, dass sich die Fourier-Koeffizienten $c[k]$ eines periodischen kontinuierlichen Signals aus der Auswertung der Fourier-Transformation an den richtigen Stellen ergeben.
+Denselben Zusammenhang finden wir hier wieder, denn zwischen der \gls{dft} und der \gls{dtft} besteht derselbe Zusammenhang.
+%
+\subsubsection{Eigenschaften der \texorpdfstring{\acrshort*{dft}}{DFT}}
+%
+Wir wollen analysieren, welche Eigenschaften die Beziehung zwischen einem diskreten $N$-periodischen Signal $x[\cdot]$ und und dessen \gls{dft} $X[\cdot]$ besitzt.
+
+\paragraph{\gls{dft} ist periodisch:} Wir wissen bereits aus der Definition und den Eigenschaften von komplexen diskreten Harmonischen, dass
+    \[
+    X[k + \ell \cdot N] = X[k]
+    \]
+    f"ur alle $\ell \in \Z$ gilt.
+\paragraph{"Ubereinstimmung mit \gls{dtft}:} Aus \Cref{py:dtft_z} wissen wir, dass
+    \[
+    X(k/N) = X[k]
+    \]
+    gilt -- wir die Werte der \gls{dft} also aus Auswertung der \gls{dtft} von $x[\cdot]$ erhalten.
+    Es ist wichtig zu erw"ahnen, dass die Frequenzen an denen die \gls{dtft} $X$ ausgewertet wird harmonische \q{Verwandte} sind, da wir $X$ an den Stellen $f = k/N$ auswerten.
+\paragraph{Abgetastete Signale:} Ist $x[\cdot]$ aus Abtastung eines analogen Signals $x: \R \rightarrow \C$ entstanden, so erh"alt die Einheit von $f$ bei der \gls{dtft} eine Bedeutung, da dann \q{Perioden pro Sample} eine physikalische Interpretation zul"asst.
+    Tasten wir $x$ mit Sampling-Rate $F_s$ ab, so ist der Abstand zwischen zwei Samples in $x[\cdot]$ genau $1/F_s$.
+    Demzufolge erh"alt die \gls{dtft} $X(f)$ die Interpretation, dass wir das periodifizierte Spektrum von $x$ an den Stellen $f \cdot F_s$ betrachten.
+    Das hei"st beispielsweise bei einer Sample-Rate von \SI{44}{\kilo\hertz} entspricht der Bereich $f \in [-1/2,+1/2]$ dem \emph{physikalischen} Frequenzbereich von $F \in [\SI{0}{\hertz},\SI{44}{\kilo\hertz}]$.
+    Es ist jedoch zu beachten, dass wir bei der Betrachung der \gls{dtft} \emph{immer} nur das periodifizierte Spektrum erhalten. 
+    Das hei"st also, nur wenn wir Aliasing-frei abgetastet haben, also $F_s$ gro"s genug gew"ahlt haben, k"onnen wir aufschlussreiche Aussagen "uber das Spektrum von $x$ basierend auf der \gls{dtft} von $x[\cdot]$ treffen.
+    Wie bereits erw"ahnt, ergibt dann die \gls{dft} des Signals $x[\cdot]$ eben die periodifizierten spektralen Informationen von $x$ an den diskreten Frequenzen $k F_s/N$.
+
 %
 % \begin{itemize}
 %     \item \begin{itemize}
