@@ -591,7 +591,7 @@ X_{\z}(z) = \Sum{n \in \Z}{}{x[n]z^{-n}} \Text{mit \gls{roc}} r_2 < \Abs{z} < r_
 \]
 Wenn wir nun $z$ in Polarform $z = r \exp(\jmath 2 \pi f)$ ausdr"ucken und annehmen, dass $r_2 < r , r_1$, dann sehen wir, dass die $z$-Transformation von $x[\cdot]$ nichts anderes ist als die \gls{dtft} von $x[n] r^{-n}$ ist.
 Mit anderen Worten ist die $z$-Transformation an einer Stelle $z=r \exp(\jmath 2 \pi f)$ die \gls{dtft} $X$ eines Signals gewichtet mit der Folge $w[n] = r^{-n}$ an der Stelle $f$.
-Ist nun $1 \in \gls{roc}$, dann gilt
+Ist nun $1 \in \gls{roc}$ (und damit der gesamte Einheitskreis der komplexen Ebene), dann gilt
 \begin{equation}\label{eq:fourier:ztrafo}
     X_{\z}(\exp(\jmath 2 \pi f)) = X(f)
 \end{equation}
@@ -624,29 +624,124 @@ In den Plots der \gls{dtft} und der \gls{dft} sehen wir auch, dass sich die \gls
 Wir hatten vorher in \Cref{eq:fourier:c_k_fourier} schon gesehen, dass sich die Fourier-Koeffizienten $c[k]$ eines periodischen kontinuierlichen Signals aus der Auswertung der Fourier-Transformation an den richtigen Stellen ergeben.
 Denselben Zusammenhang finden wir hier wieder, denn zwischen der \gls{dft} und der \gls{dtft} besteht derselbe Zusammenhang.
 %
-\subsubsection{Eigenschaften der \texorpdfstring{\acrshort*{dft}}{DFT}}
+\FloatBarrier
+\subsubsection{Weitere Eigenschaften der \texorpdfstring{\acrshort*{dft}}{DFT}}
 %
 Wir wollen analysieren, welche Eigenschaften die Beziehung zwischen einem diskreten $N$-periodischen Signal $x[\cdot]$ und und dessen \gls{dft} $X[\cdot]$ besitzt.
 
+F"ur die meisten Eigenschaften macht es Sinn die \gls{dft} eines Signals der L"ange $N$ und die entsprechende \gls{idft} zu definieren durch
+\begin{equation}\label{eq:fourier:dft_idft}
+    X[k] = \Sum{n=0}{N-1}{x[n] W_N^{k \cdot n}}
+    \Text{und}
+    x[n] = \frac{1}{N}\Sum{k=0}{N-1}{X[k] W_N^{-k \cdot n}},
+\end{equation}
+wobei wir hier 
+\begin{equation}\label{eq:fourier:weights}
+    W_N = \exp(-\jmath 2 \pi / N)
+\end{equation} 
+definiert haben.
+%
+%
 \paragraph{\gls{dft} ist periodisch:} Wir wissen bereits aus der Definition und den Eigenschaften von komplexen diskreten Harmonischen, dass
-    \[
-    X[k + \ell \cdot N] = X[k]
-    \]
-    f"ur alle $\ell \in \Z$ gilt.
+\[
+X[k + \ell \cdot N] = X[k]
+\]
+f"ur alle $\ell \in \Z$ gilt.
+%
+%
 \paragraph{"Ubereinstimmung mit \gls{dtft}:} Aus \Cref{py:dtft_z} wissen wir, dass
-    \[
-    X(k/N) = X[k]
-    \]
-    gilt -- wir die Werte der \gls{dft} also aus Auswertung der \gls{dtft} von $x[\cdot]$ erhalten.
-    Es ist wichtig zu erw"ahnen, dass die Frequenzen an denen die \gls{dtft} $X$ ausgewertet wird harmonische \q{Verwandte} sind, da wir $X$ an den Stellen $f = k/N$ auswerten.
+\[
+X(k/N) = X[k]
+\]
+gilt -- wir die Werte der \gls{dft} also aus Auswertung der \gls{dtft} von $x[\cdot]$ erhalten.
+Es ist wichtig zu erw"ahnen, dass die Frequenzen an denen die \gls{dtft} $X$ ausgewertet wird harmonische \q{Verwandte} sind, da wir $X$ an den Stellen $f = k/N$ auswerten.
+%
+%
 \paragraph{Abgetastete Signale:} Ist $x[\cdot]$ aus Abtastung eines analogen Signals $x: \R \rightarrow \C$ entstanden, so erh"alt die Einheit von $f$ bei der \gls{dtft} eine Bedeutung, da dann \q{Perioden pro Sample} eine physikalische Interpretation zul"asst.
-    Tasten wir $x$ mit Sampling-Rate $F_s$ ab, so ist der Abstand zwischen zwei Samples in $x[\cdot]$ genau $1/F_s$.
-    Demzufolge erh"alt die \gls{dtft} $X(f)$ die Interpretation, dass wir das periodifizierte Spektrum von $x$ an den Stellen $f \cdot F_s$ betrachten.
-    Das hei"st beispielsweise bei einer Sample-Rate von \SI{44}{\kilo\hertz} entspricht der Bereich $f \in [-1/2,+1/2]$ dem \emph{physikalischen} Frequenzbereich von $F \in [\SI{0}{\hertz},\SI{44}{\kilo\hertz}]$.
-    Es ist jedoch zu beachten, dass wir bei der Betrachung der \gls{dtft} \emph{immer} nur das periodifizierte Spektrum erhalten. 
-    Das hei"st also, nur wenn wir Aliasing-frei abgetastet haben, also $F_s$ gro"s genug gew"ahlt haben, k"onnen wir aufschlussreiche Aussagen "uber das Spektrum von $x$ basierend auf der \gls{dtft} von $x[\cdot]$ treffen.
-    Wie bereits erw"ahnt, ergibt dann die \gls{dft} des Signals $x[\cdot]$ eben die periodifizierten spektralen Informationen von $x$ an den diskreten Frequenzen $k F_s/N$.
+Tasten wir $x$ mit Sampling-Rate $F_s$ ab, so ist der Abstand zwischen zwei Samples in $x[\cdot]$ genau $1/F_s$.
+Demzufolge erh"alt die \gls{dtft} $X(f)$ die Interpretation, dass wir das periodifizierte Spektrum von $x$ an den Stellen $f \cdot F_s$ betrachten.
+Das hei"st beispielsweise bei einer Sample-Rate von \SI{44}{\kilo\hertz} entspricht der Bereich $f \in [-1/2,+1/2]$ dem \emph{physikalischen} Frequenzbereich von $F \in [\SI{0}{\hertz},\SI{44}{\kilo\hertz}]$.
+Es ist jedoch zu beachten, dass wir bei der Betrachung der \gls{dtft} \emph{immer} nur das periodifizierte Spektrum erhalten. 
+Das hei"st also, nur wenn wir Aliasing-frei abgetastet haben, also $F_s$ gro"s genug gew"ahlt haben, k"onnen wir aufschlussreiche Aussagen "uber das Spektrum von $x$ basierend auf der \gls{dtft} von $x[\cdot]$ treffen.
+Wie bereits erw"ahnt, ergibt dann die \gls{dft} des Signals $x[\cdot]$ eben die periodifizierten spektralen Informationen von $x$ an den diskreten Frequenzen $k F_s/N$.
+%
+%
+\paragraph{Reelle Signale}
+Intuitiv sind reelle Signale \q{einfacher} als komplexe Signale. 
+Deshalb mag es nicht verwunderlich sein, dass die \gls{dft} von reellen Signalen Struktur hat, in dem Sinne, dass wir einige Koeffizienten aus anderen schnell berechnen k"onnen.
+Ist ein Signal reell, so gilt $x[n] = x[n]^\ast$ f"ur alle $n$.
+F"ur $W_N$ gilt 
+\[
+W_N^\ell = \left(W_N^{-\ell}\right)^\ast
+\Text{und}
+W_N^{N-\ell} = \left(W_N^{\ell}\right)^\ast
+\]
+also gilt
+\[
+X[n-k] 
+    = \Sum{n=0}{N-1}{x[n] W_N^{(N - k) n}}
+    = \Sum{n=0}{N-1}{x[n]^\ast \left(W_N^{k n}\right)^\ast}
+    = \Sum{n=0}{N-1}{x[n]^\ast W_N^{-k n}}
+    = \left(\Sum{n=0}{N-1}{x[n] W_N^{k n}}\right)^\ast
+    = X[k]^\ast
+    = X[-k].
+\]
+Das hei"st, dass die \gls{dft} von rellen Signalen \q{konjugiert symmetrisch} um $k=0$ sind.
+Dies hat zur Folge, dass man nur die Koeffizienten von $k=0$ bis $k = \lceil N/2 \rceil$ berechnen und speicher muss, was den Rechenaufwand halbiert.
+Au"serdem wird hierdurch auch die \gls{idft} weniger komplex.
+In Python ist es in solchen F"allen deshalb ratsam auf \mintinline{python}|np.fft.rfft| und \mintinline{python}|np.fft.irfft| zur"uckzugreifen.
+Es sei noch angemerkt, dass sich noch viele weitere Redundanzen und Symmetrien ausnutzen lassen.
+Siehe hierzu \cite[Kap. 7.2.1]{proakis2013}.
+%
+%
+\paragraph{DC-Komponente und Nyquist-Sequenz}
+%
+Der Wert $X[0]$ wird oft als DC-Komponente, also Gleichanteil, bezeichnet, weil $W_N^0 = 1$, also ergibt sich speziell f"ur $X[0]$, dass
+\[
+X[0] = \Sum{n = 0}{N-1}{x[n]},
+\]
+was eben dem um Faktor $N$ skalierten Mittelwert des Signals $x[\cdot]$ entspricht.
+Eine andere Interpretation ergibt sich aus der Betrachtung der \gls{dft} als Skalarprodukt, wobei wir die \q{"Ahnlichkeit} von $x[\cdot]$ mit der konstanten Sequenz $x_0[\cdot] = 1$ berechnet haben.
 
+Der andere Extremfall tritt auf, wenn $k=N/2$. Hierbei wird vorausgesetzt, dass $N$ eine gerade Zahl ist.
+Dann nennt man $x_{N/2}$ die Nyquist-Sequenz, denn wie wir in \textbf{Abgetastete Signale} gesehen haben, entspricht $k=N/2$ der physikalischen Frequenz $F = (N/2) F_s / N = F_s/2$, also genau der \emph{maximalen} Frequenz, die ein Signal beinhalten darf, sodass es noch mit der gew"ahlten Sampling-Rate ohne Aliasing beobachtbar ist.
+%
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5, lastline=46]{python3}{code/nyquist_seq.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/nyquist_seq.png}
+    \end{minipage}
+    \codecaption{dsv/code/nyquist_seq.py}{Darstellung der DC-Sequenz und der Nyquist-Sequenz f"ur $N=8$}\label{py:nyquist_seq}
+\end{listing}
+
+Man in \Cref{py:nyquist_seq} gut, dass die beiden Sequenzen wirklich \q{Gegens"atze} darstellen, da $x_0[\cdot]$ die Anteile mit \q{minimaler} Variation/Frequenz aufsammelt, w"ahrend die Werte von $x_{N/2}[\cdot]$ genau so liegen, dass ein analoges Signal (und dessen Aliase), siehe \Cref{py:aliasing}, genau Frequenz $F_s/2$ (und Amplitude $1$) besitzen muss, um $x_{N/2}[\cdot]$ als Abtastwerte zu erhalten.
+%
+%
+\paragraph{Zyklische Faltung}
+%
+Kommen wir nun zur wahrscheinlich wichtigsten Eigenschaft der \gls{dft} und dem Grund, warum digitale Signalverarbeitung "uberhaupt erm"oglicht wurde.
+Wir haben bereits gesehen, dass \gls{lti}-Systeme durch eine Faltung realisiert werden k"onnen.
+Gegeben zwei $N$-periodische Signale $x_{1,2}[\cdot]$ und betrachten wir deren \emph{zyklische} Faltung $\circledast$ definiert durch
+\begin{equation}\label{eq:fourier:cyclic_conv}
+x_3[m] = \Sum{n=0}{N-1}{x_1[n] \cdot x_2[(m-n) \mod N]} = (x_1 \circledast x_2)[m],
+\end{equation}
+dann kann man zeigen, dass
+\[
+X_3[k] = X_1[k] \cdot X_2[k]
+\]
+gilt.
+Das hei"st, dass die zyklische Faltung von zwei periodischen Signalen wieder ein periodisches Signal ergibt, dessen \gls{dft} das Produkt der \glspl{dft} der gefalteten Signale ist.
+Wenn wir an \gls{lti}-Systeme denken und uns erinnern, dass viele Filter als \gls{lti}-Systeme aufgefasst werden k"onnen, so ist klar, warum diese Eigenschaft wichtig ist.
+Die digitalen Filter k"onnen also im Frequenzbereich sehr einfach angewendet werden, weil dort nur eine einfache punktweise Multiplikation notwendig ist.
+Doch dies allein ist nicht ausreichend, denn wir ben"otigen noch einen effizienten weg, um zwischen Zeit- und Freqeunzbereich wechseln zu k"onnen.
+Dies wird uns durch die \gls{fft} erm"oglicht werden.
+In \Cref{py:dft_1} hatten wir bereits erfahren, dass man die \gls{dft} als Matrix-Vektor-Produkt formulieren kann, wozu etwa \glspl{flop} in der Gr"o"senordnung $N^2$ notwendig sind.
+Die \gls{fft} erlaubt es aber eine \gls{dft} mit \glspl{flop} in der Gr"o"senordnung von nur $N \log{N}$ durchzuf"uhren.
 %
 % \begin{itemize}
 %     \item \begin{itemize}
