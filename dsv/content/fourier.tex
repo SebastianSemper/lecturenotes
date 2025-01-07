@@ -702,6 +702,8 @@ X[0] = \Sum{n = 0}{N-1}{x[n]},
 \]
 was eben dem um Faktor $N$ skalierten Mittelwert des Signals $x[\cdot]$ entspricht.
 Eine andere Interpretation ergibt sich aus der Betrachtung der \gls{dft} als Skalarprodukt, wobei wir die \q{"Ahnlichkeit} von $x[\cdot]$ mit der konstanten Sequenz $x_0[\cdot] = 1$ berechnet haben.
+Ist ein Signal reell, so ergibt sich aus der Symmetrie des Spektrums, dass der DC-Anteil immer ebenfalls reell sein muss.
+Gl"uck gehabt!
 
 Der andere Extremfall tritt auf, wenn $k=N/2$. Hierbei wird vorausgesetzt, dass $N$ eine gerade Zahl ist.
 Dann nennt man $x_{N/2}$ die Nyquist-Sequenz, denn wie wir in \textbf{Abgetastete Signale} gesehen haben, entspricht $k=N/2$ der physikalischen Frequenz $F = (N/2) F_s / N = F_s/2$, also genau der \emph{maximalen} Frequenz, die ein Signal beinhalten darf, sodass es noch mit der gew"ahlten Sampling-Rate ohne Aliasing beobachtbar ist.
@@ -710,7 +712,7 @@ Dann nennt man $x_{N/2}$ die Nyquist-Sequenz, denn wie wir in \textbf{Abgetastet
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
-        \inputminted[firstline=5, lastline=46]{python3}{code/nyquist_seq.py}
+        \inputminted[firstline=4, lastline=46]{python3}{code/nyquist_seq.py}
     \end{minipage}%
     \begin{minipage}{0.48\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -742,11 +744,46 @@ Doch dies allein ist nicht ausreichend, denn wir ben"otigen noch einen effizient
 Dies wird uns durch die \gls{fft} erm"oglicht werden.
 In \Cref{py:dft_1} hatten wir bereits erfahren, dass man die \gls{dft} als Matrix-Vektor-Produkt formulieren kann, wozu etwa \glspl{flop} in der Gr"o"senordnung $N^2$ notwendig sind.
 Die \gls{fft} erlaubt es aber eine \gls{dft} mit \glspl{flop} in der Gr"o"senordnung von nur $N \log{N}$ durchzuf"uhren.
+
+Dann bel"auft sich eine effiziente Implementierung eines \gls{fir} Filters mit Impulsantwort $h[\cdot]$ auf folgende Schritte:
+\begin{enumerate}
+    \item Transformiere $x[\cdot]$ und $h[\cdot]$ in den Zeitbereich
+    \item Punktweise Multiplikation von $Y[\cdot] = X[\cdot] \cdot H[\cdot]$ (NICHT die $z$-Transformation $H_{\z}$)
+    \item R"ucktransformation von $Y[\cdot]$ zu $y[\cdot]$.
+\end{enumerate}
+%
+Dieser Prozess wurde in \Cref{py:dft_conv} nachgestellt und wird mit der zyklischen Faltung im Zeitbereich verglichen.
+Als Beispiel nehmen wir hier eine abgetastete Sinusfunktion, deren Werte mit Rauschen belegt sind.
+Um das Signal ein wenig vom Rauschen zu befreien, implementieren wir ein gleitendes Mittel, siehe \Cref{py:moving_average}, dessen Mittelungsdauer wir mit einem \q{cut-off} einstellen k"onnen.
+Wie man sieht, ist das Ergbenis der Faltung im Zeitbreich mit dem im Frequenzbereich identisch ist.
+Au"serdem stellt sich durch die Mittelung eine Gl"attung der Werte ein, die mehr dem Verlauf des urspr"unglichen Signals "ahnelt.
+Jedoch sieht man auch, dass sich die Phase des Resultates sich von der des Eingangs unterscheidet.
+Diese Phase wird vom Filter $h$ aufgepr"agt und ist somit eine Konsequenz der gew"ahlten Signalverabeitung.
+Es gibt M"oglichkeiten diesen Einfluss zu reduzieren, die aber "uber unser aktuelles Interesse hinausgehen.
+
+Es sei hier angemerkt, dass dies er einfachste Fall ist, den man sich f"ur die sogenannte schnelle Faltung vorstellen kann.
+Es ist beispielsweise nicht direkt klar, was zu tun ist, wenn $x[\cdot]$ und $h[\cdot]$ nicht diesselbe L"ange haben, was dazu f"uhrt, dass die resultierenden \glspl{dft} ebensfalls von verschiedener L"ange sind.
+Dar"uber hinaus ist unsere Implementierung eine \q{offline}-Version in dem Sinne, dass die zu verarbeitenden Daten bereits im Speicher liegen.
+Doch, wenn man an Echtzeitanwendungen, beispielsweise im Audiobereich, denkt so wird es notwendig sein, diese Operation auf Daten anzuwenden, die nicht vollst"andig im Zugriff liegen.
+Au"serdem will man nat"urlich nicht immer eine zyklische Faltung, sondern eine \q{normale} Faltung implementieren.
+
+Alle diese Probleme k"onnen aber mit einigen Tricks so umformuliert werden, dass man am Ende wieder eine zyklische Faltung rechnen kann.
+Oft m"ussen hierzu das Signal order die Impulsantwort zielf"uhrend manipuliert werden, oder das Ergebnis nach Faltung noch prozessiert werden.
+
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=4, lastline=17]{python3}{code/dft_conv.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/dft_conv.png}
+    \end{minipage}
+    \codecaption{dsv/code/dft_conv.py}{Zyklische/periodische Faltung im Zeitbereich und im Frequenzbereich.}\label{py:dft_conv}
+\end{listing}
 %
 % \begin{itemize}
-%     \item \begin{itemize}
-%         \item reelles signal: dc und nyquist reell
-%     \end{itemize}
 %     \item dft als approximation der dtft
 %     \begin{itemize}
 %         \item $s(t) = \exp(-t/\tau) \cdot \sin(\omega_0 \cdot t)$, 
