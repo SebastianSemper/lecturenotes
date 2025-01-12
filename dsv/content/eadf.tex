@@ -1,6 +1,6 @@
 % !TEX root = ../dsv_script.tex
 %
-\subsubsection{Motivation}
+\paragraph{Motivation}
 %
 %
 Mit jeder Erschlie{\ss}ung von neuen Frequenzbereichen f\"ur die Kommunikation ist es von Interesse das Ausbreitungsverhalten der Elektro-Magnetischen Wellen f\"ur verschiedene Umgebungen zu charakterisieren, beispielsweise innerst\"adtisch, auf der Autobahn, etc. Zwar k\"onnen solche Umgebungen auch computerbasiert simuliert werden, doch f\"ur eine empirisch abgeleitete Statistik solcher sogenannter Kanalmodelle~\cite{delgaldo2007phd} sind repr\"asentative Messungen unerl\"asslich. Diese Charakteristiken werden genutzt, um in realistischen Szenarien Kanalkapazit\"aten, Datenraten und dergleichen zu bestimmen. Schlussendlich flie{\ss}en solche Statistiken dann in neue Mobilfunkstandards ein.
@@ -40,7 +40,7 @@ Es zeigt sich aus \eqref{eadf_single_path}, dass wir eine m\"oglichst pr\"azise 
 %
 %
 %
-\subsubsection{Messvorgang}
+\paragraph{Messvorgang}
 %
 %
 Es ist also unsere Aufgabe f\"ur eine gegebene Antenne ein parametrisches Modell $a: [0, \pi] \times [0, 2\pi] \rightarrow \C$ der Form $a(\varphi, \vartheta) \in \C$, also in Betrag und Phase, herzuleiten. Aus Gr\"unden der Einfachheit und der Physik vernachl\"assigen wir die Frequenzabh\"angigkeit der Antenne und konzentrieren uns auf ihr Verhalten f\"ur die Anregung mit einer einzelnen Frequenz. Auch die Polarisation von ebenen Wellen und das davon abh\"angige Verhalten einer Antenne vernachl\"assigen wir hier. Wir konzentrieren uns also auf die \emph{Winkelabh\"angigkeit} der Antennenantwort.
@@ -79,10 +79,10 @@ besteht. Wir erhalten also ein zweidimensionales Array $a[i,j] \in \C^{N_\varphi
 %
 %
 %
-\subsubsection{Ableitung der EADF}
+\paragraph{Ableitung der EADF}
 %
 %
-Wir wollen nun \eqref{dft_interpolation} aus \cref{dftintp} benutzen und auf zwei Dimensionen erweitern. Wir folgen damit effektiv~\cite{landmann2004EADF}.
+Wir wollen nun \eqref{eq:dftintp:dft_interpolation} aus \cref{sec:dftintp} benutzen und auf zwei Dimensionen erweitern. Wir folgen damit effektiv~\cite{landmann2004EADF}.
 Au{\ss}erdem \"andern wir das Argument der Funktion $x$ und deren Namen zu der oben eingef\"uhrten Schreibweise $a : [0, 2 \pi] \times [0, 2 \pi] \rightarrow \C$ mit Werten $a(\varphi, \vartheta)$. 
 In unserem Fall der Interpolation von Antennenantworten wissen wir, dass $a$ in \emph{beiden} Argumenten $2\pi$-periodisch ist.
 
@@ -114,7 +114,7 @@ erf\"ullt sein m\"ussen. Nun lassen sich alle obigen Argumente ``schnittweise'' 
         }
     },
 \end{equation}
-welche eine absolut analoge (nicht als Gegenteil zu digitale) $2D$-Version zu \eqref{dft_interpolation} darstellt. Auch in diesem Fall, k\"onnen wir das $2D$-Array $A[k_\varphi, k_\vartheta]$ durch eine $2D$-\gls{dft}, bzw. der \gls{fft}~\cite{FFTW05}, von den uniformen Samples $a[n_\varphi, n_\vartheta]$ der Funktion $a$ effizient vorberechnen.
+welche eine absolut analoge (nicht als Gegenteil zu digitale) $2D$-Version zu \eqref{eq:dftintp:dft_interpolation} darstellt. Auch in diesem Fall, k\"onnen wir das $2D$-Array $A[k_\varphi, k_\vartheta]$ durch eine $2D$-\gls{dft}, bzw. der \gls{fft}~\cite{FFTW05}, von den uniformen Samples $a[n_\varphi, n_\vartheta]$ der Funktion $a$ effizient vorberechnen.
 
 Um einen m\"oglichst effizienten Algorithmus f\"ur die Auswertung der Interpolante zu erhalten, sollte man \eqref{2d_dft_interpolation} geeignet umschreiben. Moderne Rechenarchitekturen und Scientific-Computing-Libraries sind auf schnelle Matrix-Vektor-Produkte optimiert. Nehmen wir an, wir wollen \eqref{2d_dft_interpolation} f\"ur mehrere Winkelpaare $(\varphi_1, \vartheta_1), \dots, (\varphi_L, \vartheta_L)$ auswerten. Dann berechnen wir zun\"achst zwei $2D$ Arrays
 \begin{align}
@@ -128,4 +128,4 @@ was uns erlaubt \eqref{2d_dft_interpolation} in das folgende Vektor-Matrix-Vekto
 \end{equation}
 umzuschreiben. Damit besteht der Interpolations-Algorithmus zun\"achst aus der Vorberechnung des Arrays $A$, sowie bei Ausf\"uhrung dann aus der Berechnung von $D_\varphi$ und $D_\vartheta$, sowie der Auswertung von \eqref{fast_2d_dft}.
 
-Man sieht hier der sch\"on, dass die Laufzeitkomplexit\"at von \eqref{fast_2d_dft} ma{\ss}geblich von der r\"aumlichen Bandbegrenzung der Antennen-Richtcharakteristik beeinflusst wird. Je h\"oher die Bandbreite, desto h\"oher ist nicht nur der Aufwand bei der Messung, sondern auch bei der Interpolation. Eine alternative Form der Interpolation, welche diese eventuell nachteilige Eigenschaft nicht hat, ist in \Cref{bsplines} dargestellt.
+Man sieht hier der sch\"on, dass die Laufzeitkomplexit\"at von \eqref{fast_2d_dft} ma{\ss}geblich von der r\"aumlichen Bandbegrenzung der Antennen-Richtcharakteristik beeinflusst wird. Je h\"oher die Bandbreite, desto h\"oher ist nicht nur der Aufwand bei der Messung, sondern auch bei der Interpolation. Eine alternative Form der Interpolation, welche diese eventuell nachteilige Eigenschaft nicht hat, ist in \Cref{sec:bsplines} dargestellt.

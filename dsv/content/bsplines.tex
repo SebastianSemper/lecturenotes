@@ -1,6 +1,6 @@
 % !TEX root = ../dsv_script.tex
 %
-Eine Grundvoraussetzung f\"ur eine praktisch n\"utzliche digitale Signalverarbeitung ist die M\"oglichkeit zwischen dem analogen und digitalen Bereich wechseln zu k\"onnen. Hierbei sollte man auch genau quantifizieren k\"onnen, ob bei diesem Prozess Informationen verloren gehen, oder wie man garantieren kann, dass diese Umwandlung verlustfrei vonstatten geht. Meist nutzt man hierf\"ur das Nyquist-Shannon Sampling Theorem~\cite[Kapitel~1.4.2]{proakis2013}. Die hieraus resultierende sogenannte Nyquist-Sampling-Theorie fu{\ss}t bekannterma{\ss}en auf der Repr\"asentation von bandbegrenzten Signalen durch hinreichend dichte \"aquidistante Abtastwerte. Diese Theorie ist gut studiert, in Textb\"uchern aufbereitet und bildet die Grundlage f\"ur viele Messsysteme und Algorithmen im Digitalen, siehe beispielsweise~\cref{dftintp}.
+Eine Grundvoraussetzung f\"ur eine praktisch n\"utzliche digitale Signalverarbeitung ist die M\"oglichkeit zwischen dem analogen und digitalen Bereich wechseln zu k\"onnen. Hierbei sollte man auch genau quantifizieren k\"onnen, ob bei diesem Prozess Informationen verloren gehen, oder wie man garantieren kann, dass diese Umwandlung verlustfrei vonstatten geht. Meist nutzt man hierf\"ur das Nyquist-Shannon Sampling Theorem~\cite[Kapitel~1.4.2]{proakis2013}. Die hieraus resultierende sogenannte Nyquist-Sampling-Theorie fu{\ss}t bekannterma{\ss}en auf der Repr\"asentation von bandbegrenzten Signalen durch hinreichend dichte \"aquidistante Abtastwerte. Diese Theorie ist gut studiert, in Textb\"uchern aufbereitet und bildet die Grundlage f\"ur viele Messsysteme und Algorithmen im Digitalen, siehe beispielsweise~\cref{sec:dftintp}.
 
 Es gibt jedoch auch einige Nachteile von Nyquist-Sampling, die aus dessen Annahmen und der daraus folgenden Verarbeitung entstehen. Einerseits kann ein endliches Signal im Allgemeinen \emph{nicht} bandbegrenzt sein. Weiterhin entstehen durch die Bandlimitierung von Signalen Gibbs-Artefakte, die besonders in Bildern nicht erw\"unscht sind. Geht es um die Auswertung $x(t)$ eines Signals $x$ zwischen den aufgenommenen Samples $x[n]$, also Interpolation, hat man das Problem, dass die $\Sinc$-Funktion nur sehr langsam mit Rate $1/t$ abf\"allt. Diese Eigenschaft f\"uhrt dazu, dass man f\"ur die Bestimmung eines Wertes $x(t)$ mit einer Genauigkeit von \SI{1}{\percent} etwa $100$ um $t$ benachbarte Samples betrachten muss. Das hei{\ss}t, vor allem bei 2D-Interpolation skaliert der resultierende Rechenaufwand nicht sehr g\"unstig, falls hohe Genauigkeit ben\"otigt wird.
 
@@ -213,7 +213,7 @@ Das hei{\ss}t, dass die Funktion $g: \R \rightarrow \R$ mit
 \begin{equation}\label{bsplines_sinckernel}
     g(t) = \frac{\sin(\pi t / T)}{(\pi t/T)}
 \end{equation}
-als \emph{Interpolations-Kernel} von bandbegrenzten und abgetasteten Funktionen betrachtet werden kann. Siehe \cref{eadf} f\"ur eine Anwendung dieser Art der Interpolation.
+als \emph{Interpolations-Kernel} von bandbegrenzten und abgetasteten Funktionen betrachtet werden kann. Siehe \cref{sec:eadf} f\"ur eine Anwendung dieser Art der Interpolation.
 
 Nun k\"onnen wir eine analoge Rechnung f\"ur die B-Splines durchf\"uhren, indem wir einen Filter $b^{-1}[k]$ als inverse $Z$-Transformation von $1/B(z)$ aus \eqref{bsplines_ztrafo} definieren. Dann gilt
 \begin{equation}

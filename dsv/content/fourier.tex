@@ -154,7 +154,7 @@ Die Fourier-Reihe ist nur ein Spezialfall von diesem allgemeinen Konzept!
     \end{minipage}
     \codecaption{dsv/code/fourier_series.py}{Berechnung und Darstellung von \eqref{eq:fourier:fourier_series}}\label{py:fourier_series}
 \end{listing}
-
+%
 In \Cref{py:fourier_series} wird eine Rechteckfunktion $\Rect_{[0,T]}$ in ihre Fourier-Reihe entwickelt.
 In diesem Fall m"ussen wir nat"urlich die Reihenentwicklung abbrechen, da kein $K_{\rm max}$ existiert, sodass $c[k] = 0$ f"ur $k > K_{\rm max}$.
 Wir k"onnten die Reihe zwar analytisch ausrechnen, da wir jedes $x_k$ nur auf $[0,T]$ integrieren, also dem Bereich, auf dem die von uns definierte $\Rect_{[0,T]}$-Funktion Werte ungleich $0$ annimmt.
@@ -589,7 +589,7 @@ Wie wir in \cref{sec:ztrafo} gesehen haben, ist die $z$-Transformation f"ur ein 
 \[
 X_{\z}(z) = \Sum{n \in \Z}{}{x[n]z^{-n}} \Text{mit \gls{roc}} r_2 < \Abs{z} < r_1.
 \]
-Wenn wir nun $z$ in Polarform $z = r \exp(\jmath 2 \pi f)$ ausdr"ucken und annehmen, dass $r_2 < r , r_1$, dann sehen wir, dass die $z$-Transformation von $x[\cdot]$ nichts anderes ist als die \gls{dtft} von $x[n] r^{-n}$ ist.
+Wenn wir nun $z$ in Polarform $z = r \exp(\jmath 2 \pi f)$ ausdr"ucken und annehmen, dass $r_2 < r < r_1$, dann sehen wir, dass die $z$-Transformation von $x[\cdot]$ nichts anderes ist als die \gls{dtft} von $x[n] r^{-n}$ ist.
 Mit anderen Worten ist die $z$-Transformation an einer Stelle $z=r \exp(\jmath 2 \pi f)$ die \gls{dtft} $X$ eines Signals gewichtet mit der Folge $w[n] = r^{-n}$ an der Stelle $f$.
 Ist nun $1 \in \gls{roc}$ (und damit der gesamte Einheitskreis der komplexen Ebene), dann gilt
 \begin{equation}\label{eq:fourier:ztrafo}
@@ -657,7 +657,9 @@ gilt -- wir die Werte der \gls{dft} also aus Auswertung der \gls{dtft} von $x[\c
 Es ist wichtig zu erw"ahnen, dass die Frequenzen an denen die \gls{dtft} $X$ ausgewertet wird harmonische \q{Verwandte} sind, da wir $X$ an den Stellen $f = k/N$ auswerten.
 %
 %
-\paragraph{Abgetastete Signale:} Ist $x[\cdot]$ aus Abtastung eines analogen Signals $x: \R \rightarrow \C$ entstanden, so erh"alt die Einheit von $f$ bei der \gls{dtft} eine Bedeutung, da dann \q{Perioden pro Sample} eine physikalische Interpretation zul"asst.
+\paragraph{Abgetastete Signale}\label{par:fourier:sampled_sig}
+%
+Ist $x[\cdot]$ aus Abtastung eines analogen Signals $x: \R \rightarrow \C$ entstanden, so erh"alt die Einheit von $f$ bei der \gls{dtft} eine Bedeutung, da dann \q{Perioden pro Sample} eine physikalische Interpretation zul"asst.
 Tasten wir $x$ mit Sampling-Rate $F_s$ ab, so ist der Abstand zwischen zwei Samples in $x[\cdot]$ genau $1/F_s$.
 Demzufolge erh"alt die \gls{dtft} $X(f)$ die Interpretation, dass wir das periodifizierte Spektrum von $x$ an den Stellen $f \cdot F_s$ betrachten.
 Das hei"st beispielsweise bei einer Sample-Rate von \SI{44}{\kilo\hertz} entspricht der Bereich $f \in [-1/2,+1/2]$ dem \emph{physikalischen} Frequenzbereich von $F \in [\SI{0}{\hertz},\SI{44}{\kilo\hertz}]$.
@@ -667,6 +669,7 @@ Wie bereits erw"ahnt, ergibt dann die \gls{dft} des Signals $x[\cdot]$ eben die 
 %
 %
 \paragraph{Reelle Signale}
+%
 Intuitiv sind reelle Signale \q{einfacher} als komplexe Signale. 
 Deshalb mag es nicht verwunderlich sein, dass die \gls{dft} von reellen Signalen Struktur hat, in dem Sinne, dass wir einige Koeffizienten aus anderen schnell berechnen k"onnen.
 Ist ein Signal reell, so gilt $x[n] = x[n]^\ast$ f"ur alle $n$.
@@ -678,7 +681,7 @@ W_N^{N-\ell} = \left(W_N^{\ell}\right)^\ast
 \]
 also gilt
 \[
-X[n-k] 
+X[N-k] 
     = \Sum{n=0}{N-1}{x[n] W_N^{(N - k) n}}
     = \Sum{n=0}{N-1}{x[n]^\ast \left(W_N^{k n}\right)^\ast}
     = \Sum{n=0}{N-1}{x[n]^\ast W_N^{-k n}}
@@ -706,7 +709,7 @@ Ist ein Signal reell, so ergibt sich aus der Symmetrie des Spektrums, dass der D
 Gl"uck gehabt!
 
 Der andere Extremfall tritt auf, wenn $k=N/2$. Hierbei wird vorausgesetzt, dass $N$ eine gerade Zahl ist.
-Dann nennt man $x_{N/2}$ die Nyquist-Sequenz, denn wie wir in \textbf{Abgetastete Signale} gesehen haben, entspricht $k=N/2$ der physikalischen Frequenz $F = (N/2) F_s / N = F_s/2$, also genau der \emph{maximalen} Frequenz, die ein Signal beinhalten darf, sodass es noch mit der gew"ahlten Sampling-Rate ohne Aliasing beobachtbar ist.
+Dann nennt man $x_{N/2}$ die Nyquist-Sequenz, denn wie wir in \nameref{par:fourier:sampled_sig} gesehen haben, entspricht $k=N/2$ der physikalischen Frequenz $F = (N/2) F_s / N = F_s/2$, also genau der \emph{maximalen} Frequenz, die ein Signal beinhalten darf, sodass es noch mit der gew"ahlten Sampling-Rate ohne Aliasing beobachtbar ist.
 %
 \begin{listing}[ht]
     \noindent
@@ -721,10 +724,10 @@ Dann nennt man $x_{N/2}$ die Nyquist-Sequenz, denn wie wir in \textbf{Abgetastet
     \codecaption{dsv/code/nyquist_seq.py}{Darstellung der DC-Sequenz und der Nyquist-Sequenz f"ur $N=8$}\label{py:nyquist_seq}
 \end{listing}
 
-Man in \Cref{py:nyquist_seq} gut, dass die beiden Sequenzen wirklich \q{Gegens"atze} darstellen, da $x_0[\cdot]$ die Anteile mit \q{minimaler} Variation/Frequenz aufsammelt, w"ahrend die Werte von $x_{N/2}[\cdot]$ genau so liegen, dass ein analoges Signal (und dessen Aliase), siehe \Cref{py:aliasing}, genau Frequenz $F_s/2$ (und Amplitude $1$) besitzen muss, um $x_{N/2}[\cdot]$ als Abtastwerte zu erhalten.
+Man sieht in \Cref{py:nyquist_seq} gut, dass die beiden Sequenzen wirklich \q{Gegens"atze} darstellen, da $x_0[\cdot]$ die Anteile mit \q{minimaler} Variation/Frequenz aufsammelt, w"ahrend die Werte von $x_{N/2}[\cdot]$ genau so liegen, dass ein analoges Signal (und dessen Aliase), siehe \Cref{py:aliasing}, genau Frequenz $F_s/2$ (und Amplitude $1$) besitzen muss, um $x_{N/2}[\cdot]$ als Abtastwerte zu erhalten.
 %
 %
-\paragraph{Zyklische Faltung}
+\paragraph{Zyklische Faltung im Zeitbereich}\label{par:fourier:cycl_conv}
 %
 Kommen wir nun zur wahrscheinlich wichtigsten Eigenschaft der \gls{dft} und dem Grund, warum digitale Signalverarbeitung "uberhaupt erm"oglicht wurde.
 Wir haben bereits gesehen, dass \gls{lti}-Systeme durch eine Faltung realisiert werden k"onnen.
@@ -774,7 +777,7 @@ Oft m"ussen hierzu das Signal order die Impulsantwort zielf"uhrend manipuliert w
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
-        \inputminted[firstline=4, lastline=17]{python3}{code/dft_conv.py}
+        \inputminted[firstline=4, lastline=18]{python3}{code/dft_conv.py}
     \end{minipage}%
     \begin{minipage}{0.48\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -782,6 +785,18 @@ Oft m"ussen hierzu das Signal order die Impulsantwort zielf"uhrend manipuliert w
     \end{minipage}
     \codecaption{dsv/code/dft_conv.py}{Zyklische/periodische Faltung im Zeitbereich und im Frequenzbereich.}\label{py:dft_conv}
 \end{listing}
+%
+\paragraph{Zyklische Faltung im Frequenzbereich}
+%
+Als Dual zu \nameref{par:fourier:cycl_conv} gilt auch, dass die zyklische Faltung im Frequenzbereich eine Multiplikation der jeweiligen Signale im Zeitbereich zur Folge hat.
+Es gilt also, f"ur ein Signal $x_3[\cdot]$ mit
+\[
+    x_3[n] = x_1[n] \cdot x_2[n],
+\]
+dass
+\begin{equation}\label{eq:fourier:cycl_conv_dual}
+    X_3[k] = \frac{1}{N}(X_1 \circledast X_2)[k].
+\end{equation}
 %
 % \begin{itemize}
 %     \item dft als approximation der dtft

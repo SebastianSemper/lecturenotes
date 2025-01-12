@@ -11,6 +11,7 @@ h = np.zeros_like(T) + 1 * (T < cutOff)
 h /= np.sum(h)
 
 # zirkulare faltung im zeitbereich
+# |\Cref{eq:fourier:cyclic_conv}|
 y1 = np.convolve(x, np.tile(h, 2))[N : 2 * N]
 y2 = np.fft.ifft(
     np.fft.fft(x) * np.fft.fft(h)

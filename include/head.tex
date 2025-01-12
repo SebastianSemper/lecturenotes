@@ -27,6 +27,8 @@ letterspace=-30,
 }
 \usepackage{siunitx}
 
+\usepackage{nameref}
+
 \usepackage{morewrites}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.15}
@@ -72,6 +74,7 @@ giveninits=true,]{biblatex}
 
 \usepackage{minted}
 \setminted{fontsize=\footnotesize}
+\setminted{escapeinside=||}
 
 \newcommand{\code}{Codeschnipsel}
 \renewcommand\listingscaption{\code}
@@ -119,3 +122,7 @@ giveninits=true,]{biblatex}
 \clubpenalty=1000
 
 \newcommand{\glshead}[1]{\texorpdfstring{\acrshort*{\lowercase{#1}}}{#1}}
+\newcommand{\ENDDOCUMENT}{
+\input{../include/backmatter.tex}
+\end{document}
+}
