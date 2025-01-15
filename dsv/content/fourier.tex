@@ -750,7 +750,7 @@ Die \gls{fft} erlaubt es aber eine \gls{dft} mit \glspl{flop} in der Gr"o"senord
 
 Dann bel"auft sich eine effiziente Implementierung eines \gls{fir} Filters mit Impulsantwort $h[\cdot]$ auf folgende Schritte:
 \begin{enumerate}
-    \item Transformiere $x[\cdot]$ und $h[\cdot]$ in den Zeitbereich
+    \item Transformiere $x[\cdot]$ und $h[\cdot]$ in den Frequenzbereich
     \item Punktweise Multiplikation von $Y[\cdot] = X[\cdot] \cdot H[\cdot]$ (NICHT die $z$-Transformation $H_{\z}$)
     \item R"ucktransformation von $Y[\cdot]$ zu $y[\cdot]$.
 \end{enumerate}
