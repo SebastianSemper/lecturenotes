@@ -5,7 +5,7 @@
 %
 Gegeben sei ein periodisches, analoges Signal $x: \R \rightarrow \C$, mit Periode $T_p = 1/F_0$. 
 Wir beobachten dieses Signal auf einem uniformen Raster von Punkten, via $x[n] = x(n T)$ und wollen eine Funktion $y(t)$ herleiten, f\"ur welche die Interpolationsbedingung
-\begin{equation}\label{eq:dftintp:eadf_interpol_cond}
+\begin{equation}\label{eq:dftintp:interpol_cond}
     y(nT) = x[n] = x(nT)
 \end{equation}
 erf\"ullt ist. 
@@ -71,7 +71,7 @@ Mit \eqref{eq:dftintp:fourier_series} k\"onnen wir also die Folge $x[n]$ interpo
     }
 \end{equation}
 schreiben. 
-Dieses $y$ erf\"ullt die Interpolationsbedingung \eqref{eq:dftintp:eadf_interpol_cond}, weil wegen der Bandbegrenzung von $x$ und der Periodizit\"at sogar $y(t) = x(t)$ f\"ur alle $t$ gilt.
+Dieses $y$ erf\"ullt die Interpolationsbedingung \eqref{eq:dftintp:interpol_cond}, weil wegen der Bandbegrenzung von $x$ und der Periodizit\"at sogar $y(t) = x(t)$ f\"ur alle $t$ gilt.
 
 Man beachte hier, dass nun aus der Folge von diskreten Werten $x[n]$ eine analytische Formel in Form einer \emph{endlichen} Summation entstanden ist. 
 Unter der Annahme der Bandlimitierung von $x$ ist diese Interpolation \emph{exakt} und kann effizient implementiert werden, durch die Vorberechnung der Folge $X[k]$ durch die \gls{fft}~\cite{FFTW05} der Folge $x[n]$. 

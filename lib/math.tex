@@ -166,3 +166,63 @@
 \newcommand{\mycaption}[2]{\caption[#2]{\emph{#1} -- {#2}}}
 \newcommand{\ilcode}[1]{\texttt{#1}}
 \newcommand{\TODO}[1]{{\color{red} TODO:#1}}
+
+% needs \usepackage[automake,nomain,savenumberlist]{glossaries}
+% abritrary labeled environment. could be align, equation or the like
+% this also generates a box below the environment listing the references
+\newcommand{\refbox}[1]{
+\centerline{\fbox{
+\begin{minipage}[t]{0.8\textwidth}
+\glsentryname{#1-ref}: \glsentrynumberlist{#1-ref}
+\end{minipage}
+}}\par\smallskip
+}
+
+\newcommand{\mylabeledenv}[3]{
+  \newglossaryentry{#2-ref}{
+    type=citations,
+    name={Pages referencing \cref{#2} \texttt{(#2)}},
+    description={}
+  }
+  \begin{#1}\label{#2}
+  #3
+  \end{#1}
+  \refbox{#2}
+}
+
+% abritrary labeled environment. could be align, equation or the like
+% this also generates a box below the environment listing the references
+% here, we also allow the environment to be named, like it is customs
+% for theorems and the like.
+\newcommand{\mylabelednamedenv}[4]{
+  \newglossaryentry{#3-ref}{
+    type=citations,
+    name={Pages referencing \cref{#3} \texttt{(#3)}},
+    description={}
+  }
+  \begin{#1}[#2]\label{#3}
+  #4
+  \end{#1}
+  \refbox{#2}
+}
+
+% label something, that is not an environmet like a section or something
+% here, we create no box containing the references.
+\newcommand{\mylabel}[1]{%
+\label{#1}%
+\newglossaryentry{#1-ref}{
+  type=citations,
+  name={Pages referencing \cref{#1} \texttt{(#1)}},
+  description={}
+}}
+
+% this can be used to manually insert a list of references of an
+% equation
+\newcommand{\mylabelrefs}[1]{
+\refbox{#1}
+}
+
+% this has to be used for the reference to pop up in the list
+% of references.
+\newcommand{\mycref}[1]{\glsadd[]{#1-ref}\cref{#1}\glsadd[]{#1-ref}\texttt{(#1)}}
+

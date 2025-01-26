@@ -120,10 +120,10 @@ Dies gilt jedoch nur, wenn sich diese Zusammensetzung im Frequenzbereich nicht s
 %
 %
 \clearpage
-Man kann sich diesen Effekt aber auch zunutze machen und somit das Ergebnis der \gls{dft} beeinflussen, indem man das Signal vor der \gls{dft} noch zus"atzlich fenstert, wobei man die Fensterfunktion genau so konzipiert, wie man es gerne h"atte\footnote{\url{https://docs.scipy.org/doc/scipy/reference/signal.windows.html}}.
+Man kann sich diesen Effekt aber auch zunutze machen und somit das Ergebnis der \gls{dft} beeinflussen, indem man das Signal vor der \gls{dft} noch zus"atzlich fenstert, wobei man die Fensterfunktion genau so konzipiert, wie man es gerne h"atte\externallink{{https://docs.scipy.org/doc/scipy/reference/signal.windows.html}}.
 
 Wenn wir uns beispielsweise an die Diskussion bez"uglich der m"oglichen Dynamik in einem Signal erinnern, so kann es sein, dass man eher an Dynamik als an Aufl"osung interessiert ist.
-In solch einem Fall, kann man beispielsweise auf ein Hann-Fenster\footnote{\url{https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.windows.hann.html}} zur"uckgreifen und anstatt einem Vektor $\bm x$ transformieren wir mit der \gls{dft} den Vektor $\bm w \odot \bm x$, wobei $\odot$ die punktweise Multiplikation bedeutet.
+In solch einem Fall, kann man beispielsweise auf ein Hann-Fenster\externallink{{https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.windows.hann.html}} zur"uckgreifen und anstatt einem Vektor $\bm x$ transformieren wir mit der \gls{dft} den Vektor $\bm w \odot \bm x$, wobei $\odot$ die punktweise Multiplikation bedeutet.
 Dies f"uhrt dazu, dass wir im Frequenzbereich eine Faltung mit der \gls{dft} von $\bm w$ erhalten anstatt einem $\Sinc$.
 
 In \Cref{py:stft_win} sehen wir nun, dass dies erlaubt Frequenzanteile zu finden, die sich ohne explizite Fensterung in den sogenannten Nebenwellen der $\Sinc$-Funktion \q{verstecken}.
@@ -176,7 +176,7 @@ Andererseits k"onnen wir ein Signal l"anger beobachten und haben sehr gute Aufl"
 Als letztes wollen wir ein Beispiel f"ur eine Anwendung der \gls{stft} zeigen. 
 In \cref{py:stft_bass} wurde mit einer Bassgitarre eine G-Dur-Tonleiter eingespielt und in entsprechende Bl"ocke zerteilt, die in etwa den einzelnen T"onen entsprechen.
 Im Frequenzbereich wurde dann eine \q{peak search} genutzt, um die lokalen Maxima der einzelnen \gls{dft}-Bl"ocke zu finden.
-Die ermittelten Frequenzen der einzelnen T"one passen sehr gut zu denen, die man online in Tabellen\footnote{\url{https://mixbutton.com/mixing-articles/music-note-to-frequency-chart/}} finden kann.
+Die ermittelten Frequenzen der einzelnen T"one passen sehr gut zu denen, die man online in Tabellen\externallink{{https://mixbutton.com/mixing-articles/music-note-to-frequency-chart/}} finden kann.
 \begin{listing}[ht]
     \noindent
     \begin{minipage}{0.51\textwidth}

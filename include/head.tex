@@ -8,6 +8,7 @@
 
 \usepackage{csquotes}
 
+
 \usepackage{mdframed}
 \newmdenv[]{factbox}
 
@@ -26,6 +27,8 @@ shrink=25,
 letterspace=-30,
 }
 \usepackage{siunitx}
+
+\usepackage{xurl}
 
 \usepackage{nameref}
 
@@ -101,7 +104,7 @@ giveninits=true,]{biblatex}
     #2, % 
     siehe \href{https://github.com/SebastianSemper/lecturenotes/blob/main/#1}{%
         \path{#1}%
-      }%
+      }\hfill%
     % \backrefsetup{enable}%
   }%
 }
@@ -125,4 +128,15 @@ giveninits=true,]{biblatex}
 \newcommand{\ENDDOCUMENT}{
 \input{../include/backmatter.tex}
 \end{document}
+}
+
+\usepackage{tocloft}
+\newlistof{links}{lks}{Linkverzeichnis}
+\renewcommand{\cftlkstitlefont}{\Large\bfseries}
+\newcommand\externallink[1]{%
+  \refstepcounter{links}%
+  \footnote{\url{#1}}%
+  \addcontentsline{lks}{links}{%
+    \protect\hspace{6mm}\numberline{\thelinks}%
+    \protect\url{#1}}%
 }

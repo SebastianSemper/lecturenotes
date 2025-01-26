@@ -15,6 +15,7 @@ _minted*
 *.cb2
 .*.lb
 *.ist
+*.lks
 
 ## Intermediate documents:
 *.dvi
