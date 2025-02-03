@@ -1,5 +1,5 @@
 Wir wollen noch eine weitere wichtige Anwendung f"ur die in dieser Vorlesung entwickelten Signalverarbeitungstechniken betrachten.
-F"ur die Konzipierung eines RADAR-Systems macht man sich zu Nutze, dass sich ausbreitende elektromagnetische Wellen an metallischen Objekten gut reflektiert werden.
+F"ur die Konzipierung eines RADAR-Systems macht man sich zu Nutze, dass sich ausbreitende elektromagnetische Wellen an Objekten, auf die sie w"ahren der Ausbreitung treffen, reflektiert werden.
 Mit einer Antenne kann man beispielsweise ein Signal $x[\cdot]$ mit einem \gls{tx} aussenden und mit einer zweiten Antenne am \gls{rx} auf das eventuelle Echo warten.
 Wird ein Objekt mit Entfernung $d$ nun von dieser Welle getroffen und reflektiert einen Teil der Energie in Richtung \gls{rx}, so enth"alt das empfangene Signal $y[\cdot]$ eine zeitlich verz"ogerte Kopie von $x[\cdot]$ und eine gewisse Menge an Rauschen, das von den Schaltkreisen an \gls{tx} und \gls{rx} eingepr"agt wird.
 Es gilt also
@@ -8,7 +8,7 @@ y[\cdot] = \gamma x[\cdot - \tau] + w[\cdot],
 \]
 wobei sich $\tau$ aus der Samplerate $F_s$, dem Abstand $d$ und der Lichtgeschwindigkeit $c$ via
 \[
-\tau = F_s \cdot \frac{d}{c} 
+\tau = F_s \cdot \frac{2d}{c} 
 \]
 ergibt.
 Die Zahl $\gamma \in \R$ repr"asentiert einerseits Verluste, die sich durch die Ausbreitung im Raum ergeben und gleichzeitig aus der \q{Reflektivit"at} des Objektes.
@@ -39,12 +39,12 @@ Man kann sich "uberlegen, dass
     },
 \]
 siehe \Cref{eq:disc_sig_energy}.
-Das hei"st, dass die sog.\,\emph{Kreuzkorrelation} immer durch die Werte der sog.\,\emph{Autokorrelation} wie oben angegeben beschr"ankt ist.
+Das hei"st, dass die sog.\,\emph{Kreuzkorrelation} $r_{x,y}[\cdot]$ immer durch die Werte der sog.\,\emph{Autokorrelation} $r_{x,x}[\cdot]$ wie oben angegeben beschr"ankt ist.
 Im Spezialfall $y=x$ ergibt sich
 \[
 \Abs{r_{x,x}[\ell]} \leqslant r_{x,x}[0],
 \]
-was hei"st, dass die \gls{acf} ihr Maximum immer am Wert $\ell=0$ annimmt.
+was hei"st, dass die \gls{acf} $r_{x,x}[\cdot]$ ihr Maximum immer am Wert $\ell=0$ annimmt.
 
 Betrachten wir nun wieder unser RADAR-System, so k"onnte es sich als sinnvoll erweisen, am Empf"anger das Signal $y[\cdot]$ mit dem Sendesignal zu korrelieren, also
 \[
@@ -52,11 +52,11 @@ r_{y,x}[\ell]
     = \gamma r_{x,x[\cdot-\tau]}[\ell] + r_{w,x}[\ell]
     = \gamma r_{x,x}[\ell-\tau] + r_{w,x}[\ell]
 \]
-berechnen.
+zu berechnen.
 Da $r_{x,x}[\cdot]$ bei $0$ ein lokales Maximum hat, so hat $r_{x,x[\cdot-\tau]}[\cdot]$ ein lokales Maximum bei $\tau$!
-Wir k"onnten also einfach den Maximalen Wert in $r_{y,x}[\cdot]$ suchen und dessen Stelle in $d$ umrechnen.
+Wir k"onnten also einfach den maximalen Wert in $r_{y,x}[\cdot]$ suchen und dessen Stelle in $d$ umrechnen.
 
-Die Berechnung von $r_{y,x}[\cdot]$ f"ur $N$ Werte erfordert in der Gr"osenrdnung $N^2$ viele \glspl{flop}.
+Die Berechnung von $r_{y,x}[\cdot]$ f"ur $N$ Werte erfordert in der Gr"o"senrdnung $N^2$ viele \glspl{flop}.
 Man kann aber ziemlich einfach einsehen, dass man die Korrelation als Faltung via
 \begin{equation}\label{eq:mseq:corr_conv}
     r_{x,y} = x[\cdot] \circledast y[-\cdot]
@@ -66,7 +66,7 @@ Au"serdem gilt f"ur eine Sequenz $x[\cdot]$ und deren \gls{dft} $X[\cdot]$, dass
 \begin{equation}\label{eq:mseq:dft_fold}
     \texttt{DFT}(x[-\cdot]) = X[\cdot]^\ast,
 \end{equation}
-also Umkehrung im Zeitbereich entspricht Konjugation im Frequenzbereich.
+also Umkehrung im Zeitbereich (Reflexion an $n=0$) entspricht Konjugation im Frequenzbereich.
 Demzufolge k"onnen wir \Cref{par:fourier:cycl_conv} zusammen mit \eqref{eq:mseq:corr_conv} verwenden, um $r_{x,y}[\cdot]$ mit $N \log(N)$ vielen \glspl{flop} zu berechnen.
 Das hei"st, dass f"ur die Signalverarbeitung effiziente Methoden bereitstehen, solange der Ansatz der Berechnung der Kreuzkorrelation des Empfangssignals mit der Sendesequenz als theoretisch fundiert herausstellt.
 %
@@ -87,17 +87,19 @@ Das hei"st, dass f"ur die Signalverarbeitung effiziente Methoden bereitstehen, s
     \codecaption{dsv/code/radar_1.py}{Vergleich verschiedener Sendesignale $x[\cdot]$ bez"uglich der resultierenden Korrelation $r_{x,y}[\cdot]$}\label{py:radar1}
 \end{listing}
 
-In \Cref{py:radar1} sind einige verschiedene Sendesignale miteinander verglichen, indem zwei Reflexionen mit verschiedenen Abst"anden simuliert werden und aus dem resultierenden Empfangssignal $y[\cdot]$ wiederum $r_{x,y}$ bestimmt wird.
-Wie man sieht, hat das Sendesignal einen signifikanten Einfluss auf die \q{Form} der \gls{acf}, welche wiederum einen Einfluss auf die visuelle Qualit"at der Funktion $r_{x,y}[\cdot]$ hat. 
+In \Cref{py:radar1} sind einige verschiedene Sendesignale miteinander verglichen, indem zwei Reflexionen mit verschiedenen Abst"anden simuliert werden und aus dem resultierenden Empfangssignal $y[\cdot]$ wiederum $r_{x,y}[\cdot]$ bestimmt wird.
+Wie man sieht, hat das Sendesignal einen signifikanten Einfluss auf die \q{Form} der \gls{acf}, welche wiederum einen Einfluss auf die visuelle Qualit"at der Funktion $r_{x,y}[\cdot]$ hat, wenn man an die Anwendung im RADAR denkt.
 Nutzt man nur einen einfachen Sinus als Sendesignal (\Cref{py:radar1}, oben), so kann man gar keine Information "uber den Abstand von eventuellen Reflexionen finden. 
 Der Grund ist, dass sich Zeitversatz nur mit Signalen sch"atzen l"asst, die eine gewisse Bandbreite abdecken, also mehrere Frequenzen gleichzeitig belegen.
 
-Mit einer $\Sinc$-Funktion (\Cref{py:radar1} mitte) belegen wir bekannterma"sen im Frequenzbereich einen kontinuierlichen Bereich, was dazu f"uhrt, dass wir in der Tat sehr ausgepr"agte lokale Maxima bei den wahren $\tau$ erhalten.
+Mit einer $\Sinc$-Funktion (\Cref{py:radar1} mitte) belegen wir bekannterma"sen im Frequenzbereich einen kontinuierlichen Bereich, was dazu f"uhrt, dass wir in der Tat sehr ausgepr"agte lokale Maximum bei den wahren $\tau$ erhalten.
 Je schmaler die Hauptkeule der $\Sinc$-Funktion im Zeitbereich, desto breiter ist der abgedeckte Frequenzbereich, was leicht durch Modifikation von \Cref{py:radar1} "uberpr"uft werden kann.
+Dies ist von Vorteil, wenn man mehrere Reflexionen, die in etwa gleichen Abst"anden auftreten doch noch von einander unterscheiden m"ochte.
 Es ist jedoch zu bemerken, dass ein im Zeitbereich \q{schmaler} $\Sinc$ an die Hardware, die ihn erzeugt einige unangenehme Herausforderungen stellt, weshalb solch ein Sendesignal in der Praxis einige Nachteile aufweist.
 
 Schlussendlich sehen wir (\Cref{py:radar1}, unten), dass zuf"allige Sendesignale auch gute Eigenschaften bez"uglich $r_{x,y}[\cdot]$ liefern.
 Gleichzeitig haben diese den Vorteil, dass keine gro"sen Spr"unge in der Amplitude notwendig sind, da sich das Signal bei maximaler Amplitude nicht sehr weit von seinem Mittelwert entfernt\linkfootnote{https://en.wikipedia.org/wiki/Crest_factor}.
+Deren Nachteil ist jedoch, dass man kein System auf g"anzlich zuf"alligem Verhalten fu"sen lassen sollte.
 
 Speziell f"ur unsere Anwendung im RADAR streben wir also an, dass die \gls{acf} $r_{x,y}[\cdot]$ ein ausgeptr"agtes lokales Maximum hat, also einerseits sehr schnell abf"allt, und andererseits auch wenig bis keine Nebenmaxima erzeugt, weil sich dies beispielsweise in \Cref{py:stft_harm} als Problem herausgestellt hatte.
 Im Idealfall finden wir eine Sendesequenz, die sich einerseits gut f"ur RADAR eignet und gleichzeitig sich beispielsweise effizient in Hardware erzeugen l"asst.
@@ -152,6 +154,7 @@ Man kann zeigen, dass falls die Transferfunktion $H$ ein sogenanntes irreduzible
 Das hei"st, dass die algebraischen Eigenschaften der $z$-Transformierten der Transferfunktion $H$ wieder Aufschluss dar"uber geben, welche Eigenschaften das \gls{lfsr} als System betrachtet besitzt.
 In \Cref{py:mlbs} wird ausgehend von einem Startwert des Registers (\texttt{0x1}) und einer sogenannten Tapkonfiguration (\texttt{0xD}) eine \gls{mlbs} durch einmaliges Simulieren des \gls{lfsr} erzeugt.
 Die entstehende Folge hat "ahnliche Eigenschaften, wie eine \q{wirklich} zuf"allige Zahlenfolge, doch entsteht aus einem vollst"andig deterministischem Prozess.
+Man nennt solche Sequenzen \q{pseudo zuf"allig}.
 %
 \begin{listing}[ht]
     \noindent
@@ -177,7 +180,7 @@ Sendesequenz zu erzeugen und andererseits, um die RADAR-Signalverarbeitung effiz
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
-        \inputminted[firstline=3, lastline=19]{python3}{code/radar2.py}
+        \inputminted[firstline=3, lastline=21]{python3}{code/radar2.py}
     \end{minipage}%
     \begin{minipage}{0.48\textwidth}
         \strut\vspace*{-\baselineskip}\newline
