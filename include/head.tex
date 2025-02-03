@@ -99,9 +99,9 @@ giveninits=true,]{biblatex}
 \newcommand{\q}[1]{{\glqq{}#1\grqq{}}}
 \newcommand{\myemph}[1]{\emph{#1}}
 \newcommand{\codecaption}[2]{
-  \caption[#2]{%
+  \caption[{#2}]{%
     % \backrefsetup{disable}%
-    #2, % 
+    {#2}, % 
     siehe \href{https://github.com/SebastianSemper/lecturenotes/blob/main/#1}{%
         \path{#1}%
       }\hfill%
@@ -133,10 +133,19 @@ giveninits=true,]{biblatex}
 \usepackage{tocloft}
 \newlistof{links}{lks}{Linkverzeichnis}
 \renewcommand{\cftlkstitlefont}{\Large\bfseries}
-\newcommand\externallink[1]{%
+\newcommand\linkfootnote[1]{%
   \refstepcounter{links}%
   \footnote{\url{#1}}%
   \addcontentsline{lks}{links}{%
     \protect\hspace{6mm}\numberline{\thelinks}%
     \protect\url{#1}}%
 }
+\newcommand\refurl[1]{%
+  \refstepcounter{links}%
+  \url{#1}%
+  \addcontentsline{lks}{links}{%
+    \protect\hspace{6mm}\numberline{\thelinks}%
+    \protect\url{#1}}%
+}
+
+\usepackage[bottom]{footmisc}

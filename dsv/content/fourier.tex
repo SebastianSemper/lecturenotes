@@ -237,7 +237,7 @@ und setzen dies in $P$ ein, um
         }
 \end{equation}
 %
-als den \emph{Satz von Parseval}\externallink{{https://de.wikipedia.org/wiki/Satz\_von\_Parseval}} zu erhalten.
+als den \emph{Satz von Parseval}\linkfootnote{{https://de.wikipedia.org/wiki/Satz\_von\_Parseval}} zu erhalten.
 Die physikalische Interpretation ist, dass $\Abs{c[k]}$ der Leistung des Signals bei der Frequenz $k F_0$ entspricht.
 Jeder Index $k$ hat also eine physikalische Gr"o"se, die mit ihm assoziiert ist.
 
@@ -323,7 +323,7 @@ Analog zum Satz von Parseval f"ur periodische Signale in \eqref{eq:fourier:serie
 E(x) = \Int{-\infty}{+\infty}{\Abs{x(t)}^2}{t}
      = \Int{-\infty}{+\infty}{\Abs{X(F)}^2}{F}
 \end{equation}
-auch wieder ein Parseval Theorem f"ur die \acrlong{ft} ergibt, was aber in diesem Fall als Plancherel Theorem\externallink{{https://en.wikipedia.org/wiki/Plancherel_theorem}} genannt wird.
+auch wieder ein Parseval Theorem f"ur die \acrlong{ft} ergibt, was aber in diesem Fall als Plancherel Theorem\linkfootnote{{https://en.wikipedia.org/wiki/Plancherel_theorem}} genannt wird.
 
 Andererseits kann man $X$ auch in Betrag und Phase zerlegen, da es im Allgemeinen eine komplexe Gr"o"se ist, also
 \[
@@ -542,7 +542,7 @@ Nun treten hierbei mehrere Effekte zutage.
 Ver"andert man den Wert der Variable $N$ im Skript, tritt dieser Effekt st"arker oder schw"acher zutage.
 \item Auch bei Erh"ohung von $N$ stellt sich immernoch keine Konvergenz von $X_{\rm approx}$ gegen $X_{\rm true}$ ein.
 Dies liegt daran, dass die \gls{dtft} von $x[\cdot]$ nicht konvergiert, wie wir in \Cref{py:fourier_series} bereits gesehen hatten.
-Diesen Effekt bezeichnet man allgemein als Gibbssches Ph"anomen\externallink{{https://en.wikipedia.org/wiki/Gibbs_phenomenon}}.
+Diesen Effekt bezeichnet man allgemein als Gibbssches Ph"anomen\linkfootnote{{https://en.wikipedia.org/wiki/Gibbs_phenomenon}}.
 \item Augenscheinlich ist es besser die \gls{idtft} aus $X_{\rm approx}$ zu berechnen, als aus $X_{\rm true}$. Doch dies liegt legidlich daran, dass die numerische Integration der $\Rect$-Funktion nicht genau genug ist.
 Erh"oht man die Anzahl der Punkte im Array \texttt{F}, dann stimmen im dritten Plot die drei Graphen besser "uberein.
 \end{itemize}

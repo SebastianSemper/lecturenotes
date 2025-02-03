@@ -21,7 +21,7 @@ Allgemein bezeichnet man st"uckweise definierte und stetig differenzierbare Poly
 Man nennt die Stellen an denen zwei unterschiedliche Polynome zusammensto"sen als Knoten. 
 Ein Spline der Ordnung $\ell \in \N$ ist ein Polynom vom Grad $\ell$, ist also von der Form
 \begin{equation}
-    p(x) = 
+    p(t) = 
         a_{\ell} t^{\ell} 
         + a_{\ell - 1} t^{\ell-1} 
         + \dots
@@ -98,7 +98,7 @@ Die Stetig- und Differenzierbarkeit muss man sich aber noch separat "uberlegen.
 Weiterhin kann man zeigen, dass folgende Formeln f"ur Differentiation und Integration von B-Splines gelten:
 \begin{equation}\label{eq:bsplines:deriv_int}
     \left(\beta^\ell\right)^\prime(t) =
-        \beta^{\ell-1}(x + 1/2) - \beta^{\ell-1}(x - 1/2), 
+        \beta^{\ell-1}(t + 1/2) - \beta^{\ell-1}(t - 1/2), 
     \Int{-\infty}{t}{\beta^\ell(s)}{s} = 
         \Sum{p = 0}{+\infty}{\beta^{\ell+1}(t - 1/2 - p)}.
 \end{equation}
@@ -125,9 +125,9 @@ Wir m"ochten uns eine spezielle Version der B-Splines genauer Ansehen, da diese 
 Wir setzen hierzu $\ell=3$ und erhalten somit ein Polynom dritten Grades der Form
 \begin{equation}\label{eq:bsplines:explicit_eval}
     \beta^3(t) = \begin{cases}
-        \frac 23 - \Abs{x}^2 + \frac{\Abs{x}^3}{2} \fuer \Abs{x} < 1\\
-        \frac{(2 - \Abs{x})^3}{6}, \fuer \Abs{x} \in [1, 2) \\
-        0, \fuer \Abs{x} > 2,
+        \frac 23 - \Abs{t}^2 + \frac{\Abs{t}^3}{2} \fuer \Abs{t} < 1\\
+        \frac{(2 - \Abs{t})^3}{6}, \fuer \Abs{t} \in [1, 2) \\
+        0, \fuer \Abs{t} > 2,
     \end{cases}
 \end{equation}
 welche in \Cref{py:bsplines:eval} auch einmal implementiert wurde. 
@@ -161,7 +161,7 @@ Doch die Anwendung von $B^{-1}$ ist numerisch instabil, weshalb wir einen altern
 Sehen wir uns \eqref{eq:bsplines:interpol_cond} genauer an. 
 Wir finden, dass sich diese Gleichung nach Definition von $\beta[k] = \beta^3(k)$ als Faltung via
 \begin{equation}\label{eq:bsplines:conv}
-    x[n] = (c \ast b)[k]
+    x[n] = (c \ast b)[n]
 \end{equation}
 schreiben l"asst. 
 Nach Transformation in den $z$-Bereich erhalten wir
@@ -192,9 +192,9 @@ Nun ist es noch notwendig Anfangswerte f"ur $c^+[k]$ und $c^-[k]$ zu finden.
 Dies ist aufgrund der Endlichkeit von $x$ nicht ohne Weiteres m"oglich. 
 Man sieht, dass die Impulsantwort von $c^+$ eine abklingende Exponentialfunktion ist, also gilt
 \begin{equation}
-    c^+[0] = \Sum{k=0}{\infty}{x[n] z_1^k} \approx \Sum{k=0}{K}{x[n] z_1^k},
+    c^+[0] = \Sum{k=0}{\infty}{x[-k] z_1^k} \approx \Sum{k=0}{K}{x[-k] z_1^k},
 \end{equation}
-wobei man $K \in \N$ so w"ahlen kann, dass $z_1^K \leqslant \varepsilon$ erf"ullt ist.
+wobei man $K \in \N$ so w"ahlen kann, dass $z_1^K \leqslant \varepsilon$ erf"ullt ist, siehe \Cref{py:exp_mean}.
 Nach Ausf"uhrung von $c^+$ kann man $c^-[N-1]$ durch
 \begin{equation}
     c^-[N-1] = \frac{z_1}{1 - z_1^2}\left(c^+[N-1] + z_1 c^+[N-2]\right)
@@ -279,4 +279,4 @@ Das hei"st, dass auch im Frequenzbereich Konvergenz in der Form
 gegeben sein muss.
 
 Zusammenfassend kann man sagen, dass B-Splines einen alternativen Zugang zu digitaler Signalverarbeitung bieten, welcher eng mit dem des Nyquist-Samplings verkn"upft ist und als Approximation von diesem gesehen werden kann. 
-B-Splines sind wegen ihrer effizienten und stabilen Implementierung sowohl bei der Analyse \eqref{eq:bsplines:filter}, als auch der Synthese \eqref{eq:bsplines:summation} vor allem f"ur hochdimensionale Interpolationen sehr interessant\externallink{https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-20-fast-third-order-texture-filtering}.
+B-Splines sind wegen ihrer effizienten und stabilen Implementierung sowohl bei der Analyse \eqref{eq:bsplines:filter}, als auch der Synthese \eqref{eq:bsplines:summation} vor allem f"ur hochdimensionale Interpolationen sehr interessant\linkfootnote{https://developer.nvidia.com/gpugems/gpugems2/part-iii-high-quality-rendering/chapter-20-fast-third-order-texture-filtering}.

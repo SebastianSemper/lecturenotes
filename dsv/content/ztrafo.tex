@@ -4,7 +4,7 @@ Wir werden sehen, dass die Faltungs-Formel \eqref{eq:lti_sys:conv} im $z$-Bereic
 Au"serdem erlaubt uns die Transformation eine neue Sicht auf diskrete Systeme zu gewinnen, mit welcher es eventuell einfacher sein sollte gewisse Eigenschaften von Systemen nachzupr"ufen.
 Wir werden auch sehen, dass sich manche Signale oder Systeme im $z$-Bereich kompakter aufschreiben lassen.
 
-Die $z$-Transformation $X_\z: \C \rightarrow \C$ eines Signals $x[\cdot] : \N \rightarrow \C$ ist die komplexe Potenzreihe\externallink{{https://mathworld.wolfram.com/LaurentSeries.html}}
+Die $z$-Transformation $X_\z: \C \rightarrow \C$ eines Signals $x[\cdot] : \N \rightarrow \C$ ist die komplexe Potenzreihe\linkfootnote{{https://mathworld.wolfram.com/LaurentSeries.html}}
 \begin{equation}\label{eq:ztrafo:def}
     z \mapsto X_\z(z) = \Sum{n\in\Z}{}{x[n] z^{-n}}.
 \end{equation}
@@ -166,7 +166,7 @@ Wir k"onnen also zusammenfassend folgende Herangehensweise bei der Berechnung de
 %
 \paragraph{Inverse \texorpdfstring{$z$}{z}-Transformation}
 Obige Berechnung der Faltung verlangt im letzten Schritt die Invertierung der $z$-Transformation von $X_{\z}$ zu $x[\cdot]$.
-Im allgemeinen Fall ist man darauf angewiesen den Cauchyschen Integralsatz~\externallink{{https://de.wikipedia.org/wiki/Cauchyscher_Integralsatz}} zu bem"uhen.
+Im allgemeinen Fall ist man darauf angewiesen den Cauchyschen Integralsatz~\linkfootnote{{https://de.wikipedia.org/wiki/Cauchyscher_Integralsatz}} zu bem"uhen.
 Am Ende erlaubt dieser die Herleitung von
 \begin{equation}\label{eq:ztrafo:inv}
     x[n] = \frac{1}{\jmath 2 \pi} \ointctrclockwise\limits_{C \subset \mathrm{ROC}} X_{\z}(z) z^{n-1} \mathrm{d}z
@@ -247,7 +247,7 @@ In diesem Fall gilt
 \[
 H(z) = z^{-M} \Sum{k = 1}{M}{b_k z^{M-k}}
 \]
-und $H$ besitzt als Polynom vom Grad $M$ dann $M$ Nullstellen~\externallink{{https://de.wikipedia.org/wiki/Fundamentalsatz_der_Algebra}} und eine $M$-fache Polstelle bei $z=0$.
+und $H$ besitzt als Polynom vom Grad $M$ dann $M$ Nullstellen~\linkfootnote{{https://de.wikipedia.org/wiki/Fundamentalsatz_der_Algebra}} und eine $M$-fache Polstelle bei $z=0$.
 Tritt eine Polstelle bei $z=0$ auf, so nennen wir diese \emph{trivial}, da sie keinen Einfluss auf das System hat.
 Schlie"slich korrespondiert $z^{-M}$ nur zu einer Verschiebung im Zeitbereicht, was bei \gls{lti}-Systemen per definitionem nur eine globale Verschiebung der ganzen Systems bedeutet.
 Da keine nicht-trivialen Polstellen auftreten, hat das System eine \emph{endliche} Impulsantwort.
