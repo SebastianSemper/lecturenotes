@@ -124,14 +124,15 @@ Es ist demnach auch leicht zu sehen, dass solch ein System sehr leicht und effiz
 
 Zum Zeitpunkt $n$ ist damit die Ausgabe
 \[
-y[n] 
-    = x[n] 
+x[n] 
+    = x[n-1] 
       + a_1 x[n-1] 
       + \ldots 
       + a_{L-1} x[n - (L-1)] 
       + x[n-L],
 \]
-wobei die Koeffizienten $a_1, \ldots, a_{L-1} \in \Z_2$, also definieren, welche Werte der Register f"ur die Berechnung des Feedbacks genutzt werden.
+wobei die Koeffizienten $a_1, \ldots, a_{L-1} \in \Z_2$, diese also definieren, welche Werte der Register f"ur die Berechnung des Feedbacks genutzt werden.
+Es ist anzumerken, dass man nun f"ur einen Start der Simulation die Zust"ande $x[-L], \ldots, x[-1]$ kennen muss.
 Man kann das System zum Zeitpunkt $n$ durch die Werte $x[n], \ldots, x[n-L]$ also eine Bin"arzahl mit $L$ Stellen/Bits beschreiben. 
 Kennt man all diese Zust"ande, ist es auch m"oglich den N"achsten zu berechnen, indem auf die Zahl ein Bitshift und eine \q{maskierte} Addition "uber die Bits des aktuellen Zustands angewandt wird.
 

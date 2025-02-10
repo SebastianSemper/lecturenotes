@@ -17,9 +17,9 @@ N = 64
 tau = [14, 34]
 gamma = [1, 0.75]
 
-# x = np.sin(np.linspace(0, 10 * np.pi, N))
-# x = np.sinc(np.linspace(-15, +15, N))
-x = np.sign(np.random.randn(N))
+x = np.sin(np.linspace(0, 10 * np.pi, N))
+x = np.sinc(np.linspace(-25, +25, N))
+# x = np.sign(np.random.randn(N))
 X = np.fft.fft(x)
 
 y = gen_receive(x, tau, gamma)
