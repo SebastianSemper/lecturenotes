@@ -1,0 +1,81 @@
+Bisher waren wir ausschließlich mit deterministischen Signalen befasst. 
+Also solchen, welche sich bequem durch eine Funktionsvorschrift $t \mapsto x(t)$ beschreiben lassen.
+Doch eigentlich ist dies ein absolut idealisierter Spezialfall, da für gew\"ohnlich alle Signale, die wir verarbeiten, zu mindestens einem Zeitpunkt von einem Messgerät beobachtet wurden.
+Somit sind diese notwendigerweise mit Messrauschen behaftet, dessen unangenehme Eigenschaft es ist, zuällig zu sein.
+Aus diesem Grund ist es uns nicht m\"oglich, ein gemessenes und digitalisiertes Signal $x[\cdot]$ mittels eines alebraischen Ausdrucks zu beschreiben.
+Notwendigerweise wird $x[\cdot]$ zu einer sog. Zufallsgr\"oße, welche wir \q{nur} noch durch deren statistische Eigenschaften beschreiben k\"onnen.
+Nicht nur das, auch jede folgende Verarbeitung von $x[\cdot]$, bespielsweise durch ein \gls{lti}-System, wird zu einer Zufallsgr\"oße, deren Eigenschaften u.A. von denen des Messrauschens abhängen.
+
+Weiterhin kann es für gewisse Anwendungen auch absolut ausreichend sein, eigentlich deterministische Signale als zufällig zu modellieren.
+Wenn es beispielsweise darum geht, zu bestimmen, ob ein Kommunikationssystem in der Lage ist, Informationen fehlerfrei zu übertragen, dann kann es ausreichend sein, \q{nur} eine Ausfallrate zu bestimmen, oder diese Rate zu begrenzen, anstatt dies für jedes m\"ogliche übertragene Signal zu bestimmen/gewährleisten.
+
+Um diese \q{neue} Sichtweise auf Signale gut verinnerlichen zu k\"onnen, ben\"otigen wir jedoch einige Werkzeuge aus der Wahrscheinlichkeitstheorie, die wir uns nun ansehen werden, wobei wir versuchen, uns nicht mit vielen mathematischen Details aufzuhalten, sondern wollen stattdessen unsere Intuition schärfen.
+
+\subsection{Grundlagen Wahrscheinlichkeitstheorie}\label{sec:random:prbly}
+
+Nehmen wir zunächst einmal an, dass wir einen zufälligen Vorgang betrachten, dessen Ausgang sich in Form einer einzelnen reellen Zahl manifestiert.
+Diesen zufälligen Vorgang assoziieren wir mit der Zufallsgr\"oße $X : \Omega \rightarrow \R$, also $\omega \rightarrow X(\omega)$, wobei wir uns vorstellen, dass $\Omega$, beziehungsweise $\omega$, dafür sorgen, dass Zufall ins Spiel kommt. \textit{$\ast$MITHÄNDENWEDEL$\ast$} Wir sind nun daran interessiert, wie die \emph{Verteilung} der Werte $X(\omega)$ charakterisiert werden kann.
+
+Hierzu definieren wir beigeordnet zu $X$ eine Funktion $F_X: \R \rightarrow [0,1]$, welche uns für $x \in \R$ mitteilt, was die Wahrscheinlichkeit für das Ereignis $X \leqslant x$ ist.
+Man kann auch sagen/schreiben:
+\[
+F_X(x) = P(X \leqslant x).
+\]
+Die Funktion $F$ ist monoton wachsend, da natürlich $P(X \leqslant x_1) \leqslant P(X \leqslant x_2)$, falls $x_1 < x_2$, also auch $F_X(x_1) \leqslant F_X(x_2)$.
+Jetzt kann man mit der \emph{Verteilungsfunktion} $F_X$ schon eine Menge anfangen.
+Beispielsweise k\"onnen wir damit auch bestimmen, mit welcher Wahrscheinlichkeit das Ereignis $x_1 < X \leqslant x_2$ eintritt, indem wir einfach 
+\[
+P(x_1 < X \leqslant x_2) = F_X(x_2) - F_X(x_1)
+\]
+berechnen.
+
+Wir k\"onnen sogar noch einen Schritt weiter gehen, und die Gr\"oße
+\[
+f^h_X(x) = \frac{F_X(x + h) - F_X(x)}{h}
+\]
+betrachten.
+Man kann es sich so vorstellen, dass wir das Intervall $[x,x+h]$ hernehmen, berechnen, wie \q{viel} von $X$ in $[x,x+h]$ landen kann, und normieren das mit der Intervallbreite $h$.
+Im Grunde berechnen wir, wie \q{dicht} die Zufallsgr\"oße zwischen $x$ und $x+h$ ist.
+Aus diesem Grund nennt man
+\[
+f_X(x) = \lim\limits_{h \rightarrow 0} f^h_X(x) = \lim\limits_{h \rightarrow 0} \frac{F_X(x + h) - F_X(x)}{h}
+\]
+die \emph{Dichte} von $X$.
+Natürlich sehen wir, dass der berechnete Grenzwert der sogenannte Differenzenquotient der Verteilungsfunktion $F_x$ ist. Es gilt also $f_X = F^\prime_X$.
+Deshalb kann man nun die Verteilungsfunktion auch aus der Dichte gewinnen, indem wir
+\[
+F_X(x) = \Int{-\infty}{x}{f_X(s)}{s}
+\]
+auswerten.
+Die obigen Betrachtungen gelten freilich nur, wenn die formulierten Grenzwerte auch immer existieren, doch erstens existieren diese meistens und für ein intuitives Verständnis sollte es zunächst genügen.
+
+Weiterhin gilt für reelle Zufallsgrößen $X$, dass diese sich \q{irgendwo} zwischen $-\infty$ und $+\infty$ mit Wahrscheinlichkeit $1$ realisieren muss.
+Also gilt
+\[
+\lim_{x \rightarrow \infty} F_X(x) = 1,
+\]
+was für die Dichte ergibt, dass
+\[
+\Int{-\infty}{+\infty}{f_X(s)}{s} = 1.
+\]
+
+\subsubsection{Erwartungswert, Varianz, Kovarianz}
+
+% - zentraler grenzwertsatz?
+
+\subsection{Zufällige Signale}
+
+% - Stochastische Prozesse: definition, zwei sichtweisen (per pfad, folge von verteilungen)
+% - stationaere prozesse/signale
+% - Wiener-Chintschin-Theorem
+
+\subsection{Parameterschätzung}\label{sec:random:paramest}
+
+\subsection{Quantisierung}\label{sec:random:quanti}
+
+% - \cite{widrow2008quantization}
+% - area sampling (geoemetrisch)
+% - charakteristische funktion: value at 0, conj sym, 
+% - areasampling: analytisch in value domain, in frequ domain
+% - reconstruction der PDF aus der quantisierten PDF
+% - PQN Model
