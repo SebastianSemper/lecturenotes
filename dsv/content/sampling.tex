@@ -5,12 +5,12 @@ Wir nehmen im Tonstudio mit einem Mikrofon Ton auf und eine Soundkarte wandelt d
 In einer Fotokamera, trifft ein Feld von Lichtstrahlen ein und wird von einem \gls{cmos}-Sensor \q{direkt} abgetastet und in diskrete Helligkeitswerte pro Farbkanal umgewandelt.
 Eine Antenne wandelt ein anliegendes elektro-magnetisches Feld in eine Spannung um, welche nachträglich von einem \gls{adc} abgetastet und quantisiert wird.
 
-Mathematisch modellieren wir analoge Signale $s_a : D \rightarrow B$ meist mit $D = B = \R$.
-Die Wandlung von analog zu digital transformiert dieses Signal in eine Funktion $s: \Z \rightarrow Q$ um, wobei nun $\Abs{Q} < \infty$ gilt.
+Mathematisch modellieren wir analoge Signale $x_a : D \rightarrow B$ meist mit $D = B = \R$.
+Die Wandlung von analog zu digital transformiert dieses Signal in eine Funktion $x: \Z \rightarrow Q$ um, wobei nun $\Abs{Q} < \infty$ gilt.
 Das heißt, dass das Signal nach AD-Wandlung nur noch endlich viele Werte (aus $Q$) auf einer diskreten Menge an Punkten (auf $\Z$) annehmen kann.
 Meistens folgt schließlich noch ein Kodierungsschritt, der die Werte in $Q$ in eine Folge von Bits transformiert.
-Wir werden uns zunächst nur mit der Diskretisierung in Zeit befassen, weil es einfach einfacher ist und die Quantisierung später in \Cref{sec:random:quanti} damit befassen.
-Das heißt, dass wir uns vorstellen, dass das diskretisierte Signal nur an einer diskreten Menge an Punkten noch Informationen über das abgetastete Signal beinhaltet, wobei hier aber explizit $Q = \R$.
+Wir werden uns zunächst nur mit der Diskretisierung in Zeit befassen, weil es einfach einfacher ist und die Quantisierung später in \Cref{sec:random:quanti} behandeln.
+Das heißt, dass wir uns vorstellen, dass das digitalisierte Signal nur an einer diskreten Menge von Punkten Informationen über das abgetastete Signal beinhaltet, wobei hier aber explizit $Q = \R$ gesetzt wird, wir also keine Quantisierung betrachten.
 Weiterhin sind wir nicht an der physikalischen Umsetzung von \glspl{adc} interessiert, sondern höchstens an deren systemtheoretischer Modellierung.
 
 Die zentralen Fragen sind nun:
