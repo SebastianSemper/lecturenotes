@@ -279,20 +279,23 @@ Noch weiter ist die Abbildung $M$ sogar linear, da
         }
         = M(\bm c^1) + M(\bm c^2).
 \]
-Das heißt, dass es auch eine \emph{Matrix} $\bm M \in \C^{N \times N}$ geben muss, welche uns einfach $\bm c$ in $\bm x$ umtransformiert, indem wir $\bm x = \bm M \cdot \bm c$ als Matrix-Vektor-Produkt berechnen.
-Wenn wir \eqref{eq:disc_fourier_lincomb} genau betrachten sehen wir, dass wir die Matrix $\bm M$ bilden können, indem wir deren $k$-te Spalte $\bm M_{\cdot, k}$ gleich $\bm x_k$ setzen.
-Wenn wir noch sicher sein könnten, dass $\bm M$ invertierbar ist, könnten wir sogar aus $\bm x$ via $\bm c = \bm M^{-1} \cdot \bm x$ die Fourierkoeffizienten $\bm c$ direkt aus einem gegebenen $N$-periodischen Signal $x[\cdot]$ bestimmen.
+Das heißt, dass es zur linearen Abbildung $M$ auch eine \emph{Matrix} $\bm M \in \C^{N \times N}$ geben muss, welche uns einfach $\bm c$ in $\bm x$ umtransformiert, indem wir $\bm x = \bm M \cdot \bm c$ als Matrix-Vektor-Produkt berechnen.
+Dies liegt daran, dass wir im Grunde die Einträge in $\bm x$ beziehungsweise $\bm c$ als \emph{Koordinaten} in der kanonischen Standardbasis $\{\bm e_1, \dots, \bm e_N\}$ betrachten können.
+
+Wenn wir \eqref{eq:disc_fourier_lincomb} genau studieren sehen wir, dass wir die Matrix $\bm M$ bilden können, indem wir deren $k$-te Spalte $\bm M_{\cdot, k}$ gleich $\bm x_k$ setzen.
+Wenn wir noch sicher sein könnten, dass $\bm M$ invertierbar ist, also eine Matrix $\bm M^{-1}$ mit $\bm M \cdot \bm M^{-1} = \bm I_N$\footnote{Hier steht $\bm I_N \in \C^{N \times N}$ für die Einheitsmatrix im $\C^N$}, könnten wir sogar mit $\bm x$ via $\bm c = \bm M^{-1} \cdot \bm x$ die Fourierkoeffizienten $\bm c$ direkt aus einem gegebenen $N$-periodischen Signal $x[\cdot]$ bestimmen.
 
 Wir haben hier eine sogenannte Isomorphie zwischen abgetasteten Summen von komplexen Schwingungen mit Grundfrequenz $1/N$ und dem Vektorraum $\C^N$ geschaffen.
 Dies hat zur Folge, dass eine Darstellung eines solchen diskreten Signals \q{in beiden Welten} leben kann. 
-In der Welt der Abtastwerte $x[n]$, als auch in der Welt der Koeffizienten $\bm c$.
+In der Welt der Abtastwerte $x[n]$/$\bm x$, als auch in der Welt der Koeffizienten $\bm c$.
 %
 %
 %
 \subsection{Abtastung von Sinussignalen}\label{sec:sample_harm}
 %
 Es gibt viele Möglichkeiten ein analoges Signal zu digitalisieren.
-Wir beschränken uns auf Abtastung, welche ein analoges Signal auf eine regelmäßige Art und Weise \emph{direkt} auswertet.
+Im Allgemeinen ist das Ziel eine kontinuierliche Funktion/ein analoges Signal $x_a$ so in eine Menge von diskreten Werten $x[\cdot]$ \q{umwandeln}, dass \q{keine Information verloren geht}.
+Wir beschränken uns auf Abtastung (denglisch: Sampling), welche ein analoges Signal auf eine regelmäßige Art und Weise \emph{direkt} auswertet.
 Diese Art wird manchmal auch \q{Nyquist-Sampling} genannt, weil die theoretische Grundlage für \q{erfolgreiches} Sampling durch das Nyquist-Theorem gelegt ist.
 Wir stellen uns Abtastung so vor, dass wir das Signal $x_a: \R \rightarrow \R$ direkt an gewissen Stellen beobachten können.
 Wir können uns eine Art Sampling-Operator $\mathcal{S}$ vorstellen, der ein analoges Signal $x_a$ in eine abgetastete Version $x_a \mapsto \mathcal{S}(x_a)[\cdot] = x[\cdot]$ transformiert.
@@ -300,16 +303,17 @@ Durch die regelmäßige/uniforme Abtastung in Zeitabständen $T > 0$ von $x_a$ e
 \[
     x[n] = \mathcal{S}(x_a)[n] = x_a(n T) \Text{mit} n \in \Z.
 \]
-Wir nennen $F_s = T^{-1}$ die Sampling-Frequenz, oder die Abtastrate.
+Wir nennen $F_s = 1/T$ die Sampling-Frequenz, oder die Abtastrate.
 Der Vorgang ist schematisch in \Cref{fig:uniform_sampling} dargestellt.
 
-Da wir uns $x[\cdot]$ so vorstellen, dass es \q{einfach} eine Folge von reellen Zahlen ist, müssen wir bei der Interpretation von $x[\cdot]$ auch immer gleichzeitig im Hinterkopf behalten, dass der Wert $x[n]$ dem Wert $x_a(n T) = x_a(n/F_s)$ entspricht.
+Da wir $x[\cdot]$ so modellieren, dass es \q{einfach} eine Folge von reellen/komplexen Zahlen ist, müssen wir bei der Interpretation von $x[\cdot]$ auch immer gleichzeitig im Hinterkopf behalten, dass der Wert $x[n]$ dem Wert $x_a(n T) = x_a(n/F_s)$ entspricht.
 Das bedeutet, dass $t$ (als Argument von $x_a$) und $n$ (als Argument von $x[\cdot]$) durch
 \[
 t = n T = n/F_s
 \]
 miteinander in Verbindung stehen. 
-Man sieht auch nun eindrucksvoll, dass dadurch $n = t \cdot F_s$ einheitenlos geworden ist, bzw.~sein muss.
+Diese Verbindung, dass $n$ einem Zeitpunkt $nT$ entspricht und dass wir $F_s$ \q{viele} Samples pro Zeiteinheit haben, muss also in unserer Vorstellung immer mitschwingen.
+Man sieht auch nun eindrucksvoll, dass dadurch $n = t \cdot F_s$ einheitenlos geworden ist, beziehungsweise sein muss.
 %
 \begin{figure}
     \begin{center}
@@ -318,7 +322,7 @@ Man sieht auch nun eindrucksvoll, dass dadurch $n = t \cdot F_s$ einheitenlos ge
     \caption{Uniforme Abtastung einer Signals. Quelle: \cite{proakis2013}}\label{fig:uniform_sampling}
 \end{figure}
 
-Weiterhin folgt aus $t = n/F_s$, dass es auch einen Zusammenhang zwischen der Frequenz $F$ einer kontinuierlichen Signals und der Frequenz $f$ im Zeit-diskreten geben muss.
+Weiterhin folgt aus $t = n/F_s$, dass es auch einen Zusammenhang zwischen der Frequenz $F$ eines kontinuierlichen Signals und der Frequenz $f$ im Zeit-diskreten geben muss.
 Um diesen herzuleiten, betrachten wir eine einfache analoge Schwingung, wie in \eqref{eq:analog_cosine}, also
 \[
 x_a(t) = A \cos(2 \pi F t + \theta)
@@ -328,23 +332,24 @@ und wir stellen uns vor, dass wir dieses Signal mit Samplerate $F_s = 1/T$ abtas
 x[n] 
     = x_a(n T) 
     = A \cos(2 \pi F n T + \theta) 
-    = A \cos\left(\frac{2 \pi F n}{F_s} + \theta\right).
+    = A \cos\left(2 \pi \frac{F}{F_s} n + \theta\right).
 \]
-Wenn wir nun $x[n]$ in die Form von \eqref{eq:discrete_cosine} bringen, sehen wir, dass $f = F/F_s$ gelten muss.
+Da wir nun $x[n]$ in die Form von \eqref{eq:discrete_cosine} gebracht haben, sehen wir, dass dort dann $f = F/F_s$ gelten muss.
 
 Wie ist dies zu interpretieren? 
-Wir sind mit dem analogen Signal $x_a$ gestartet, welches die Frequenz $F$ enthält.
-Durch das Sampling mit Rate $F_s$ entsteht eine abgetastete Schwingung mit Frequenz $f = F/F_s$. 
-Doch wir haben bereits gesehen, dass sich die Frequenz $f$ von keiner Frequenzen $f + k$ unterscheiden lässt.
-Das heißt im Umkehrschluss, dass sich \emph{nach} der Abtastung die ursprüngliche Frequenz nicht eindeutig bestimmen lässt, da alle
+Wir sind mit einem speziellen analogen Signal $x_a$ gestartet, welches als Sinussignal die Frequenz $F$ enthält.
+Durch das Sampling mit Rate $F_s$ entsteht eine \emph{diskrete} Schwingung mit Frequenz $f = F/F_s$ in der Form von \eqref{eq:discrete_cosine}. 
+Doch wir haben bereits gesehen, dass sich diskrete Schwingungen mit Frequenz $f$ wegen \emph{Aliasing} nicht von anderen diskreten Schwingungen mit Frequenz $f + k$ unterscheiden lassen.
+Das heißt im Umkehrschluss, dass sich \emph{nach} der Abtastung die ursprüngliche Frequenz $F$ nicht mehr eindeutig bestimmen lässt, da alle
 \[
 F_k = F + k \cdot F_s 
 \]
 bei Abtastung von $A \cos(2 \pi F_k t + \theta)$ diesselben Abtastwerte $x[n]$ ergeben würden.
-Wenn wir nun also behaupten wollen, dass wir im digitalen irgendetwas sinnvolles zu tun gedenken, dann können wir dies gerade nicht so ohne weiteres.
-Denn bis jetzt haben wir keine Möglichkeit das wahre analoge Signal zu rekonstruieren.
+
+Wenn wir nun also behaupten wollen, dass wir im digitalen irgendetwas Sinnvolles zu tun gedenken, dann können wir dies gerade nicht so ohne weiteres.
+Denn bis jetzt haben wir nicht einmal für einfachste Schwinungen eine Möglichkeit, wie man aus Abtastwerten das ursprüngliche analoge Signal rekonstruieren kann.
 Diese missliche Lage wird in \Cref{py:aliasing} dargestellt, wo ein mögliches
-$x_a$, dessen Abtastwerte $x[n]$ und zwei mögliche Aliase dargestellt sind.
+$x_a$, dessen Abtastwerte $x[n]$ und zwei mögliche Aliase visualisiert sind.
 Man sieht, wie die Aliase so geschaffen sind, dass auch sie Ursprung für die Abtastwerte $x[n]$ sein könnten.
 %
 \begin{listing}
@@ -361,16 +366,17 @@ Man sieht, wie die Aliase so geschaffen sind, dass auch sie Ursprung für die Ab
 \end{listing}
 
 Die Frage ist nun, wie wir das Sampling gestalten müssen, dass wir aus $x[n]$ eindeutig das Signal $x_a$ rekonstruieren können.
-In diesem Fall ist mit \q{rekonstruieren} gemeint, dass wir aus den Werten $x[n]$ den Wert $x_a(t)$ für beliebige $t \in \R$ korrekt bestimmen können.
-Wie wir oben gesehen haben, ist im Digitalen nur sinnvoll von Frequenzen $f \in [-1/2,+1/2]$ zu sprechen, da wir für alle anderen $f^\prime \notin [-1/2,+1/2]$ ein $f \in [-1/2,+1/2]$ finden, das dieselben Werte in \eqref{eq:discrete_cosine} produziert.
-Wegen des Zusammenhangs $f = F/F_s$ macht es also Sinn sich auch im \emph{Analogen} auf den entsprechenden Bereich zu beschränken.
+In diesem Fall ist mit \q{rekonstruieren} gemeint, dass wir aus den diskreten Werten $x[n]$ die Werte $x_a(t)$ für beliebige $t \in \R$ korrekt bestimmen können.
+Wie wir oben gesehen haben, ist im Digitalen nur sinnvoll von Frequenzen $f \in [-1/2,+1/2]$ zu sprechen, da wir wegen Aliasing für alle anderen $f^\prime \notin [-1/2,+1/2]$ ein $f \in [-1/2,+1/2]$ finden, das dieselben Werte in \eqref{eq:discrete_cosine} produziert.
+Wegen des Zusammenhangs $f = F/F_s$ macht es also Sinn sich auch im \emph{Analogen} auf den entsprechenden Bereich zu beschränken, der demnach von der Samplingrate $F$ bestimmt wird.
 Das heißt, wenn wir nur analoge Signale betrachten, bei welchen
 \[
 -\frac{F_s}2 \leqslant F \leqslant +\frac{F_s}2
 \]
-gilt, dann sind wir in der Lage aus $x[\cdot]$ das originale $x_a$ zu rekonstruieren, weil wir wissen, auf welche der Aliase wir uns beschränken müssen.
+gilt, dann sind wir in der Lage aus $x[\cdot]$ das originale $x_a$ zu rekonstruieren, weil wir \emph{annehmen}, dass unser abgetastetes Signal nicht im Bereich der Aliase liegt.
+Damit folgt die folgende wichtige Beobachtung:
 
-\emph{Eine Möglichkeit der perfekten Rekonstruktion von analogen mit einzelnen Frequenzen Signalen aus uniformen digitalen Abtastwerten ist die Einschränkung auf einen bestimmten Frequenzbereich.}
+\emph{Eine Möglichkeit der perfekten Rekonstruktion von analogen Signalen, die einzelne Frequenzen beinhalten, aus deren Abtastwerten ist die Einschränkung auf einen bestimmten Frequenzbereich.}
 
 Umgekehrt können wir auch bei Vorwissen über die maximale Frequenz $F_{\rm max}$, also $F \in [-F_{\rm max},+F_{\rm max}]$ in einem Signal $x_a$ die Samplingrate ermitteln, sodass im Digitalen die Aliase $f + k$ für $k \neq 0$ nicht im Bereich $[-F_{\rm max},+F_{\rm max}]$ liegen.
 Damit
@@ -382,8 +388,9 @@ gilt, muss also auch
     -\frac 12 \leqslant \frac{F}{F_s} \leqslant + \frac 12 \Text{für alle} F \in [-F_{\rm max},+F_{\rm max}]
 \]
 gelten.
-Deshalb muss schlussendlich $F_s > 2 F_{\rm max}$ gelten.
-Es ist zu beachten, dass wir diese Überlegungen erst einmal \q{nur} für Signale der Form \eqref{eq:analog_cosine} und \eqref{eq:discrete_cosine} durchgeführt haben.
+Deshalb muss schlussendlich $F_s > 2 F_{\rm max}$ gelten, damit wir aus den Abtastwerten $x[\cdot]$ die ursprüngliche Schwingung $x_a$ wieder exakt rekonstruieren können.
+
+Es ist zu beachten, dass wir diese Überlegungen erst einmal \q{nur} für Signale der Form \eqref{eq:analog_cosine} und \eqref{eq:discrete_cosine} durchgeführt haben und wir nun einen Weg finden müssen, wie wir .
 Im nächsten Abschnitt werden wir das Abtasttheorem für beliebige aperiodische Signale herleiten.
 %
 %
@@ -393,7 +400,7 @@ Wir beschäftigen uns nun also allgemein mit dem Problem der Abtastung eine beli
 \[
     x[n] = x_a(nT).
 \]
-Für die bequeme Analyse von kontinuierlichen Signalen und ihrem Anteil an harmonischen Komponenten, benutzen wir die \gls{ft} $\mathcal{F}$, welche ein Signal $x : \R \rightarrow \C$ transformiert in $x \mapsto \mathcal{F} x = X : \R \rightarrow \C$, wobei $X$ durch
+Für die bequeme Analyse von kontinuierlichen Signalen und ihrem Anteil an harmonischen Komponenten, benutzen wir die \gls{ft} $\mathcal{F}$, welche ein Signal $x : \R \rightarrow \C$ zu $x \mapsto \mathcal{F} x = X : \R \rightarrow \C$ transformiert, wobei die Fourier-Transformierte $X$ von $x$ durch
 %
 \begin{equation}\label{eq:sampling:fourier_trafo}
     X(F) = \Int{-\infty}{+\infty}{x(t) \exp(-\jmath 2 \pi F t)}{t}
@@ -407,8 +414,9 @@ Die zugehörige inverse \gls{ft}, also die Abbildung von $X$ auf $x$ ist gegeben
     x(t) = \Int{-\infty}{+\infty}{X(F) \exp(\jmath 2 \pi F t)}{F}.
 \end{equation}
 
-Wir wollen nun ausarbeiten, wie man diese Art Integral-Transformation rein mathematisch interpretieren kann, um eine alternative Sicht auf solche Art Transformation zu erhalten.
-Betrachten wir dazu das Signal $x$ wieder als Vektor in einem Vektorraum, in dem ein \emph{Skalarprodukt} definiert ist.
+Wir wollen nun ausarbeiten, wie man diese Art Integral-Transformation geometrisch, also wenn man Signale als Vektoren behandelt, interpretieren kann, um eine alternative Sicht auf solche Art Transformation zu erhalten.
+
+Betrachten wir dazu das Signal $x$ wieder als Element aus einem Vektorraum, in dem zusätzlich zur Vektorraumstruktur ein \emph{Skalarprodukt} definiert ist.
 Um zu erläutern, was das bringt, starten wir mit etwas Bekanntem.
 Im endlich-dimensionalen Fall, also wenn $\bm x, \bm y \in \C^N$, dann ist ein mögliches Skalarprodukt $\ScPr{\cdot}{\cdot} : \C^N \times \C^N \rightarrow \R$ durch
 \[
@@ -418,22 +426,29 @@ Im endlich-dimensionalen Fall, also wenn $\bm x, \bm y \in \C^N$, dann ist ein m
 \]
 gegeben, wobei der letzte Ausdruck das Matrix-Vektor-Produkt einer $\C^{N \times 1}$ Matrix und einem Vektor in $\C^N$ darstellt.
 Man kann nun $\ScPr{\bm x}{\bm y}$ betrachten, um zu ermitteln, wie \q{ähnlich} die Vektoren $\bm x$ und $\bm y$ sind.
-Beispielsweise nennen wir die beiden Vektoren orthogonal/senkrecht, falls $\ScPr{\bm x}{\bm y} = 0$. 
+Beispielsweise nennen wir die beiden Vektoren orthogonal/senkrecht, falls $\ScPr{\bm x}{\bm y} = 0$, diese sich also überhaupt nicht ähnlich sind. 
 In diesem Fall interpretieren wir dies intuitiv so, dass $\bm x$ und $\bm y$ keine \q{gemeinsamen} Anteile haben.
-Beispielsweise, wenn wir einen dritten Vektor $\bm z = \alpha \bm x + \beta \bm y$ betrachten und es gilt, dass $\ScPr{\bm x}{\bm y} = 0$, dann schlägt sich dies auch auf das Skalarprodukt von $\ScPr{\bm x}{\bm z}$ nieder, da
+Beispielsweise, wenn wir einen dritten Vektor $\bm z = \alpha \bm x + \beta \bm y$ betrachten und es gilt, dass $\ScPr{\bm x}{\bm y} = 0$, dann schlägt sich dies auch auf das Skalarprodukt von $\ScPr{\bm x}{\bm z}$ nieder. 
+Denn wir können berechnen, dass
 %
 \[
     \ScPr{\bm x}{\bm z} 
         = \ScPr{\bm x}{\alpha \bm x + \beta \bm y}
-        = \alpha \ScPr{\bm x}{\bm x}.
+        = \alpha \ScPr{\bm x}{\bm x}
+    \Text{und}
+    \ScPr{\bm y}{\bm z} 
+        = \ScPr{\bm y}{\alpha \bm x + \beta \bm y}
+        = \beta \ScPr{\bm y}{\bm y}
 \]
 %
-Beim Bilden von $\ScPr{\bm x}{\bm z}$ können wir also einen etwas asymmetrischen Standpunkt einnehmen und uns vorstellen, dass wir ermitteln, wie viele \q{Anteile} von $\bm x$ in $\bm z$ zu finden sind.
+gelten muss.
+Beim Bilden von $\ScPr{\bm x}{\bm z}$ können wir uns also vorstellen, dass wir ermitteln, wie viele \q{Anteile} von $\bm x$ in $\bm z$ zu finden sind.
+Da nun $\bm x$ und $\bm y$ keine gemeinsamen Anteile haben, können wir also $\alpha$ und $\beta$ unabhängig voneinander aus $\bm z$ extrahieren.
 
 Man sieht, dass dies in gewisser Weise erlaubt mit hochdimensionalen Objekten eine Art Geometrie zu betreiben.
 Man kann noch weiter gehen und mit einem Skalarprodukt Korrelationen, Winkel und Längen definieren.
 
-Wir wollen nun dieses Konzept auf kontinuierliche Signale erweitern und dann die \gls{ft} in diesem Licht interpretieren.
+Wir wollen nun dieses Konzept einfach genauso auf kontinuierliche Signale anwenden und dann die \gls{ft} in diesem Licht interpretieren.
 Man kann zeigen, dass für zwei Funktionen $x,y : \R \rightarrow \C$ die Abbildung $(x,y) \mapsto \ScPr{x}{y}$ mit
 %
 \begin{equation}\label{eq:cont_scpr}
@@ -443,7 +458,7 @@ Man kann zeigen, dass für zwei Funktionen $x,y : \R \rightarrow \C$ die Abbildu
 \end{equation}
 %
 ein Skalarprodukt definiert. 
-Auch hier halten wir an der Interpretation fest, dass wir damit berechnen, wie ähnlich sich $x$ und $y$ sind.
+Auch hier halten wir an der Interpretation fest, dass wir damit bestimmen, wie ähnlich sich \emph{(die Funktionen!)} $x$ und $y$ sind.
 Definieren wir nun die Signale $k_F: \R \rightarrow \C$ durch $k_F(t) = \exp(\jmath 2 \pi F t)$, dann können wir \eqref{eq:sampling:fourier_trafo} umschreiben zu
 \[
 \ScPr{x}{k_F} 
@@ -453,19 +468,56 @@ Definieren wir nun die Signale $k_F: \R \rightarrow \C$ durch $k_F(t) = \exp(\jm
     = \Int{-\infty}{+\infty}{
         x(t) \cdot \exp(-\jmath 2 \pi F t)
     }{t}
-    = X(f).
+    = X(F).
 \]
-Dies suggeriert uns also, dass wir die \gls{ft} als Skalarprodukt von dem zu transformierenden Signal und einem geeignet gewählten Transformationskern interpretieren können.
+Dies suggeriert uns also, dass wir die \gls{ft} $X$ an der Stelle $F$ als Skalarprodukt von dem zu transformierenden Signal $x$ und dem geeignet gewählten $k_F$ Transformationskern interpretieren können.
 Die Zuordnung von $F \mapsto \ScPr{x}{k_F}$ definiert dann im Grunde die Funktion $X$ für alle $F$.
+Da die $k_F$ komplexe Schwingungen mit Frequenz $F$ darstellen, kann man sich die \gls{ft} auch als Analysewerkzeug vorstellen, das \q{extrahiert}, zu welchem Anteil $x$ die Frequenz $F$ beinhaltet.
+Deshalb ist es auch gängig, dass man $X$ als das \emph{Spektrum} von $x$ bezeichnet.
+%
+\begin{Bsp}
+Wir betrachten das Signal $x: \R \rightarrow \C$ mit 
+\[
+x(t) = 4 \cdot \exp(\jmath 2 \pi 3 t) - 2 \cdot \exp(\jmath 2 \pi 7 t)
+\]
+Dann berechnen wir die \gls{ft} $X$ an der Stelle $F$, indem wir $\ScPr{x}{k_F}$ schrittweise und durch Nachschlagen in Tabellen berechnen:
+\[
+\ScPr{\exp(\jmath 2 \pi 3 t)}{k_F} 
+    = \Int{-\infty}{+\infty}{
+        \exp(\jmath 2 \pi 3 t) \cdot \exp(-\jmath 2 \pi F t)
+    }{t}
+    = \Int{-\infty}{+\infty}{
+        \exp(\jmath 2 \pi (3 - F) t)
+    }{t}
+    = \delta(F - 3) + \delta(-(F - 3)),
+\]
+\[
+\ScPr{\exp(\jmath 2 \pi 7 t)}{k_F} 
+    = \Int{-\infty}{+\infty}{
+        \exp(\jmath 2 \pi 7 t) \cdot \exp(-\jmath 2 \pi F t)
+    }{t}
+    = \Int{-\infty}{+\infty}{
+        \exp(\jmath 2 \pi (7 - F) t)
+    }{t}
+    = \delta(F - 7) + \delta(-(F - 7)),
+\]
+Dann setzen wir einfach zusammen, indem wir die Linearität des Skalarproduktes ausnutzen:
+\[
+X(f) 
+    = 4 \cdot \ScPr{\exp(\jmath 2 \pi 3 \cdot)}{k_F} - 2 \ScPr{\exp(\jmath 2 \pi 7 \cdot)}{k_F} = 
+    = 4 (\delta(F - 3) + \delta(-(F - 3))) - 2 (\delta(F - 7) + \delta(-(F - 7))).
+\]
+\end{Bsp}
 
-Genauso erhalten wir für die Folge der Abtastwerte $x[\cdot]$ die \gls{dtft} als Skalarprodukt von $x[\cdot]$ und der Folge $k_f[n] = \exp(\jmath 2 \pi f n)$, also
+Auch für diskrete Signale lassen sich Skalarprodukte und die entsprechende \gls{ft} definieren.
+Wir erhalten für eine Folge/ein diskretes Signal $x[\cdot]$ die \gls{dtft} als Skalarprodukt von $x[\cdot]$ und der entsprechenden diskreten komplexen Schwingung $k_f[n] = \exp(\jmath 2 \pi f n)$, also
 %
 \begin{equation}\label{eq:dtft_inner_prod}
     X(f) = \Sum{n \in \Z}{}{
             x[n] k_f[n]^\ast
         }
         = \Sum{n \in \Z}{}{
-            x[n] exp(-\jmath 2 \pi f n)
+            x[n] \exp(-\jmath 2 \pi f n)
         }.
 \end{equation}
 %
@@ -473,8 +525,16 @@ Die inverse \gls{dtft} ergibt sich durch
 \[
 x[n] = \Int{-1/2}{+1/2}{X(f) \exp(\jmath 2 \pi f n)}{f}.
 \]
-Wir haben nun alle Werkzeuge zusammen, um genauer zu Analysieren, was bei Abtastung von $x_a$ zu $x[\cdot]$ geschieht.
-Wir erinnern uns, dass gilt für die Abtastpunkte gilt, dass $t = nT = n/F_s$ gilt.
+Wenn wir uns an die Aliasing-Eigenschaft der diskreten Schwingungen $k_f$ erinnern, also dass $k_f$ nicht von $k_{f+k}$ zu unterscheiden ist, dann muss dasselbe für die Skalarprodukte $\ScPr{x[\cdot]}{k_f}$ gelten.
+Dies bedeutet dann, dass $X$ als \gls{dtft} von $x[\cdot]$ eine \emph{periodische} Funktion sein muss, da
+\[
+X(f) = \ScPr{x[\cdot]}{k_f[\cdot]} = \ScPr{x[\cdot]}{k_{f+k}[\cdot]} = X(f+k)
+\]
+gilt.
+Das heißt, dass sich aus Aliasing von diskreten Schwingungen Periodizität der \gls{dtft} mit Periodenlänge $1$ ergibt.
+
+Wir haben nun alle Werkzeuge zusammen, um genauer zu Analysieren, was bei Abtastung von $x_a$ zu $x[\cdot]$ mit Abtastrate $F_s$ geschieht.
+Wir erinnern uns, dass für die Abtastpunkte $t = nT = n/F_s$ gilt.
 Wir erhalten dann mit $x[n] = x_a(nT)$ und der inversen \gls{ft} angewandt auf $X_a$, dass
 \[
 x[n] = x_a(nT) = \Int{-\infty}{+\infty}{X_a(F) \exp(\jmath 2 \pi F/F_s n)}{F}
@@ -483,28 +543,30 @@ gelten muss.
 Setzen wir nun auch für $x[\cdot]$ die inverse \gls{dtft} ein, erhalten wir mit $f = F/F_s$ (siehe \Cref{sec:sample_harm}) als Variablentransformation, dass
 \[
     \frac{1}{F_s} \Int{-{F_s}/2}{+{F_s}/2}{X(f) \exp(\jmath 2 \pi F/F_s n)}{F}
-    = \Int{-\infty}{+\infty}{X_a(F) \exp(\jmath 2 \pi F/F_s)}{F}
+    = \Int{-\infty}{+\infty}{X_a(F) \exp(\jmath 2 \pi F/F_s n)}{F}
 \]
 gilt. 
-Wichtig ist an diesem Ausdruck, dass wir nun einen Zusammenhang zwischen der \gls{dtft} $X$ und der \gls{ft} $X_a$ gefunden haben.
+Wichtig ist an diesem Ausdruck, dass wir nun einen Zusammenhang zwischen der \gls{dtft} $X$ der Abtastwerte $x[\cdot]$ und der \gls{ft} $X_a$ des analogen Signals $x_a$ gefunden haben.
 Die Integration auf beiden Seiten ist auch bezüglich desselben Integrationskernes $\exp(\jmath 2 \pi \cdot/F_s n)$.
-Das heißt, dass es möglich sein sollte, einen Ausdruck herzuleiten, der $X$ in Abhängigkeit von $X_a$ ausdrückt.
+Das heißt, dass es möglich sein sollte, einen Ausdruck herzuleiten, der die \gls{dtft} $X$ in Abhängigkeit von der \gls{ft} $X_a$ ausdrückt.
 Mit ein wenig algebraischem Grindwork findet man
-\begin{equation}\label{eq:spectrum_sampled}
-    X(f) = F_s \Sum{k \in \Z}{}{
-        X_a((f - k) F_s)
-    }.
+%
+\begin{equation}\label{eq:sampling:spectrum_sampled}
+    X(f) = F_s \Sum{k \in \Z}{}{X_a((f - k) F_s)}.
 \end{equation}
-
+%
 Wie ist dies nun zu interpretieren? 
-Im Grunde bestätigt \eqref{eq:spectrum_sampled} für beliebige Signale, was wir bereits für Signale mit einzelnen Frequenzen (siehe \eqref{eq:analog_cosine}) gefunden hatten.
-Das Spektrum wird durch die Abtastung periodifiziert und zwar entsteht das periodische Spektrum $X$ durch Wiederholung von um $1/F_s$ gestauchte Kopien von $X_a$ mit Abstand $1/F_s$.
+Wir haben oben schon gesehen, dass das Spektrum von $x[\cdot]$ periodisch sein muss.
+In \eqref{eq:sampling:spectrum_sampled} berechnet sich also das periodische Spektrum $X$ durch Wiederholung von um $1/F_s$ gestauchte Kopien von $X_a$ mit Abstand $1/F_s$, was in $f$ eine periodische Funktion mit Periodenlänge $1$ ergibt.
+Im Grunde bestätigt \eqref{eq:sampling:spectrum_sampled} für beliebige Signale, was wir bereits für Signale mit einzelnen Frequenzen (siehe \eqref{eq:analog_cosine}) gefunden hatten.
 
-Andererseits kann man es auch so sehen, dass der Wert $X(f)$ sich ergibt aus Summation der Werte $X_a(f \cdot F_s - k F_s)$ für alle $k \in \Z$. 
-Also an der Stelle $f$ erscheinen die Werte von $X_a$ an den Stellen $f F_s - k F_s$.
-Das heißt, wie die Periodifizierung vonstatten geht h"ngt maßgeblich von der Samplingfrequenz $F_s$ ab!
+Andererseits kann man es auch so sehen, dass der Wert $X(f)$ sich aus Summation der Werte $X_a(f \cdot F_s - k F_s)$ für alle $k \in \Z$ ergibt. 
+Also an der Frequenz $f$ erscheinen in $X(f)$ die Werte von $X_a$ an den Stellen $f F_s - k F_s$.
+Das heißt, wie die Periodifizierung vonstatten geht hängt maßgeblich von der Samplingfrequenz $F_s$ ab!
 
-Man sieht nun auch wieder schön, dass unsere obige Argumentation zum Verhältnis von Samplingfrequenz und maximaler Frequenz im Signal immernoch gilt, da nun gelten muss, dass \emph{alle} belegten Frequenzen von $x_a$ sich im Intervall $[-F_s/2,+F_s/2]$ befinden müssen, da sich sonst die Kopien von $X_a$ in \eqref{eq:spectrum_sampled} überlappen.
+Man sieht nun auch wieder schön, dass unsere obige Argumentation zum Verhältnis von Samplingfrequenz $F_s$ und maximaler Frequenz $F_{\rm max}$ im abgetasteten Signal immernoch gilt, da \emph{alle} belegten Frequenzen von $x_a$ sich im Intervall $[-F_s/2,+F_s/2]$ befinden müssen, wenn sich sonst die Kopien von $X_a$ in \eqref{eq:sampling:spectrum_sampled} nicht überlappen sollen.
+Denn nur wenn diese sich nicht überlappen, kann man das Spektrum des analogen Signals $X_a$ von den Werten von $X$ ablesen.
+
 Dies ist äquivalent zur Forderung, dass
 \[
 \Abs{X_a(F)} = 0 \Text{für} \Abs{F} > F_s/2
@@ -514,8 +576,8 @@ In diesem Fall spricht man davon, dass $X_a$ \emph{bandbegrenzt} ist.
 Das kleinste $F \in \R$, was obige Ungleichung erfüllt, nennen wir $F_{\rm max}$.
 
 Wir sind nun beinahe am Ziel angelangt, dass wir das Samplingtheorem formulieren können.
-Wir benötigen lediglich noch eine Möglichkeit aus den Abtastwerten $x[\cdot]$ das Signal $x_a$ zu rekonstruieren.
-Wenn kein Aliasing vorliegt, also $F_{\rm max} < F_s/2$, dann können wir $X_a$ aus $X$ berechnen, indem wir
+Wir benötigen lediglich noch eine Möglichkeit aus den Abtastwerten $x[\cdot]$ das ursprüngliche Signal $x_a$ zu rekonstruieren.
+Wenn wir wissen, dass kein Aliasing vorliegt, also $F_{\rm max} < F_s/2$, dann können wir $X_a$ aus $X$ berechnen, indem wir
 \[
 X_a(F) = \begin{cases}
     \frac{X(F/{F_s})}{F_s}, \Abs{F} \leqslant F_s/2, \\
@@ -562,7 +624,7 @@ Wir sind nicht wirklich schlauer, aber wir wissen aus unserer Erfahrung von Inte
 \]
 Wir nutzen nun wiederum die Interpretation von Integration eines Produktes von Funktionen als deren Skalarprodukt.
 Wir bilden also das Skalarprodukt von zwei Funktionen mit Periode $F_s$, d.h. es genügt das Integral im Intervall $[-F_s/2, +F_s/2]$ zu bilden.
-Sehen wir genauer hin, bilden wir also das Skalarprodukt $\ScPr{k_t}{k_{n/F_s}}$, wobei ähnlich wie oben
+Sehen wir genauer hin, bilden wir also das Skalarprodukt (aber diesmal von Signalen im \emph{Frequenzbereich}!) $\ScPr{k_t}{k_{n/F_s}}$, wobei ähnlich wie oben
 \[
 k_t(F) = \exp(\jmath 2 \pi F t)
 \]
@@ -571,8 +633,11 @@ Das heißt nun in der Sprache von Skalarprodukten, dass wir die $\Sinc$-Funktion
 \[
     \Sinc(F_s (t - n/Fs)) = \ScPr{k_t}{k_{n/F_s}}.
 \]
-Wenn man es ein wenig allgemeiner Formuliert, kann man sagen, dass die $\Sinc$-Funktion nur ein spezieller \emph{Interpolationskern} ist, der sich aus der Definition von $k_t$ ergibt.
-Wir werden später noch ein weiteres Beispiel für so einen Kern betrachten. Zusammenfassend für diesen \Cref{sec:sampling} steht nun folgendes
+Wenn man es ein wenig allgemeiner formuliert, kann man sagen, dass die $\Sinc$-Funktion nur ein spezieller \emph{Interpolationskern} ist, der sich aus der Definition von $k_t$ und damit eigentlich aus der Art der Abtastung ergibt.
+Wir werden später noch ein weiteres Beispiel für so einen Kern betrachten. 
+Zusammenfassend für diesen \Cref{sec:sampling} steht nun folgendes
+%
+%
 \begin{Thm}[Samplingtheorem]\label{stm:sampling_theorem}
 Gegeben sei ein analoges Signal $x_a$ mit Frequezen in $[-F_{\rm max},+F_{\rm max}]$ und dessen Abtastwerte $x[\cdot]$ mit $x[n] = x_a(nT)$, wobei $T = 1/F_s$.
 
@@ -587,8 +652,11 @@ wobei der Interpolationskern $g : \R \rightarrow \R$ gegeben ist durch
 g_{F_s}(t) = \frac{\sin(\pi F_s t)}{\pi F_s t}.
 \]
 \end{Thm}
-
-\textbf{Hinweis:} Das Samplingtheorem, wie es in \cite{proakis2013} formuliert ist, beinhaltet einen kleinen, aber entscheidenden Fehler. Die Definition des Interpolationskernes $g_F$ ist dort mit
+%
+%
+\textbf{Hinweis:} 
+Das Samplingtheorem, wie es in \cite{proakis2013} formuliert ist, beinhaltet einen kleinen, aber entscheidenden Fehler. 
+Die Definition des Interpolationskernes $g_F$ ist dort mit
 \[
 g(t) = \frac{\sin(2 \pi B t)}{2 \pi B t}.
 \]
@@ -610,8 +678,8 @@ In diesem Fall spricht man auch von \emph{kritischer Abtastung}.
 \end{listing}
 
 Es ist weiterhin noch zu erwähnen, dass wir genau genommen immer noch nicht wissen, wie wir überprüfen können, welche maximale Frequenz $F_{\rm max}$ von einem analogen Signal $x_a$ belegt wird.
-Dies liegt daran, dass wir im Vorhinein -- also vor Abtastung -- keinen Zugriff auf das abzutastende Signal haben.
+Dies liegt daran, dass wir im Vorhinein -- also vor Abtastung -- keinen Zugriff auf das abzutastende Signal haben und deswegen die Bedingung an die Bandbreite nicht überprüfen können.
 Das heißt, dass wir auch noch nicht überprüfen können, ob wir das Samplingtheorem eingehalten haben, oder einhalten werden, falls wir Abtasten sollten.
-Man muss sich also für ein gegebenes System, das einem Signale produziert, die abgetastet werden sollen, auf anderem Weg überlegen, wie man die Bedingung $\Abs{X_a(F)} = 0 \Text{für} \Abs{F} > F_s/2$ überprüfen kann.
+Man muss sich also für ein gegebenes System, das einem zu digitalisierende Signale produziert, die also abgetastet werden sollen, auf anderem Weg überlegen, wie man die Bedingung $\Abs{X_a(F)} = 0 \Text{für} \Abs{F} > F_s/2$ überprüfen, oder besser noch im Vorhinein sicherstellen, kann.
 
 \FloatBarrier
