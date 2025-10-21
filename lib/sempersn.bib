@@ -2399,18 +2399,6 @@ abstract = {A least-squares identification method is studied that estimates a fi
  year = {1997},
 }
 %comment{This file was created with betterbib v4.3.6.}
-@book{conn2000trust,
-  title={Trust Region Methods},
-  author={Conn, A.R. and Gould, N.I.M. and Toint, P.L.},
-  isbn={9780898714609},
-  lccn={00038796},
-  series={MPS-SIAM Series on Optimization},
-  url={https://books.google.de/books?id=5kNC4fqssYQC},
-  year={2000},
-  publisher={Society for Industrial and Applied Mathematics}
-}
-
-
 @article{levenberg1944lvm,
   title = {A method for the solution of certain non-linear problems in least squares},
   volume = {2},
@@ -3923,14 +3911,7 @@ url="https://doi.org/10.1007/978-3-319-42056-1_7"
  year = {2003},
  month = jul,
 }
-@book{widrow2008quantization,
-  title={Quantization Noise: Roundoff Error in Digital Computation, Signal Processing, Control, and Communications},
-  author={Widrow, B. and Koll{\'a}r, I.},
-  isbn={9781139472845},
-  url={https://books.google.de/books?id=8q-xcGeEJDwC},
-  year={2008},
-  publisher={Cambridge University Press}
-}
+
 
 @ARTICLE{zoubir2012robust_estimation,
   author={Zoubir, Abdelhak M. and Koivunen, Visa and Chakhchoukh, Yacine and Muma, Michael},
@@ -4110,15 +4091,6 @@ url="https://doi.org/10.1007/978-3-319-42056-1_7"
   month = sep 
 }
 
-@article{semper2024angledmc_arxiv,
-  title = {Estimating Angular Diffuse Components and Model Misspecification in MIMO Channel Sounding},
-  url = {http://dx.doi.org/10.36227/techrxiv.173091519.96666428/v1},
-  DOI = {10.36227/techrxiv.173091519.96666428/v1},
-  publisher = {Institute of Electrical and Electronics Engineers (IEEE)},
-  author = {Semper,  Sebastian and D\"{o}bereiner,  M and Landmann,  M and Gedschold,  J and Thom\"{a},  R},
-  year = {2024},
-  month = nov 
-}
 
 @misc{schieler2022deepest_arxiv,
   doi       = {10.48550/ARXIV.2211.04846},
@@ -4131,6 +4103,19 @@ url="https://doi.org/10.1007/978-3-319-42056-1_7"
   copyright = {arXiv.org perpetual, non-exclusive license},
   abstract = {Harmonic retrieval techniques are the foundation of radio channel sounding, estimation, and modeling. This paper introduces a Deep Learning approach for joint delay- and Doppler estimation from frequency and time samples of a radio channel transfer function. Our work estimates the two-dimensional parameters from a signal containing an unknown number of paths. Compared to existing deep learning-based methods, the signal parameters are not estimated via classification but in a quasi-grid-free manner. This alleviates the bias, spectral leakage, and ghost targets that grid-based approaches produce. The proposed architecture also reliably estimates the number of paths in the measurement. Hence, it jointly solves the model order selection and parameter estimation task. Additionally, we propose a multi-channel windowing of the data to increase the estimator's robustness. We also compare the performance to other harmonic retrieval methods and integrate it into an existing maximum likelihood estimator for efficient initialization of a gradient-based iteration.},
 }
+
+@INPROCEEDINGS{gedschold2025excitation_signal_design,
+	author={Gedschold, Jonas and Semper, Sebastian and Ebert, Sebastian and Del Galdo, Giovanni, and Thomä, Reiner S.},
+	booktitle={DUMMY (Accepted at EuCAP 2025)}, 
+	title={Experimental Performance Validation of Fisher Information-Optimized Multicarrier Waveforms for Sub-THz Channel Sounding}, 
+	year={2025},
+	volume={},
+	number={},
+	pages={1-5},
+	keywords={},
+	doi={..}
+}
+
 
 @misc{hotz2020pre_monitoring,
   author        = {Hotz, Thomas and Glock, Matthias and Heyder, Stefan and Semper, Sebastian and Böhle, Anne and Krämer, Alexander},
@@ -4153,7 +4138,22 @@ url="https://doi.org/10.1007/978-3-319-42056-1_7"
 	author={Gedschold, Jonas and Dupleich, Diego and Semper, Sebastian and Döbereiner, Michael and Ebert, Alexander and Galdo, Giovanni Del and Thomä, Reiner S},
 	year={2024},
 	month={12}
-}@INPROCEEDINGS{zhao2025dualband_sensing_isac,
+}@ARTICLE{semper2025angledmc,
+  author={Semper, S. and Döbereiner, M. and Landmann, M. and Gedschold, J. and Thomä, R.},
+  journal={IEEE Transactions on Antennas and Propagation}, 
+  title={Estimating Angular Diffuse Components and Model Misspecification in MIMO Channel Sounding}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1-1},
+  abstract={Parameter estimation for MIMO channel sounding data aims at accurately describing channel measurements with physically realistic and interpretable parameters. The performance of model-based approaches, e.g. maximum likelihood, is determined by the accuracy of the imposed signal model. For channel sounding data it has turned out to be beneficial to use two distinct concepts for the description of the propagation process. The specular components account for the dominant propagation paths of plane waves, whereas diffuse components model the weaker but more diverse propagation processes by means of a colored noise process. In order to improve the accuracy of the model for the diffuse components we propose a simple but still flexible parametric covariance model that allows to account for a smooth power angle profile that describes the correlation in the spatial domain. Moreover, the model for the deterministic part of the signal is usually contaminated by calibration errors, which in turn deteriorate the reliability of the specular path estimates. This is most prominently visible by the estimation of so-called ghost paths. To mitigate this we introduce a new model order selection scheme based on the so-called misspecified Cramer Rao bound which accounts for the unavoidable modeling errors. Additionally, to avoid the fitting of ghost paths caused by the faulty modeling of strong specular components we locally decrease the estimated SNR in time domain around already estimated ones. Further, as these changes to the signal model require more computational resources compared to existing algorithms, we also showcase how necessary quantities like likelihoods, score functions and Fisher information matrices can still be computed efficiently. We implement our proposed extensions within the RIMAX framework. We also showcase that they improve the reliability of the produced estimates compared to plain vanilla RIMAX on real measurement data.},
+  keywords={Antenna measurements;Numerical models;Computational modeling;Accuracy;Channel estimation;Data models;Channel models;Calibration;Signal to noise ratio;Hardware;Channel Sounding;Model Misspecification},
+  doi={10.1109/TAP.2025.3613529},
+  ISSN={1558-2221},
+  month={},}
+
+
+@INPROCEEDINGS{zhao2025dualband_sensing_isac,
   author={Zhao, Zhixiang and Smeenk, Carsten Jan and Semper, Sebastian and Schneider, Christian and Thomä, Reiner S.},
   booktitle={2025 IEEE Wireless Communications and Networking Conference (WCNC)}, 
   title={Dual-Band Sensing for Passive Target Surveillance in ISAC Systems}, 
@@ -4165,12 +4165,12 @@ url="https://doi.org/10.1007/978-3-319-42056-1_7"
   keywords={Wireless communication;Surveillance;OFDM;Dual band;Bandwidth;Object detection;Radar signal processing;Sensors;Millimeter wave communication;Next generation networking;mmWave;sub-6GHz;dual-band sensing;ISAC;OFDM signals;passive target surveillance;beam sweeping},
   doi={10.1109/WCNC61545.2025.10978429},
   ISSN={1558-2612},
-  month={March},}
+  month={3},}
 
 
 @INPROCEEDINGS{miranda2025joint_est_ofdma,
   author={Miranda, Marc and Semper, Sebastian and Schneider, Christian and Thomä, Reiner and Del Galdo, Giovanni},
-  booktitle={2025 Joint European Conference on Networks and Communications & 6G Summit (EuCNC/6G Summit)}, 
+  booktitle={2025 Joint European Conference on Networks and Communications \& 6G Summit (EuCNC/6G Summit)}, 
   title={Joint Delay-Doppler Estimation Using OFDMA Payloads for Integrated Communications and Sensing}, 
   year={2025},
   volume={},

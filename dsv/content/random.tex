@@ -58,10 +58,91 @@ was für die Dichte ergibt, dass
 \[
 \Int{-\infty}{+\infty}{f_X(s)}{s} = 1.
 \]
-
+%
+%
+\subsubsection{Beispiele}
+%
+\paragraph{Uniforme Verteilung/Gleichverteilung}
+Gegeben zwei reelle Zahlen $a < b$ nennt man eine Zufallsgröße $X$ verteilt nach $\Unif(a,b)$, wenn die Dichte $f_X$ gegeben ist durch
+\[
+f_X(x) = \begin{cases}
+    0, \Text{falls} x<a, \\
+    1/(b-a), \Text{falls} a \leqslant x < b \\
+    0, \Text{falls} b \leqslant x.
+\end{cases} = 
+    \frac 1{b-a} \Rect\left(\frac{x-(b+a)/2}{b-a}\right)
+\]
+Der Name dieser Verteilung ergibt sich daraus, dass intuitiv alle Intervalle, die im Intervall $[a,b]$ liegen mit einr Wahrscheinlichkeit proportional zu ihrer \q{Länge} von $X$ \q{getroffen} werden.
+Man schreibt auch oft $X \sim \Unif(a,b)$.
+%
+\paragraph{Normalverteilung}
+Gegeben zwei Parameter $\mu \in \R$ und $\sigma^2 \in \R^+$, so nennt man eine Zufallsgröße $X$ normalverteilt mit Erwartungswert $\mu$ und Varianz $\sigma^2$, falls deren Dichte $f_X$
+\[
+f_X(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2 \sigma^2}\right)
+\]
+erfüllt.
+Die Normalverteilungist eine sehr wichtige Verteilung, weil aus Gründen die meisten Messwerte einer Normalverteilung mit Erwartungswert $\mu$ und einer gewissen Varianz $\sigma^2$ folgen.
+Je größer $\sigma^2$, desto stärker ist die Streuung der gemessenen Werte um den Erwartungswert $\mu$.
+Man schreibt auch $X \sim \mathcal{N}(\mu, \sigma^2)$.
+Es sind zwei Beispiele in \Cref{py:random:normal1} zusammen mit der Berechnung der Dichte via \texttt{scipy} dargestellt.
+Auch hier ist es wieder ratsam, keine eigenen Implementierungen solcher Standardfunktionen zu nutzen und stattdessen auf Funktionen aus getesteten Paketen zurück zu greifen.
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=3, lastline=10]{python3}{code/random/normal1.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/random/normal1.png}
+    \end{minipage}
+    \codecaption{dsv/code/random/normal1.py}{Visualisierung der Dichte der Normalverteilung für verschiedene Parameter}\label{py:random:normal1}
+\end{listing}
+%
+%
+\paragraph{Exponentialverteilung}
+Gegeben eine Intensität $\lambda > 0$, so folgt eine Zufallsgröße $X$ einer Exponentialverteilung $\Exp(\lambda)$, falls die Dichte $f_X$ die Form 
+\[
+f_X(x) = \begin{cases}
+    \lambda \exp(-\lambda x), \Text{für} x \geqslant
+    0, \\
+    0 \Text{sonst}
+\end{cases}
+\]
+besitzt.
+Auch eine wichige Verteilung, die beispielsweise die Lebensdauer von irgendwelchen Bauteilen modelliert, oder auch die Wartezeit zwischen zwei Anrufen bei einer Servicehotline. 
+Je kleiner $\lambda$, desto höher die Intensität, also desto kürzer die Wartezeit.
+%
+%
 \subsubsection{Erwartungswert, Varianz, Kovarianz}
 
-% - zentraler grenzwertsatz?
+Will man eine Zufallsgröße auf einige wenige Kennzahlen herunterbrechen, die in der Praxis auch relevant sein könnten, so bieten sich sogenannte Momente deren Verteilung an.
+%
+%
+\paragraph{Erwartungswert}
+Interessiert man sich für den Wert, der sich \q{im Mittel} bei einer Verteilung $X$ ergibt, so berechnet man den Erwartungswert $\E(X)$ definiert durch
+\begin{equation}\label{eq:random:mean}
+    \E(X) = \Int{-\infty}{+\infty}{x f_X(x)}{x}.
+\end{equation}
+Wenn $f_X$ einer physikalischen Dichteverteilung im Raum entspräche, so würde $\E(X)$ genau den Masseschwerpunkt dieser Verteilung darstellen.
+Ist beispielsweise $X \sim \Unif(a,b)$, so gilt $\E(X) = (a+b)/2$ und falls $X \sim \mathcal{N}(\mu, \sigma^2)$, so gilt $\E(X) = \mu$.
+%
+%
+\paragraph{Varianz}
+%
+Basierend auf dem Erwartungswert, können wir auch die erwartete Streuung einer Zufallsgröße um $\E(X)$ herum betrachten, also
+%
+\begin{equation}\label{eq:random:var}
+\Var(X) 
+    = \E((X - \E(X))^2) 
+    = \Int{-\infty}{+\infty}{(x-\E(X))^2 f_X(x)}{x}
+    = \E(X^2) - \E(X)^2.
+\end{equation}
+%
+Die Interpretation ist, dass $\Var(X)$ die mittlere quadratische Abweichung einer Zufallsgröße von ihrem Erwartungswert beschreibt.
+Es ist anzumerken, dass es Verteilungen gibt, für welche $\E$ und $\Var$ nicht existieren müssen, weil die jeweiligen Integrale in \eqref{eq:random:mean} und \eqref{eq:random:var} nicht endlich sind.
+
+Beispielsweise gilt im Falle von $X \sim \Unif(a,b)$, dass $\Var(X) = (b-a)^2/12$ und im Falle von $X \sim \mathcal{N}(\mu, \sigma^2)$, dass $\Var(X) = \sigma^2$.
 
 \subsection{Zufällige Signale}
 
