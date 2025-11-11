@@ -7,14 +7,15 @@ Notwendigerweise wird $x[\cdot]$ zu einer sog. Zufallsgr\"oße, welche wir \q{nu
 Nicht nur das, auch jede folgende Verarbeitung von $x[\cdot]$, bespielsweise durch ein \gls{lti}-System, wird zu einer Zufallsgr\"oße, deren Eigenschaften u.A. von denen des Messrauschens abhängen.
 
 Weiterhin kann es für gewisse Anwendungen auch absolut ausreichend sein, eigentlich deterministische Signale als zufällig zu modellieren.
-Wenn es beispielsweise darum geht, zu bestimmen, ob ein Kommunikationssystem in der Lage ist, Informationen fehlerfrei zu übertragen, dann kann es ausreichend sein, \q{nur} eine Ausfallrate zu bestimmen, oder diese Rate zu begrenzen, anstatt dies für jedes m\"ogliche übertragene Signal zu bestimmen/gewährleisten.
+Wenn es beispielsweise darum geht, zu bestimmen, ob ein Kommunikationssystem in der Lage ist, Informationen fehlerfrei zu übertragen, dann kann es ausreichend sein, \q{nur} eine Ausfallrate/-wahrscheinlichkeit zu bestimmen, oder diese Rate zu begrenzen, anstatt dies für jedes m\"ogliche zu übertragende Signal zu bestimmen/gewährleisten.
 
 Um diese \q{neue} Sichtweise auf Signale gut verinnerlichen zu k\"onnen, ben\"otigen wir jedoch einige Werkzeuge aus der Wahrscheinlichkeitstheorie, die wir uns nun ansehen werden, wobei wir versuchen, uns nicht mit vielen mathematischen Details aufzuhalten, sondern wollen stattdessen unsere Intuition schärfen.
 
 \subsection{Grundlagen Wahrscheinlichkeitstheorie}\label{sec:random:prbly}
 
 Nehmen wir zunächst einmal an, dass wir einen zufälligen Vorgang betrachten, dessen Ausgang sich in Form einer einzelnen reellen Zahl manifestiert.
-Diesen zufälligen Vorgang assoziieren wir mit der Zufallsgr\"oße $X : \Omega \rightarrow \R$, also $\omega \rightarrow X(\omega)$, wobei wir uns vorstellen, dass $\Omega$, beziehungsweise $\omega$, dafür sorgen, dass Zufall ins Spiel kommt. \textit{$\ast$MITHÄNDENWEDEL$\ast$} Wir sind nun daran interessiert, wie die \emph{Verteilung} der Werte $X(\omega)$ charakterisiert werden kann.
+Diesen zufälligen Vorgang assoziieren wir mit der Zufallsgr\"oße $X : \Omega \rightarrow \R$, also $\omega \rightarrow X(\omega)$, wobei wir uns vorstellen, dass $\Omega$, beziehungsweise $\omega$, dafür sorgen, dass Zufall ins Spiel kommt. \textit{$\ast$MITHÄNDENWEDEL$\ast$} 
+Wir sind nun daran interessiert, wie die \emph{Verteilung} der Werte $X(\omega)$ charakterisiert werden kann.
 
 Hierzu definieren wir beigeordnet zu $X$ eine Funktion $F_X: \R \rightarrow [0,1]$, welche uns für $x \in \R$ mitteilt, was die Wahrscheinlichkeit für das Ereignis $X \leqslant x$ ist.
 Man kann auch sagen/schreiben:
@@ -25,7 +26,7 @@ Die Funktion $F$ ist monoton wachsend, da natürlich $P(X \leqslant x_1) \leqsla
 Jetzt kann man mit der \emph{Verteilungsfunktion} $F_X$ schon eine Menge anfangen.
 Beispielsweise k\"onnen wir damit auch bestimmen, mit welcher Wahrscheinlichkeit das Ereignis $x_1 < X \leqslant x_2$ eintritt, indem wir einfach 
 \[
-P(x_1 < X \leqslant x_2) = F_X(x_2) - F_X(x_1)
+P(x_1 < X \leqslant x_2) = P(\{x_1 < X\} \cup \{X < x_2\}) = F_X(x_2) - F_X(x_1)
 \]
 berechnen.
 
@@ -36,12 +37,12 @@ f^h_X(x) = \frac{F_X(x + h) - F_X(x)}{h}
 betrachten.
 Man kann es sich so vorstellen, dass wir das Intervall $[x,x+h]$ hernehmen, berechnen, wie \q{viel} von $X$ in $[x,x+h]$ landen kann, und normieren das mit der Intervallbreite $h$.
 Im Grunde berechnen wir, wie \q{dicht} die Zufallsgr\"oße zwischen $x$ und $x+h$ ist.
-Aus diesem Grund nennt man
+Aus diesem Grund nennt man den Grenzwert
 \[
 f_X(x) = \lim\limits_{h \rightarrow 0} f^h_X(x) = \lim\limits_{h \rightarrow 0} \frac{F_X(x + h) - F_X(x)}{h}
 \]
 die \emph{Dichte} von $X$.
-Natürlich sehen wir, dass der berechnete Grenzwert der sogenannte Differenzenquotient der Verteilungsfunktion $F_x$ ist. Es gilt also $f_X = F^\prime_X$.
+Natürlich sehen wir, dass der berechnete Grenzwert der sogenannte Differenzenquotient der Verteilungsfunktion $F_x$ ist. Es gilt also $f_X = F^\prime_X = (\mathrm d)/{\mathrm d x} F_{x}(x)$.
 Deshalb kann man nun die Verteilungsfunktion auch aus der Dichte gewinnen, indem wir
 \[
 F_X(x) = \Int{-\infty}{x}{f_X(s)}{s}
@@ -58,12 +59,78 @@ was für die Dichte ergibt, dass
 \[
 \Int{-\infty}{+\infty}{f_X(s)}{s} = 1.
 \]
+Da $F_X$ monoton wachsend ist, muss auch immer gelten, dass $f_X(x) \geqslant 0$.
+%
+%
+\subsubsection{Unabhängigkeit}\label{sec:random:unabh}
+%
+%
+Gegeben zwei Zufallsgrößen $X$ und $Y$ ist es oft interessant deren Verhältnis zueinander zu untersuchen. 
+Beispielsweise wollen wir $P(X \leqslant x, Y \leqslant y)$, also die Wahrscheinlichkeit, dass $X \leqslant x$ und $Y \leqslant y$ gemeinsam (gleichzeitig) eintreten, berechnen/untersuchen/kennen.
+Im allgemeinen Fall, benötigt man hierfür die \emph{gemeinsame} Verteilung von $X$ und $Y$, also $F_{X,Y}$ oder $f_{X,Y}$.
+
+Gilt aber für alle $x,y$, dass
+\begin{equation}\label{eq:random:unabh}
+    P(X \leqslant x, Y \leqslant y) = P(X \leqslant x) \cdot P(Y \leqslant y),
+\end{equation}
+so nennt man $X$ und $Y$ (stochastisch) \emph{unabhängig}. 
+Die gemeinsame Verteilung von $X$ und $Y$ ergibt sich also als das Produkt der Einzelverteilungen, was \emph{sehr} viele Berechnungen vereinfacht.
+Jedoch ist es schwer Unabhängigkeit nachzuweisen, weshalb es oft eine Annahme ist, die man im Vorhinein während der Modellierung eines Zufallsprozesses trifft.
+%
+%
+\paragraph{Diskrete Verteilungen}
+%
+Bisher haben wir immer den Fall betrachtet, dass die Verteilungsfunktion $F_X$ (nicht die Dichte $f_X$, siehe uniforme Verteilung) immer stetig war.
+In diesem Fall spricht man auch von stetigen Verteilungen.
+Deren Eigenschaft ist es (intuitiv), dass wenn $f_X(x) > 0$ für ein $x$, dann gibt es auch in jeder Umgebung, egal wie klein, um $x$ noch Punkte $y$ mit $f_X(x) > 0$.
+Bei diskreten Verteilungen kann es sein, dass \q{Wahrscheinlichkeitsmasse} auf isolierte (diskrete) \emph{Punkte} konzentriert ist.
+
+Ein einfaches Beispiel (siehe \Cref{sec:random:quanti}) wäre die quantisierte Version $Q(X)$ einer stetigen Zufallsgröße $X$. 
+Dann erhalten wir mit $Q(X)$ wieder eine Zufallsgröße, deren Werte aber auf die Quantisierungsstufen $\mathcal{Q}$ beschränkt sind.
+Da wir später diese Art von Verteilung irgendwie in den Griff bekommen müssen, wollen wir uns kurz damit befassen.
+
+Eigentlich müssen diskrete Verteilungen kein Spezialfall von kontinuierlichen Verteilungen sein, wenn man die richtige Theorie\footnote{\url{https://en.wikipedia.org/wiki/Measure_(mathematics)}} verwendet.
+Um das zu vermeiden, müssen wir auf eine etwas unsaubere Schreib- und Denkweise zurückgreifen und im Hinterkopf behalten, dass hier einige Spitzfindigkeiten versteckt sind.
+
+Hierzu nutzen wir den stetigen Dirac-Stoß.
+Gegeben eine Menge von diskreten Punkten der Form $D = \{d_k \vert k \in \Z \}$ und zugehörige Wahrscheinlichkeiten $p_k \geqslant 0$ für $k \in \Z$ mit der Eigenschaft, dass
+\[
+\Sum{k \in \Z}{}{p_k} = 1,
+\]
+dann definieren wir eine diskrete Zufallsgröße $X$ mit Dichte $f_X$ durch
+\begin{equation}\label{eq:diskrete_dichte}
+    f_X(x) = \Sum{k \in \Z}{}{p_k \delta(x - d_k)}.
+\end{equation}
+Wir heften also an die Punkte in $D$ jeweile einen Dirac-Stoß, der mit der Wahrscheinlichkeit für diesen Punkt gewichtet wird.
+Dann ergibt sich also direkt aus den Eigenschaften von $\delta$, dass $P(X = d_k) = p_k$ und $P(X=x) = 0$ für $x \notin D$, siehe \Cref{py:random:discrete}.
+
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=4, lastline=18]{python3}{code/random/discrete.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/random/discrete.png}
+    \end{minipage}
+    \codecaption{dsv/code/random/discrete.py}{Visualisierung der Dichte und der Verteilungsfunktion einer diskreten Zufallsgröße}\label{py:random:discrete}
+\end{listing}
+
+Mithilfe von $\delta$ sind wir also in der Lage, weiterhin die aus der Signalverarbeitung bekannten Integrale und deren Eigenschaften in bezug auf $\delta$ zu nutzen.
 %
 %
 \subsubsection{Beispiele}
 %
+Es ist zunächst noch eine Schreibweise einzuführen. 
+Wir werden die Notation $X \sim V$, wobei gemeint ist, dass $V$ für eine Verteilung steht, die die Dichte und damit auch die Verteilungsfunktion und damit auch das oben definierte $P$ festlegt. 
+Wenn wir nun schreiben $X,Y \sim V$ (oder kurz: $X \sim Y$), dann meint das \emph{nicht}, dass $X = Y$!
+Es meint nur, dass $X$ und $Y$ derselben Verteilung folgen, aber nicht, dass deren Realisierungen $X(\omega)$ und $Y(\omega)$ immer diesselben Werte annehmen. 
+Das Ereignis $X = Y$ tritt also nur mit einer Wahrscheinlichkeit $P(X = Y)$ ein, wobei wir hierfür Kenntnis über die \emph{gemeinsame Dichte} $f_{X,Y}(x,y)$ benötigen.
+Es ist bei vielen unserer Beispiele sehr oft der Fall, dass $P(X = Y) = 0$, wenn $X \sim Y$.
+%
 \paragraph{Uniforme Verteilung/Gleichverteilung}
-Gegeben zwei reelle Zahlen $a < b$ nennt man eine Zufallsgröße $X$ verteilt nach $\Unif(a,b)$, wenn die Dichte $f_X$ gegeben ist durch
+Gegeben zwei reelle Zahlen $a < b$ nennt man eine Zufallsgröße $X$ verteilt nach $\Unif(a,b)$, man schreibt $X \sim \Unif(a,b)$, wenn die Dichte $f_X$ gegeben ist durch
 \[
 f_X(x) = \begin{cases}
     0, \Text{falls} x<a, \\
@@ -72,7 +139,7 @@ f_X(x) = \begin{cases}
 \end{cases} = 
     \frac 1{b-a} \Rect\left(\frac{x-(b+a)/2}{b-a}\right)
 \]
-Der Name dieser Verteilung ergibt sich daraus, dass intuitiv alle Intervalle, die im Intervall $[a,b]$ liegen mit einr Wahrscheinlichkeit proportional zu ihrer \q{Länge} von $X$ \q{getroffen} werden.
+Der Name dieser Verteilung ergibt sich daraus, dass intuitiv alle Intervalle, die im Intervall $[a,b]$ liegen mit einer Wahrscheinlichkeit proportional zu ihrer \q{Länge} von $X$ \q{getroffen} werden.
 Man schreibt auch oft $X \sim \Unif(a,b)$.
 %
 \paragraph{Normalverteilung}
@@ -112,6 +179,28 @@ f_X(x) = \begin{cases}
 besitzt.
 Auch eine wichige Verteilung, die beispielsweise die Lebensdauer von irgendwelchen Bauteilen modelliert, oder auch die Wartezeit zwischen zwei Anrufen bei einer Servicehotline. 
 Je kleiner $\lambda$, desto höher die Intensität, also desto kürzer die Wartezeit.
+%
+%
+\paragraph{Laplace- und Binomialverteilung}
+%
+Wir stellen uns vor, dass wir ein Zufallsexperiment $X$ durchführen, bei dem Erfolg $X=1$ mit Wahrscheinlichkeit $p$ auftritt und Misserfolg $X=0$ mit Wahrscheinlichkeit $(1-p)$.
+Demzufolge gibt es nur diese beiden Möglichkeiten, und wir haben als Dichte entsprechend
+\[
+f_{X}(x) = (1-p) \delta(x) + p \delta(x-1). 
+\]
+Solche eine diskrete Verteilung nennt man Laplaceverteilung mit Parameter $p$.
+
+Allein ist diese Verteilung so einfach, wie sie nur sein kann.
+Betrachten wir aber nun $n$ viele solcher \emph{unabhängiger} Laplaceexperimente $X_1, \ldots X_n$ und zählen die Anzahl der Erfolge $X$ in diesen $n$ Experimenten, also 
+\[
+    X = \Sum{i = 1}{n}{X_n},
+\]
+so erhalten wir als Dichte
+\[
+    f_{X}(x) = \Sum{k = 0}{n}{\binom{n}{k} p^k (1-p)^{n-k} \delta(x - k)}.
+\]
+Diese Verteilung nennt man Binomialverteilung mit Parametern $n$ und $p$.
+Die Unabhängigkeit ist hier sehr wichtig, da diese für das Herleiten von $f_X$ aus denen der einzelnen $f_{X_i}$ hergenommen wird.
 %
 %
 \subsubsection{Erwartungswert, Varianz, Kovarianz}
