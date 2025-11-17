@@ -176,6 +176,7 @@ Das heißt, \emph{wenn} $h[\cdot]$ absolut summierbar ist, dann ist das System m
 Wie ist es um die umgekehrte Schlussfolgerung bestellt?
 Impliziert \gls{bibo}-Stabilität, dass $h[\cdot]$ absolut summierbar sein muss?
 Erinnern wir uns daran, dass man \gls{bibo}-Stabilität widerlegen kann, indem man \emph{einen} beschränkten Eingang $x[\cdot]$ findet, für welchen der Ausgang $y[\cdot]$ nicht beschränkt bleibt.
+
 Nehmen wir an, dass 
 \[
 \Sum{k\in\Z}{}{\Abs{h[n-k]}} = \infty
@@ -238,8 +239,8 @@ y[n] = \frac{n}{n+1} y[n-1] + \frac{1}{n+1} x[n].
 \]
 Wir können also alternativ $y[n]$ aus $x[n]$ und $y[n-1]$ berechnen.
 Da also $y[n]$ von $y[n-1]$ abhängt, nennen wir das System \emph{rekursiv}.
-Man sieht deutlich, dass diese Umformulierung deutlich macht, dass wir nur $y[n-1]$ im Speicher halten müssen und dieses mit einer Art \emph{zeitverzögertem Feedback} ausstatten müssen.
-Hierbei ist natürlich die Zeitverzögerung essenziell, denn müssen wir $y[n]$ in Abhängigkeit von $y[n]$ berechnen, würde uns das vor ein halbwegs unlösbares Problem stellen.
+Man sieht, dass diese Umformulierung deutlich macht, dass wir nur $y[n-1]$ im Speicher halten müssen und dieses mit einer Art \emph{zeitverzögertem Feedback} ausstatten müssen.
+Hierbei ist natürlich die Zeitverzögerung essenziell, denn müssten wir $y[n]$ in Abhängigkeit von $y[n]$ berechnen, würde uns das vor ein halbwegs unlösbares Problem stellen.
 In \Cref{py:cumulative_sum} sehen wir die beiden unterschiedlichen Implementierungen.
 Es ist hier zu beachten, dass \mintinline{python}|y[nn] = np.sum(x[:nn]) / (nn + 1)| immer auf die komplette Vergangenheit von $x[\cdot]$ zugreift und eben \emph{nicht} auf Werte von $y[\cdot]$.
 
@@ -325,7 +326,7 @@ da sonst
 nicht endlich sein könnte.
 Das heißt, dass die Werte der Impulsantwort $h[\cdot]$ gegen $0$ konvergieren müssen und deshalb kann man $n_{\rm low} < n_{\rm hgh}$ so wählen, dass der Unterschied zwischen $h[\cdot]$ und $h_{\rm FIR}[\cdot]$ beliebig klein wird.
 
-Je nachdem wie schnell $h[\cdot]$ gegen $0$ konvergiert, benötigen wir mehr oder von $0$ verschiedene Einträge in $h_{\rm FIR}$, was sich auf den Implementierungsaufwand auswirkt.
+Je nachdem wie schnell $h[\cdot]$ gegen $0$ konvergiert, benötigen wir mehr oder weniger von $0$ verschiedene Einträge in $h_{\rm FIR}$, was sich auf den Implementierungsaufwand auswirkt.
 
 Ein Beispiel für einen exponentiellen Mittelwert-Filter findet man in \Cref{py:exp_mean}.
 Man sieht, dass für $\alpha=0.5$ der Abschneidefehler deutlicher zutage tritt, da die Faltung mit $h_{\rm FIR}[\cdot]$ in diesem Fall ein deutlich schlechteres Ergebnis liefert als im Falle von $\alpha=0.1$.
