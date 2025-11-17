@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 
 n = np.arange(100)
 x_1_n = np.cos(2 * np.pi * 0.1 * n)
-x_2_n = np.cos(2 * np.pi * 0.05 * n) * np.exp(
+x_2_n = np.cos(2 * np.pi * 0.5 * n) * np.exp(
     -n / 20
 )
 
-y_0 = 1
+y_0 = -1
 
 
 y_1_n = np.concatenate(
