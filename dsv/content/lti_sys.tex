@@ -227,9 +227,11 @@ Außerdem haben \gls{iir}-Systeme noch das Problem, dass man die Faltungsformel 
 Um die Notwendigkeit von \eqref{eq:lti_sys:conv} zu umgehen, betrachten wir eine gewisse Klasse von Systemen, deren Ausgang $y[\cdot]$ auch über einen alternativen Weg bestimmt werden kann.
 Hierzu betrachten wir
 \[
-y[n] = \frac{1}{n+1}\Sum{k=0}{n}{x[n]},
+y[n] = \frac{1}{n+1}\Sum{k=0}{n}{x[k]},
 \]
 was ein kumulatives Mittel von $0$ bis $n$ darstellt.
+Wichtig ist hier, dass dies ein Beispiel für ein sogenanntes \gls{ltv}-System.
+Wegen der Linearität existiert immernoch eine Impulsantwort, die durch Faltung mit dem Eingang $x[\cdot]$ den Ausgang $y[\cdot]$ ergibt, diese ist aber zeitvariant, also $h_n[\cdot]$.
 So wie es hier scheint, muss man für die Berechnung von $y[n]$ alle vergangenen Werte von $x[\cdot]$ bereitliegen haben.
 Doch mit einer einfachen Umformung findet man, dass
 \[

@@ -191,7 +191,7 @@ f_{X}(x) = (1-p) \delta(x) + p \delta(x-1).
 Solche eine diskrete Verteilung nennt man Laplaceverteilung mit Parameter $p$.
 
 Allein ist diese Verteilung so einfach, wie sie nur sein kann.
-Betrachten wir aber nun $n$ viele solcher \emph{unabhängiger} Laplaceexperimente $X_1, \ldots X_n$ und zählen die Anzahl der Erfolge $X$ in diesen $n$ Experimenten, also 
+Betrachten wir aber nun $n$ viele solcher \emph{unabhängiger} Laplaceexperimente $X_1, \ldots X_n$, man nennt diese dann \gls{iid}, und zählen die Anzahl der Erfolge $X$ in diesen $n$ Experimenten, also 
 \[
     X = \Sum{i = 1}{n}{X_n},
 \]
@@ -209,35 +209,198 @@ Will man eine Zufallsgröße auf einige wenige Kennzahlen herunterbrechen, die i
 %
 %
 \paragraph{Erwartungswert}
-Interessiert man sich für den Wert, der sich \q{im Mittel} bei einer Verteilung $X$ ergibt, so berechnet man den Erwartungswert $\E(X)$ definiert durch
+Interessiert man sich für den Wert, der sich \q{im Mittel} bei einer Verteilung $X$ ergibt, so berechnet man den Erwartungswert $\E(X)$, das erste Moment, definiert durch
 \begin{equation}\label{eq:random:mean}
     \E(X) = \Int{-\infty}{+\infty}{x f_X(x)}{x}.
 \end{equation}
 Wenn $f_X$ einer physikalischen Dichteverteilung im Raum entspräche, so würde $\E(X)$ genau den Masseschwerpunkt dieser Verteilung darstellen.
 Ist beispielsweise $X \sim \Unif(a,b)$, so gilt $\E(X) = (a+b)/2$ und falls $X \sim \mathcal{N}(\mu, \sigma^2)$, so gilt $\E(X) = \mu$.
+
+Mit dem Erwartungswert kann man Zufallsgrößen \emph{zentrieren}, indem man für $X$ die Zufallsgröße $\tilde{X} = X - \E(X)$ betrachtet. 
+Dann gilt 
+\[
+\E(\tilde{X}) = \E(X) - \E(\E(X)) = \E(X) - \E(X) = 0
+\]
+Man nennt Zufallsgrößen $X$ mit $\E(X)$ \emph{mittelwertfrei}.
 %
 %
 \paragraph{Varianz}
 %
-Basierend auf dem Erwartungswert, können wir auch die erwartete Streuung einer Zufallsgröße um $\E(X)$ herum betrachten, also
+Basierend auf dem Erwartungswert, können wir auch die mittlere Streuung einer Zufallsgröße um $\E(X)$ herum betrachten, also das zweite zentrierte Moment, die \emph{Varianz},
 %
 \begin{equation}\label{eq:random:var}
 \Var(X) 
     = \E((X - \E(X))^2) 
+    = \E(\tilde{X}^2)
     = \Int{-\infty}{+\infty}{(x-\E(X))^2 f_X(x)}{x}
     = \E(X^2) - \E(X)^2.
 \end{equation}
 %
 Die Interpretation ist, dass $\Var(X)$ die mittlere quadratische Abweichung einer Zufallsgröße von ihrem Erwartungswert beschreibt.
-Es ist anzumerken, dass es Verteilungen gibt, für welche $\E$ und $\Var$ nicht existieren müssen, weil die jeweiligen Integrale in \eqref{eq:random:mean} und \eqref{eq:random:var} nicht endlich sind.
+Es ist anzumerken, dass es Verteilungen gibt, für welche $\E$ und $\Var$ nicht existieren, weil die jeweiligen Integrale in \eqref{eq:random:mean} und \eqref{eq:random:var} nicht endlich sind.
 
 Beispielsweise gilt im Falle von $X \sim \Unif(a,b)$, dass $\Var(X) = (b-a)^2/12$ und im Falle von $X \sim \mathcal{N}(\mu, \sigma^2)$, dass $\Var(X) = \sigma^2$.
+%
+%
+\paragraph{Korrelation/Kovarianz}
+%
+%
+Es kommt vor, dass wir auf einfache Weise zwei Zufallsgrößen $X$ und $Y$ mit einander in Zusammenhang bringen wollen.
+Hierzu kann man deren \emph{Korrelation} $\E(X Y)$ betrachten, also den Erwartungswert von deren Produkt $Z = X \cdot Y$.
+Betrachtet man stattdessen die Korrelation der zentrierten Versionen $\E(\tilde{X} \tilde{Y})$, so spricht man von der \emph{Kovarianz}.
 
+Es ist wieder darauf hinzuweisen, dass man Korrelation und Kovarianz nicht \q{einfach} berechnen kann, weil man hierfür wieder die gemeinsame Verteilung der beiden Zufallsgrößen benötigt.
+Sind aber $X$ und $Y$ unabhängig, dann gilt
+\begin{align*}
+\E(X Y) 
+    & = \Int{}{}{
+        \Int{}{}{x y f_{x,y}(x,y) }{y}
+    }{x}
+    = \Int{}{}{
+        \Int{}{}{x y f_{x}(x) f_{y}(y) }{y}
+    }{x}
+    = \Int{}{}{
+        x f_x(x)\Int{}{}{y f_{y}(y) }{y}
+    }{x} \\
+    & = \E(Y) \Int{}{}{
+        x f_x(x)\Int{}{}{y f_{y}(y) }{y}
+    }{x}
+    = \E(X) \E(Y).
+\end{align*}
+Für unabhängige Zufallsgrößen ist also der Erwartungswert des Produktes das Produkt der einzelnen Erwartungswerte. 
+Eine sehr nützliche Eigenschaft, wie wir bald sehen werden!
+
+\paragraph{Charakteristische Funktion} Gegeben eine Zufallsgröße $X$ mit Dichte $f_X$, ist die zugehörige \emph{charakteristische Funktion} $\phi_X : \R \rightarrow \C$ definiert durch
+\begin{equation}
+    \phi_X(f) = \Int{-\infty}{+\infty}{f_X(x)\exp(-\jmath 2 \pi f x)}{x}.
+\end{equation}
+Damit ist $\phi_X$ die Fourier-Transformierte von $f_X$.
+Wir werden bald den Nutzen von dieser Funktion sehen, aber es sei beispielhaft erwähnt, dass
+\[
+\left(\frac{\mathrm{d}}{\mathrm{d}f}\right)^k\phi_X(0) = \jmath^k \E(X^k),
+\]
+also die Ableitungen von $\phi_X$ mit den Momenten von $X$ in Zusammenhang stehen.
+%
+%
+%
 \subsection{Zufällige Signale}
+%
+Die bisherigen Konzepte reichen jedoch nicht aus, um die zeitliche Komponente von Zufallsprozessen richtig modellieren zu können, da wir bis jetzt nur einzelne Zufallsgrößen betrachtet haben, die nicht in einem gemeinsamen (beispielsweise zeitlichen) Kontext gebracht wurden.
+Wenn wir von zufallsbehafteten Signalen, beispielsweise im Zeitbereich, sprechen, so stellen wir uns vor, dass an jedem Zeitpunkt $t$ eine Zufallsgröße $X_t$ \q{angeheftet} ist, die sich dann in ihrer Gesamtheit zu einer zufälligen Funktion $f : \R \rightarrow \C$ realisieren, indem wir $f(t) = X_t(\omega)$ setzen.
+Die \emph{zufällige} Funktion $f$ ist also die punktweise Realisierung der verschiedenen Zufallsprozesse $X_t$, siehe \Cref{py:random:signal1}.
+Man nennt dann die Folge von Zufallsgrößen $(X_t)_{t \in \R}$ einen \emph{stochastischen Prozess}, oder einfach \emph{zufälliges/stochastisches Signal}.
+Eine spezielle Realisierung zu einer zufälligen Funktion $f$ nennen wir auch \emph{Pfad}.
 
-% - Stochastische Prozesse: definition, zwei sichtweisen (per pfad, folge von verteilungen)
-% - stationaere prozesse/signale
-% - Wiener-Chintschin-Theorem
+Daraus ergeben sich nun zwei Sichtweisen auf stochastische Signale. 
+Wir können von einer Folge von Zufallsgrößen im Zeitbereich sprechen, und deren gemeinsame Verteilung betrachten.
+Alternativ können wir auch direkt auf den Pfaden eine andere, aber darauf bezogene, Verteilung im Raum der Funktionen betrachten. 
+Im ersten Fall betrachten wir die Verteilung zu einzelnen Zeitpunkten, aber gemeinsam für alle Punkte.
+Im zweiten betrachten wir das Verhalten als \emph{Ganzes}.
+Beide Sichtweisen sind in \Cref{py:random:signal2} zusammengefasst.
+
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5, lastline=6]{python3}{code/random/signal1.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/random/signal1.png}
+    \end{minipage}
+    \codecaption{dsv/code/random/signal1.py}{Drei Realisierungen von $\sin(2 \pi t) + 3/10 X_t$, wobei alle $X_t \sim \mathcal{N}(0,1)$ unabhängig identisch verteilt sind (\gls{iid})}\label{py:random:signal1}
+\end{listing}
+
+Wie bereits in den vorherigen Abschnitten, wollen wir darauf hinweisen, dass man solche stochastischen Signale auch ohne viel Aufwand im Raum definieren kann.
+Man kann also auch Bild-Signale der Form $(X_{x,y})_{x,y \in \R}$ als räumlichen Prozess auffassen/modellieren.
+
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=5, lastline=17]{python3}{code/random/signal2.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/random/signal2.png}
+    \end{minipage}
+    \codecaption{dsv/code/random/signal2.py}{Visualisierung der beiden Sichtweisen auf stochastische Signale.}\label{py:random:signal2}
+\end{listing}
+
+Es gibt zu stochastischen Signalen eine Menge zu sagen und man kann viel Theorie dazu konsumieren und betreiben. 
+Wir wollen uns jedoch direkt auf eine kleine Klasse von stochastischen Signalen beschränken.
+
+\subsection{Diskrete Stationäre Signale}\label{sec:random:station}
+
+Nehmen wir an, dass wir eine diskrete Folge von Zufallsgrößen $(X_{n})_{n \in \N}$, also ein diskretes stochastisches Signal gegeben haben.
+Dann gibt es für diese Werte eine gemeinsame Dichte $f_{X_{1}, X_{2}, \ldots}(x_1, x_2, \ldots)$.
+Wenn wir nun diese Samples um ein $\tau \in \N$ verschieben, also $(X_{n + \tau})_{n \in \N}$ verschieben und 
+%
+\[
+f_{X_{1}, X_{2}, \ldots}(x_1, x_2, \ldots) =
+    f_{X_{1 + \tau}, X_{2} + \tau, \ldots}(x_1, x_2, \ldots)
+\]
+%
+für alle Stellen $n \in \N$ und $\tau \in \N$ gilt, dann nennt man den Prozess $X_n$ \emph{stark stationär}.
+Dies führt dazu, dass sowohl Erwartungswert als auch Varianz \emph{konstant} sind, also $\E(X_n) = \E(X_0) = c$.
+Umgekehrt muss der Prozess nicht stationär sein, wenn die Momente zeitlich konstant sind.
+
+Wir definieren die \gls{acf} $\gamma_{X,X}: \N \times \N \rightarrow \R$ als
+\begin{equation}
+    \label{eq:random:acf}
+    \gamma_{X,X}[n_1, n_2] = \E(X_{n_1} X^\ast_{n_2}).
+\end{equation}
+Somit stellt $\gamma$ die Korrelation der Prozesses $X_n$ zwischen verschiedenen Zeitpunkten dar.
+Ist nun $X_n$ stark stationär, dann unterscheidet sich die Verteilung von $X_n$ nicht von der von $X_{n + \tau}$.
+Also gilt wegen
+\begin{equation}
+    \label{eq:random:stat_acf}
+    \gamma_{X,X}[n_1, n_2] 
+        = \gamma_{X,X}[n_1 + \tau, n_2 + \tau]
+        = \gamma_{X,X}[n_1 - n_2, 0] = \gamma_{X,X}[n_1 - n_2],
+\end{equation}
+dass die \gls{acf} nur von $n_1-n_2$ abhängig, also dem Abstand der Abtastzeitpunkte, ist.
+Da wir in \eqref{eq:random:stat_acf} auch in die andere Richtung hätten argumentieren können, gilt $\gamma_{X,X}[\tau] = \gamma_{X,X}[-\tau]$, was $\gamma$ zu einer geraden Funktion macht.
+
+Es ist nun essentiell zu sehen, dass wir mit $\gamma$ aus einem stochastischen Objekt, also dem stationären Prozess $X_n$ die \emph{deterministische}, also nicht-zufällige, Funktion $\gamma$ gewonnen haben, die uns gleichzeitig etwas über das zeitliche Verhalten des Prozesses, also des Signals, mitteilen kann.
+Für stationäre stochastische Signale bildet $\gamma$ also eine Brücke zwischen der zufälligen und stochastischen Welt.
+
+Wir sehen das noch direkter an folgendem 
+\begin{Thm}[Rainbows'n'Sunshine Wiener-Chintschin]
+    \label{thm:random:wiener-chintschin}
+    Für einen stationären Prozess $X_n$ mit \gls{acf} $\gamma_{X,X}$ existiert eine Funktion $S: [-1/2,+1/2] \rightarrow \C$ sodass,
+    \begin{equation}
+        \gamma_{X,X}(n) = \Int{-1/2}{+1/2}{
+            S(f) \exp(\jmath 2 \pi f n)
+        }{f}
+    \end{equation}
+    gilt.
+    Man nennt dann $S$ die spektrale Leistungsdichte von $X_n$.
+\end{Thm}
+
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=6, lastline=19]{python3}{code/random/signal3.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/random/signal3.png}
+    \end{minipage}
+    \codecaption{dsv/code/random/signal3.py}{Visualisierung der Dichte der Normalverteilung für verschiedene Parameter}\label{py:random:signal3}
+\end{listing}
+
+Wir zeigen in \Cref{py:random:signal3}, wie man aus mehreren Realisierungen eines stationären Signals
+\[
+x[n] = X_n = \sin(2 \pi 5 n \Delta t + \phi) + z_n,
+\]
+wobei $z_n \sim \mathcal{N}(0, 0.3^2)$ und $\phi \sim \Unif(0, 2\pi)$ \gls{iid}.
+Von diesem zufälligen Signal haben wir in dem oberen Plot von \Cref{py:random:signal3} verschiedene Realisierungen dargstellt.
+Im mittleren Plot haben wir Histogramme von $X_{10}$ und von $X_{50}$ geplottet, um eine Möglichkeit zu zeigen, wie man zumindest \emph{visuel} prüfen kann, ob das Signal $x[n]$ stationär ist.
+Wir sehen, dass die Histogramme in etwa übereinstimmen, also können wir von Stationarität ausgehen.
+Beispielsweise wäre das Signal aus \Cref{py:random:signal2} \emph{nicht} stationär.
+Im unteren Plot zeigen wir eine Schätzung von $\gamma_{X,X}$ basiernd auf mehreren Realisierungen des Signals $x[\cdot]$, indem wir einfach für jedes einzelne $x[\cdot]$ die Faltung $x \ast x[-\cdot]$ berechnet haben und dann über \emph{diese} Realisierungen gemittelt, um den Erwartungswert in \eqref{eq:random:acf} zu approximieren.
 
 \subsection{Parameterschätzung}\label{sec:random:paramest}
 
