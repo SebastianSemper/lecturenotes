@@ -78,7 +78,7 @@ Die gemeinsame Verteilung von $X$ und $Y$ ergibt sich also als das Produkt der E
 Jedoch ist es schwer Unabhängigkeit nachzuweisen, weshalb es oft eine Annahme ist, die man im Vorhinein während der Modellierung eines Zufallsprozesses trifft.
 %
 %
-\paragraph{Diskrete Verteilungen}
+\subsubsection{Diskrete Verteilungen}
 %
 Bisher haben wir immer den Fall betrachtet, dass die Verteilungsfunktion $F_X$ (nicht die Dichte $f_X$, siehe uniforme Verteilung) immer stetig war.
 In diesem Fall spricht man auch von stetigen Verteilungen.
@@ -203,8 +203,11 @@ Diese Verteilung nennt man Binomialverteilung mit Parametern $n$ und $p$.
 Die Unabhängigkeit ist hier sehr wichtig, da diese für das Herleiten von $f_X$ aus denen der einzelnen $f_{X_i}$ hergenommen wird.
 %
 %
-\subsubsection{Erwartungswert, Varianz, Kovarianz}
-
+%
+%
+%
+\subsubsection{Kenngrößen von Zufallsgrößen}
+%
 Will man eine Zufallsgröße auf einige wenige Kennzahlen herunterbrechen, die in der Praxis auch relevant sein könnten, so bieten sich sogenannte Momente deren Verteilung an.
 %
 %
@@ -242,9 +245,7 @@ Es ist anzumerken, dass es Verteilungen gibt, für welche $\E$ und $\Var$ nicht 
 Beispielsweise gilt im Falle von $X \sim \Unif(a,b)$, dass $\Var(X) = (b-a)^2/12$ und im Falle von $X \sim \mathcal{N}(\mu, \sigma^2)$, dass $\Var(X) = \sigma^2$.
 %
 %
-\paragraph{Korrelation/Kovarianz}
-%
-%
+\paragraph{Korrelation/Kovarianz} 
 Es kommt vor, dass wir auf einfache Weise zwei Zufallsgrößen $X$ und $Y$ mit einander in Zusammenhang bringen wollen.
 Hierzu kann man deren \emph{Korrelation} $\E(X Y)$ betrachten, also den Erwartungswert von deren Produkt $Z = X \cdot Y$.
 Betrachtet man stattdessen die Korrelation der zentrierten Versionen $\E(\tilde{X} \tilde{Y})$, so spricht man von der \emph{Kovarianz}.
@@ -269,8 +270,10 @@ Sind aber $X$ und $Y$ unabhängig, dann gilt
 \end{align*}
 Für unabhängige Zufallsgrößen ist also der Erwartungswert des Produktes das Produkt der einzelnen Erwartungswerte. 
 Eine sehr nützliche Eigenschaft, wie wir bald sehen werden!
-
-\paragraph{Charakteristische Funktion} Gegeben eine Zufallsgröße $X$ mit Dichte $f_X$, ist die zugehörige \emph{charakteristische Funktion} $\phi_X : \R \rightarrow \C$ definiert durch
+%
+%
+\paragraph{Charakteristische Funktion}
+Gegeben eine Zufallsgröße $X$ mit Dichte $f_X$, ist die zugehörige \emph{charakteristische Funktion} $\phi_X : \R \rightarrow \C$ definiert durch
 \begin{equation}
     \phi_X(f) = \Int{-\infty}{+\infty}{f_X(x)\exp(-\jmath 2 \pi f x)}{x}.
 \end{equation}
@@ -302,7 +305,7 @@ Beide Sichtweisen sind in \Cref{py:random:signal2} zusammengefasst.
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
-        \inputminted[firstline=5, lastline=6]{python3}{code/random/signal1.py}
+        \inputminted[firstline=5, lastline=8]{python3}{code/random/signal1.py}
     \end{minipage}%
     \begin{minipage}{0.48\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -318,7 +321,7 @@ Man kann also auch Bild-Signale der Form $(X_{x,y})_{x,y \in \R}$ als räumliche
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
-        \inputminted[firstline=5, lastline=17]{python3}{code/random/signal2.py}
+        \inputminted[firstline=5, lastline=19]{python3}{code/random/signal2.py}
     \end{minipage}%
     \begin{minipage}{0.48\textwidth}
         \strut\vspace*{-\baselineskip}\newline
@@ -382,28 +385,33 @@ Wir sehen das noch direkter an folgendem
     \noindent
     \begin{minipage}{0.51\textwidth}
         \strut\vspace*{-\baselineskip}\newline
-        \inputminted[firstline=6, lastline=19]{python3}{code/random/signal3.py}
+        \inputminted[firstline=6, lastline=39]{python3}{code/random/signal3.py}
     \end{minipage}%
     \begin{minipage}{0.48\textwidth}
         \strut\vspace*{-\baselineskip}\newline
         \includegraphics[width=\textwidth]{code/random/signal3.png}
     \end{minipage}
-    \codecaption{dsv/code/random/signal3.py}{Visualisierung der Dichte der Normalverteilung für verschiedene Parameter}\label{py:random:signal3}
+    \codecaption{dsv/code/random/signal3.py}{Extraktion der spektralen Komponenten eines stationären Signals}\label{py:random:signal3}
 \end{listing}
 
 Wir zeigen in \Cref{py:random:signal3}, wie man aus mehreren Realisierungen eines stationären Signals
 \[
-x[n] = X_n = \sin(2 \pi 5 n \Delta t + \phi) + z_n,
+x[n] = X_n = \sin(2 \pi 0.75 n \Delta t + \phi_1) + \sin(2 \pi 3 n \Delta t + \phi_2) + z_n,
 \]
-wobei $z_n \sim \mathcal{N}(0, 0.3^2)$ und $\phi \sim \Unif(0, 2\pi)$ \gls{iid}.
+wobei $z_n \sim \mathcal{N}(0, 0.6^2)$ und $\phi_{1,2} \sim \Unif(0, 2\pi)$ \gls{iid}, die spektralen Komponenten extrahieren kann.
 Von diesem zufälligen Signal haben wir in dem oberen Plot von \Cref{py:random:signal3} verschiedene Realisierungen dargstellt.
 Im mittleren Plot haben wir Histogramme von $X_{10}$ und von $X_{50}$ geplottet, um eine Möglichkeit zu zeigen, wie man zumindest \emph{visuel} prüfen kann, ob das Signal $x[n]$ stationär ist.
-Wir sehen, dass die Histogramme in etwa übereinstimmen, also können wir von Stationarität ausgehen.
+Wir sehen, dass die Histogramme in etwa übereinstimmen, also können wir von Stationarität ausgehen, da gleiche Histogramme an verschiedenen Zeitpunkten auf eine gleiche Dichte an diesen Zeitpunkten schließen lassen.
 Beispielsweise wäre das Signal aus \Cref{py:random:signal2} \emph{nicht} stationär.
+
 Im unteren Plot zeigen wir eine Schätzung von $\gamma_{X,X}$ basiernd auf mehreren Realisierungen des Signals $x[\cdot]$, indem wir einfach für jedes einzelne $x[\cdot]$ die Faltung $x \ast x[-\cdot]$ berechnet haben und dann über \emph{diese} Realisierungen gemittelt, um den Erwartungswert in \eqref{eq:random:acf} zu approximieren.
+Man sieht sehr gut, dass die (\textbf{zufällige}) Approximation von $\gamma_{X,X}$ sich sehr stabil verhält, auch wenn wir $N$ in \Cref{py:random:signal3} viel kleiner werden lassen.
+Weiterhin sehen wir im Plot ganz unten den Effekt von \Cref{thm:random:wiener-chintschin}, weil die \gls{dft} von $\gamma_{X,X}$ an den Stellen $F=\pm 3$ und $F = \pm 0.75$ lokale Maxima zu sehen sind, was genau den spektralen Komponenten des \emph{zufälligen} Signals $X_n$ entspricht.
 
-\subsection{Parameterschätzung}\label{sec:random:paramest}
-
+Mit der Berechnung der \gls{acf} kann man also aus einzelnen wenigen Realisierungen von zufälligen Signalen deren spektrale Komponenten extrahieren.
+Diese Herangehensweise ist durch das Wiener-Chintschin-\Cref{thm:random:wiener-chintschin} theoretisch untermauert.
+%
+%
 \subsection{Quantisierung}\label{sec:random:quanti}
 
 % - \cite{widrow2008quantization}
@@ -412,3 +420,5 @@ Im unteren Plot zeigen wir eine Schätzung von $\gamma_{X,X}$ basiernd auf mehre
 % - areasampling: analytisch in value domain, in frequ domain
 % - reconstruction der PDF aus der quantisierten PDF
 % - PQN Model
+
+% \input{content/paramest.tex}

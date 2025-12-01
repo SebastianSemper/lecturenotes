@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 
 
 def X(t):
-    return np.sin(2 * np.pi * t) + 0.3 * np.random.randn(t.size)
+    return np.sin(
+        2 * np.pi * t
+    ) + 0.3 * np.random.randn(t.size)
 
 
 N = 1000
@@ -19,7 +21,10 @@ X_t2 = [X_t[nn][n2] for nn in range(N)]
 
 plt.figure(figsize=[6.4, 6.4], layout="tight")
 plt.subplot(211)
-[plt.plot(T, xx, alpha=0.002, color="black") for xx in X_t]
+[
+    plt.plot(T, xx, alpha=0.002, color="black")
+    for xx in X_t
+]
 plt.axvline(t1, color="red")
 plt.axvline(t2, color="green")
 plt.subplot(212)

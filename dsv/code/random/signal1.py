@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 
 
 def X(t):
-    return np.sin(2 * np.pi * t) + 0.3 * np.random.randn(t.size)
+    return np.sin(
+        2 * np.pi * t
+    ) + 0.3 * np.random.randn(t.size)
 
 
 T = np.linspace(0, 1, 127, endpoint=False)
