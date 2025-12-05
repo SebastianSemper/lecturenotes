@@ -356,7 +356,7 @@ Außerdem liefern sie als Ausgabewert wieder \emph{Funktionen}, die wir einfach 
 %
 Wir nähern uns langsam der Fourier-Analyse von diskreten Signalen.
 Schließlich wollen wir etwaige spektrale Analysen und dergleichen im Digitalen durchführen, um die Vorzüge von digitalen Rechenwerken dabei nutzen zu können.
-Die vorher eingeführten Transformationen sind zwar hilfreich für theoretische Argumentation, wie beispielsweise beim Sampling-\Cref{stm:sampling_theorem}, aber nicht für praktische Anwendungen. 
+Die vorher eingeführten Transformationen sind zwar hilfreich für theoretische Argumentation, wie beispielsweise beim Sampling-\Cref{thm:sampling_theorem}, aber nicht für praktische Anwendungen. 
 Deshalb wenden wir uns nun der spektralen Analyse von diskreten Signalen zu.
 Wir werden aber im Verlauf auch wieder ähnliche Zusammenhänge wie in \eqref{eq:fourier:c_k_fourier} finden.
 %
@@ -514,7 +514,7 @@ Hierzu definieren wir die zugehörige \gls{ft}, die wir \gls{dtft} nennen, durch
 \begin{equation}\label{eq:fourier:dtft}
     X(f) = \Sum{n \in \Z}{}{x[n] \exp(-\jmath 2 \pi f n)},
 \end{equation}
-genau wie in \Cref{sec:sampling} bei der Herleitung von \eqref{stm:sampling_theorem}.
+genau wie in \Cref{sec:sampling} bei der Herleitung von \eqref{thm:sampling_theorem}.
 Im Unterschied zur \q{analogen} \gls{ft} \eqref{eq:fourier:fourier_trafo} sehen wir, dass $X$ nur für Frequenzen $f \in (0,1]$ definiert ist, da das diskrete Signal $x_f[n] = \exp(\jmath 2 \pi f n)$ periodisch in $f$ ist.
 Es gilt also $x_{f + k}[\cdot] = x_{f}[\cdot]$ für alle $k \in \Z$.
 Dies \q{passt} auch zur Natur von diskreten Signalen, da deren Frequenzbereich \emph{immer} periodisch sein muss.

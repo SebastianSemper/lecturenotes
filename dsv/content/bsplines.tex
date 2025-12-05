@@ -2,7 +2,7 @@
 %
 Eine Grundvoraussetzung f"ur eine praktisch n"utzliche digitale Signalverarbeitung ist die M"oglichkeit zwischen dem analogen und digitalen Bereich wechseln zu k"onnen. 
 Hierbei sollte man auch genau quantifizieren k"onnen, ob bei diesem Prozess Informationen verloren gehen, oder wie man garantieren kann, dass diese Umwandlung verlustfrei vonstatten geht. 
-Meist nutzt man hierf"ur das Sampling \Cref{stm:sampling_theorem}. 
+Meist nutzt man hierf"ur das Sampling \Cref{thm:sampling_theorem}. 
 Die hieraus resultierende sogenannte Nyquist-Sampling-Theorie fu"st bekannterma"sen auf der Repr"asentation von bandbegrenzten Signalen durch hinreichend dichte "aquidistante Abtastwerte.
 
 Es gibt jedoch auch einige Nachteile von Nyquist-Sampling, die aus dessen Annahmen und der daraus folgenden Verarbeitung entstehen. 
@@ -233,7 +233,7 @@ Au"serdem k"onnen wir das Spektrum der abgetasteten Werte $X$ durch
 \end{equation}
 ausdr"ucken. 
 Nun k"onnen wir das analoge Signal $x_a$ in Abh"angigkeit von den Abtastwerten darstellen. 
-Es gilt mit $T = 1/F_s$ und nach \Cref{stm:sampling_theorem}, dass
+Es gilt mit $T = 1/F_s$ und nach \Cref{thm:sampling_theorem}, dass
 \begin{align*}
     x_a(t) = \Sum{n=-\infty}{+\infty}{
         x[n] \frac{\sin(\pi(t-nT)/T)}{\pi(t-nT)/T}

@@ -19,9 +19,10 @@ Wir sind nun daran interessiert, wie die \emph{Verteilung} der Werte $X(\omega)$
 
 Hierzu definieren wir beigeordnet zu $X$ eine Funktion $F_X: \R \rightarrow [0,1]$, welche uns für $x \in \R$ mitteilt, was die Wahrscheinlichkeit für das Ereignis $X \leqslant x$ ist.
 Man kann auch sagen/schreiben:
-\[
-F_X(x) = P(X \leqslant x).
-\]
+\begin{equation}
+    \label{eq:random:cdf}
+    F_X(x) = P(X \leqslant x).
+\end{equation}
 Die Funktion $F$ ist monoton wachsend, da natürlich $P(X \leqslant x_1) \leqslant P(X \leqslant x_2)$, falls $x_1 < x_2$, also auch $F_X(x_1) \leqslant F_X(x_2)$.
 Jetzt kann man mit der \emph{Verteilungsfunktion} $F_X$ schon eine Menge anfangen.
 Beispielsweise k\"onnen wir damit auch bestimmen, mit welcher Wahrscheinlichkeit das Ereignis $x_1 < X \leqslant x_2$ eintritt, indem wir einfach 
@@ -31,16 +32,18 @@ P(x_1 < X \leqslant x_2) = P(\{x_1 < X\} \cup \{X < x_2\}) = F_X(x_2) - F_X(x_1)
 berechnen.
 
 Wir k\"onnen sogar noch einen Schritt weiter gehen, und die Gr\"oße
-\[
-f^h_X(x) = \frac{F_X(x + h) - F_X(x)}{h}
-\]
+\begin{equation}
+    \label{eq:random:pdf_approx}
+    f^h_X(x) = \frac{F_X(x + h) - F_X(x)}{h}
+\end{equation}
 betrachten.
 Man kann es sich so vorstellen, dass wir das Intervall $[x,x+h]$ hernehmen, berechnen, wie \q{viel} von $X$ in $[x,x+h]$ landen kann, und normieren das mit der Intervallbreite $h$.
 Im Grunde berechnen wir, wie \q{dicht} die Zufallsgr\"oße zwischen $x$ und $x+h$ ist.
 Aus diesem Grund nennt man den Grenzwert
-\[
-f_X(x) = \lim\limits_{h \rightarrow 0} f^h_X(x) = \lim\limits_{h \rightarrow 0} \frac{F_X(x + h) - F_X(x)}{h}
-\]
+\begin{equation}
+    \label{eq:random:density}
+    f_X(x) = \lim\limits_{h \rightarrow 0} f^h_X(x) = \lim\limits_{h \rightarrow 0} \frac{F_X(x + h) - F_X(x)}{h}
+\end{equation}
 die \emph{Dichte} von $X$.
 Natürlich sehen wir, dass der berechnete Grenzwert der sogenannte Differenzenquotient der Verteilungsfunktion $F_x$ ist. Es gilt also $f_X = F^\prime_X = (\mathrm d)/{\mathrm d x} F_{x}(x)$.
 Deshalb kann man nun die Verteilungsfunktion auch aus der Dichte gewinnen, indem wir
@@ -275,6 +278,7 @@ Eine sehr nützliche Eigenschaft, wie wir bald sehen werden!
 \paragraph{Charakteristische Funktion}
 Gegeben eine Zufallsgröße $X$ mit Dichte $f_X$, ist die zugehörige \emph{charakteristische Funktion} $\phi_X : \R \rightarrow \C$ definiert durch
 \begin{equation}
+    \label{eq:random:char_fun}
     \phi_X(f) = \Int{-\infty}{+\infty}{f_X(x)\exp(-\jmath 2 \pi f x)}{x}.
 \end{equation}
 Damit ist $\phi_X$ die Fourier-Transformierte von $f_X$.
@@ -413,12 +417,182 @@ Diese Herangehensweise ist durch das Wiener-Chintschin-\Cref{thm:random:wiener-c
 %
 %
 \subsection{Quantisierung}\label{sec:random:quanti}
+%
+%
+Wir wollen die entwickelte Theorie zu stochastischen Signalen nun auf ein Problem anwenden, das wir bis jetzt gutmütig ingoriert haben: Quantisierung.
+Bisher sind wir von einem zeitdiskreten, aber nicht wert-diskreten Signal ausgegangen. 
+Dies wollen wir nun noch einmal kurz umreißen indem wir den Effekt von Quantisierung auf zufällige stationäre Signale betrachten.
+Hierzu folgen wir im Grunde den jeweiligen Abschnitten in \cite{widrow2008quantization}.
 
-% - \cite{widrow2008quantization}
-% - area sampling (geoemetrisch)
-% - charakteristische funktion: value at 0, conj sym, 
-% - areasampling: analytisch in value domain, in frequ domain
-% - reconstruction der PDF aus der quantisierten PDF
-% - PQN Model
+\begin{figure}[ht]
+    \centering\includegraphics[width=0.6\textwidth]{img/quantization1.png}
+    \caption{Visualisierung von Area Sampling, Quelle: \cite{widrow2008quantization}}
+    \label{fig:random:quantization1}
+\end{figure}
 
+Wir gehen nun davon aus, dass wir ein stationäres Signal $X_n$ quantisieren, und dadurch $Q_n = q(X_n)$ erhalten, wobei $q$ die Quantisierungsoperation darstellt.
+Zunächst wollen wir ein Gefühl für die Wirkung von Quantisierung bekommen und betrachten hierzu den Effekt vom sogenannten \q{Area Sampling}, siehe \Cref{fig:random:quantization1}.
+
+Dies ist in \Cref{py:random:quantization1} durchgeführt, wobei wir von 3 Quantisierungsstufen ausgegangen sind, und deren Werte so gelegt haben, dass sie zum Signal passen, das wie in \Cref{py:random:signal3} generiert wird.
+Außerdem sind zusätzlich die Bereiche (\texttt{edges}) markiert, die gleiche Quantisierungswerte ergeben, sowie die einzelnen Quantisierungsstufen (\texttt{centers}).
+Man sieht, dass diese Art der Quantisierung sehr leicht durch geschicktes Runden implementiert werden kann.
+
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=34, lastline=57]{python3}{code/random/quantization1.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/random/quantization1.png}
+    \end{minipage}
+    \codecaption{dsv/code/random/quantization1.py}{Quantisierung via Area Sampling}\label{py:random:quantization1}
+\end{listing}
+
+Ein Grund, weshalb wir uns auf die Verteilung, oder Dichte $f_x$, eines stationären Signals konzentrieren ist der Fakt, dass zwar einerseits Quantisierung eines Signals nicht-linear auf das eine einzelne Signalrealisierung wirkt, doch wir sehen gleich, dass Area Sampling eine lineare Operation auf der Dichte $f_X$ darstellt.
+
+Geometrisch wird aus \Cref{fig:random:quantization1} klar, dass Area Sampling im Grunde alle Werte in einem Bereich, einer Fläche (daher der Name) unter der Dichte des nicht-quantisierten Signals, auf einen Punkt zusammenzieht.
+Die Verteilung der nicht-quantisierten Werte ist also auch eine stetige Verteilung, während die Verteilung des quantisierten Signals diskret sein muss -- schließlich ist ja genau das unser Ziel bei der Quantisierung.
+
+Betrachten wir also nun einmal das Area Sampling mit $\Delta Q > 0$ als Abstand zwischen den Quantisierungsstufen analytisch via
+\begin{align*}
+    f_{q(X)}(x) = \Sum{k \in \Z}{}{
+        \delta(x - k \Delta Q) 
+        \Int{k \Delta Q - \Delta Q/2}{k \Delta Q + \Delta Q/2}{
+            f_{X}(x)
+        }{x}
+    }.
+\end{align*}
+Definieren wir nun die Funktion $\Rect_{\Delta Q}: \R \rightarrow \R$ via
+\[
+\Rect_{\Delta Q}(x) = \begin{cases}
+    1 \Text{für} x \in [-\Delta Q/2,+\Delta Q/2], \\
+    0 \Text{sonst}
+\end{cases}
+\]
+Die Faltung von $\Rect_{\Delta Q}$ mit einer Funktion $f$ ergibt
+\begin{equation}
+    \label{eq:random:conv_cdf}
+    [\Rect_{\Delta Q} \ast f](x) 
+        = \Int{x - \Delta Q/2}{x + \Delta Q/2}{f(t)}{t} 
+        = F_{X}(x + \Delta Q/2) - F_{X}(x - \Delta Q/2),
+\end{equation}
+somit müssen wir nur noch die Faltung von $\Rect_{\Delta Q}$ und $f_X$ an der richtigen Stelle auswerten, um das Area Sampling analytisch zu reproduzieren.
+Diese Auswertung kann wegen \Cref{eq:random:density} durch Verwenden Verteilungsfunktion $F_X$ erfolgen.
+
+Definieren wir für die Auswertung einen entsprechenden Dirac-Kamm in Abhängigkeit von $\Delta Q$ via
+\[
+c(x) = \Sum{k \in \Z}{}{
+    \delta(x - k \Delta Q)
+},
+\]
+dann ergibt sich
+\begin{equation}
+    \label{eq:random:area_sampling}
+    f_{q(X)} = (\Rect_{\Delta Q} \ast f) \cdot c.
+\end{equation}
+Damit haben wir gezeigt, dass sich die diskrete Dichte des quantisierten Signals bei Area Sampling als Folge von Punktauswertungen der Faltung der Dichte des nicht-quantisierten Signals mit $\Rect_{\Delta Q}$ ergibt.
+Dies ist offensichtlich eine lineare Transformation der Dichte, da alle involvierten Operationen, also Faltung mit $\Rect_{\Delta Q}$ und Multiplikation mit $c$, linear in $f_X$ sind.
+Dieser Zusammenhang wird in \Cref{py:random:quantization2} beispielhaft für die Signale aus \Cref{py:random:signal3} durchgeführt.
+
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=58, lastline=100]{python3}{code/random/quantization2.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/random/quantization2.png}
+    \end{minipage}
+    \codecaption{dsv/code/random/quantization2.py}{Quantisierung via Area Sampling}\label{py:random:quantization2}
+\end{listing}
+
+Wir sehen in \Cref{py:random:quantization2} in \pyinl{empirical_pdf}, wie man aus \pyinl{N} Realisierungen eine Schätzung für die Dichte $f_X$ bekommen kann.
+Dies nennt man entsprechend \emph{empirische Dichte}, da sie nicht analytisch, sondern empirisch durch Mittelung, entstanden ist.
+Wir berechnen erst die \emph{empirische Verteilung} als Schätzung von $F_X$ aus \Cref{eq:random:cdf} und bilden dann numerische Ableitungen, wie in \Cref{eq:random:pdf_approx} gefordert und erhalten somit \pyinl{XN_f}. 
+Dann vollziehen wir die beiden Möglichkeiten für die Berechnung der Dichte der quantisierten Werte $f_{q(X)}$, indem wir erst quantisieren und dann das Histogram an den Quantisierungsstufen bilden, um \pyinl{XN_f_q} zu erhalten.
+Schließlich erhalten wir \pyinl{XN_f_q_as} durch direktes Implementieren von \Cref{eq:random:area_sampling} mittels \pyinl{density_area_sampling}.
+Wie man im unteren Plot erkennen kann, stimmen die beiden Implementierungen sehr gut überein. 
+Kleinste Abweichungen kommen von der Tatsache, dass die empirische Dichte verwendet wurde und dass wir auch für die alternative Implementierung des Area Samplings eine empirische Version der Verteilung $F_X$ verwendet haben.
+
+\FloatBarrier
+Die Frage, die wir uns nun stellen wollen ist: 
+Unter welchen Bedingungen kann man aus der diskreten Dichte $f_{q(X)}$ die ursprüngliche Dichte $f_{X}$ des Nicht-quantisierten Signals rekonstruieren?
+
+Hierzu betrachten wir den Zusammenhang aus \Cref{eq:random:area_sampling} im Frequenzbereich.
+In \eqref{eq:random:char_fun} haben wir die charakteristische Funktion $\phi_X$ als Fourier-Transformierte einer Dichte $f_X$ eingeführt.
+Definieren wir $F_Q = 1 / \Delta Q$, dass ergibt sich aus den Eigenschaften der Fourier-Transformation direkt, dass
+\begin{equation}
+    \label{eq:random:area_sampling_fourier}
+    \phi_{q(X)}(F) = \Sum{k \in \Z}{}{
+        \left(
+            \phi_{X} \cdot \Sinc_{\Delta Q}
+        \right)(F - k F_Q)
+    } = \Sum{k \in \Z}{}{
+        \left(
+            \phi_{X}(F - k F_Q) \cdot \Sinc_{\Delta Q}(F - k F_Q)
+        \right)
+    },
+\end{equation}
+%
+\begin{figure}[t]
+    \centering\includegraphics[width=0.6\textwidth]{img/quantization2.png}
+    \caption{Visualisierung des Effekts von Area Sampling im Frequenzbereich. Quelle:~\cite{widrow2008quantization}}
+    \label{fig:random:quant_cf}
+\end{figure}
+%
+wobei wir 
+\[
+\Sinc_{\Delta Q}(F) = \Sinc\left(\frac{\Delta Q F}{2}\right)
+\]
+definiert haben.
+
+Wir sehen hier schön die Eigenschaften, die wir aus \Cref{sec:sampling} bereits kennen, am Werk.
+Da die Dichte der quantisierten Werte aus Faltung und Abtastung mit Rate $F_Q = 1/T_Q$ hervorgeht, ist deren Spektrum periodisch mit Periodenlänge $T_Q$. 
+Weiterhin muss vor Periodifizierung die charakteristische Funktion der nicht-quantisierten Werte $\phi_X$ mit der Fourier-Transformierten von $\Rect_{\Delta Q}$ multipliziert werden.
+Dies ist in \Cref{fig:random:quant_cf} sehr schön aufbereitet.
+
+Wir kommen nun zum Abschluss, da wir nun basierend auf \eqref{eq:random:area_sampling_fourier} ein Kriterium angeben können, sodass wir $f_X$ aus $f_{q(X)}$ rekonstruieren können. 
+Dies ist in der Praxis natürlich von großem Interesse, da wir für gewöhnlich nur $f_{q(X)}$ ermitteln können, aber eigentlich Informationen über $f_X$ aus unseren Beobachtungen ziehen wollen.
+
+Wie wir gesehen haben, hängt die Periodifizierung im Frequenzbereich in \eqref{eq:random:area_sampling_fourier} von dem Abstand der Quantisierungsstufen ab.
+Wählen wir also $\Delta Q$ so klein, dass $\phi_X(F) = 0$ für alle $\Abs{F} > F_Q$, dann tritt in \Cref{eq:random:area_sampling_fourier} kein Aliasing auf.
+Das heißt, dass sich die Kriterien für hinreichend feines Quantisieren \emph{direkt} aus der Anwendung des Samplingtheorems~\ref{thm:sampling_theorem} auf $f_{X}$ beziehungsweise $f_{q(X)}$ ergeben!
+
+\FloatBarrier
+\begin{Thm}[Widrow-Quantisierungs-Theorem]
+\label{thm:random:widrow}
+Ist die Dichte der nicht-quantisierten Werte $f_x$ bandbegrenzt, also gilt
+\[
+\phi_X(F) = 0 \Text{für} \Abs{F} > \frac{1}{\Delta Q},
+\]
+dann lässt sich die
+\end{Thm}
+
+Wir versuchen nun mit \Cref{thm:random:widrow} aus der Dichte der quantisierten Werte $f_{q(X)}$ die Dichte der nicht-quantisierten Werte $f_X$ zu bestimmen.
+Dies ist einmal basierend auf dem vorherigen Beispiel aus \Cref{py:random:quantization2} in \Cref{py:random:quantization3}.
+Die Funktion \pyinl{invert_quant} nutzt hierfür die \gls{dft} in Form der \gls{fft} und wendet die Filter im entsprechenden diskreten Spektrum an.
+Im vorletzten Schritt wird das Spektrum der charakteristischen Funktion in den Zeitbereich transformiert und schlussendlich der Interpolationskern aus \Cref{thm:sampling_theorem}.
+
+\begin{listing}[ht]
+    \noindent
+    \begin{minipage}{0.51\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \inputminted[firstline=80, lastline=115]{python3}{code/random/quantization3.py}
+    \end{minipage}%
+    \begin{minipage}{0.48\textwidth}
+        \strut\vspace*{-\baselineskip}\newline
+        \includegraphics[width=\textwidth]{code/random/quantization3_1.png}
+
+        \includegraphics[width=\textwidth]{code/random/quantization3_2.png}
+
+        \includegraphics[width=\textwidth]{code/random/quantization3_3.png}
+    \end{minipage}
+    \codecaption{dsv/code/random/quantization3.py}{Schätzung der Dichte $f_X$ aus $f_{q(X)}$, die aus Area Sampling gewonnen wurde}\label{py:random:quantization3}
+\end{listing}
+%
+%
+%
 % \input{content/paramest.tex}
