@@ -560,6 +560,8 @@ Dies ist in der Praxis natürlich von großem Interesse, da wir für gewöhnlich
 Wie wir gesehen haben, hängt die Periodifizierung im Frequenzbereich in \eqref{eq:random:area_sampling_fourier} von dem Abstand der Quantisierungsstufen ab.
 Wählen wir also $\Delta Q$ so klein, dass $\phi_X(F) = 0$ für alle $\Abs{F} > F_Q$, dann tritt in \Cref{eq:random:area_sampling_fourier} kein Aliasing auf.
 Das heißt, dass sich die Kriterien für hinreichend feines Quantisieren \emph{direkt} aus der Anwendung des Samplingtheorems~\ref{thm:sampling_theorem} auf $f_{X}$ beziehungsweise $f_{q(X)}$ ergeben!
+Man kann sich in diesem Sinne Quantisierung als \q{Abtastung} der Dichte $f_X$ vorstellen.
+Deshalb ergibt sich auch, dass die Quantisierungsstufen so nah beieinander liegen müssen, dass diese Dichte kritisch abgetastet wurde.
 
 \FloatBarrier
 \begin{Thm}[Widrow-Quantisierungs-Theorem]
@@ -568,13 +570,79 @@ Ist die Dichte der nicht-quantisierten Werte $f_x$ bandbegrenzt, also gilt
 \[
 \phi_X(F) = 0 \Text{für} \Abs{F} > \frac{1}{\Delta Q},
 \]
-dann lässt sich die
+dann lässt sich die Dichte $f_X$ schreiben als
+\[
+f_X(x) = \Sum{k \in \Z}{}{
+    \Sum{\ell = \infty}{k}{
+        f_{q(X)}(\ell \Delta Q)
+    }
+    \frac{\mathrm{d}}{\mathrm{d} x}\Sinc\left(
+        \frac{x - (k + 1/2) \Delta Q}{\Delta Q}
+    \right)
+}
+\]
 \end{Thm}
+\begin{proof}
+Wir führen den Beweis der Vollständigkeit halber, da in \cite{widrow2008quantization} auf \url{http://www.mit.be.hu/books/quantization} verwiesen wird. 
+Anyways.
 
-Wir versuchen nun mit \Cref{thm:random:widrow} aus der Dichte der quantisierten Werte $f_{q(X)}$ die Dichte der nicht-quantisierten Werte $f_X$ zu bestimmen.
-Dies ist einmal basierend auf dem vorherigen Beispiel aus \Cref{py:random:quantization2} in \Cref{py:random:quantization3}.
-Die Funktion \pyinl{invert_quant} nutzt hierfür die \gls{dft} in Form der \gls{fft} und wendet die Filter im entsprechenden diskreten Spektrum an.
-Im vorletzten Schritt wird das Spektrum der charakteristischen Funktion in den Zeitbereich transformiert und schlussendlich der Interpolationskern aus \Cref{thm:sampling_theorem}.
+Die Funktion $\Rect_{\Delta Q} \ast f_X$ ist genau dann bandbegrenzt, wenn $f_X$ bandbegrenzt ist, da $\Rect_{\Delta Q}$ nicht bandbegrenzt ist und die beiden Spektren sich wegen der Faltung im Frequenzbereich multiplizieren.
+Die Formel für die Interpolation ergibt sich aus der Anwendung von \Cref{thm:sampling_theorem} auf die Funktion $\Rect_{\Delta Q} \ast f_X$, von der wir aus \Cref{eq:random:area_sampling} wissen, dass
+\[
+[\Rect_{\Delta Q} \ast f_X](x) = \Sum{k \in \Z}{}{
+    f_{q(X)}(k \Delta Q) \Sinc\left(\frac{x - k \Delta Q}{\Delta Q}\right).
+}
+\]
+Dann wissen wir aus \Cref{eq:random:conv_cdf}, dass 
+\[
+[\Rect_{\Delta Q} \ast f_X](x) = F_{X}(x + \Delta Q/2) - F_{X}(x - \Delta Q/2),
+\]
+was nach Differentiation beider Seiten 
+\[
+f_{X}(x + \Delta Q/2) - f_{X}(x - \Delta Q/2) = 
+    \Sum{k \in \Z}{}{
+        f_{q(X)}(k \Delta Q) \frac{\mathrm{d}}{\mathrm{d} x} \Sinc\left(\frac{x - k \Delta Q}{\Delta Q}\right)
+    } 
+    = g(x)
+\]
+impliziert.
+Betrachten wir $g(x) + g(x + \Delta Q)$ so ergibt sich
+\begin{align*}
+g(x) + g(x - \Delta Q)
+    & = f_{X}(x + \Delta Q/2) - f_{X}(x - \Delta Q/2)
+      + f_{X}(x + \Delta Q/2 - \Delta Q) - f_{X}(x - \Delta Q/2 - \Delta Q) \\
+    & = f_{X}(x + \Delta Q/2) - f_{X}(x - \Delta Q/2 - \Delta Q)
+\end{align*}
+Also folgern wir induktiv, dass
+\[
+\Sum{\ell = 0}{\infty}{
+    g(x + \ell \Delta Q)
+} = f_X(x + \Delta Q / 2) + \lim_{\ell \rightarrow \infty} f_X(x + \ell \Delta Q), 
+\]
+Da Dichten endliches Integral besitzen und die Dichten, die wir betrachten gutartig genug sind, gilt
+\[
+\lim_{\ell \rightarrow \infty} f_X(x + \ell \Delta Q) = 0,
+\]
+sodass wir mit ein bisschen Umindizieren von $p = k - \ell$ und Vertauschung von Summen nachrechnen, dass
+\begin{align*}
+    f_X(x + \Delta Q / 2) 
+    & = \Sum{\ell = - \infty}{0}{
+        \Sum{k \in \Z}{}{
+            f_{q(X)}(k \Delta Q) \frac{\mathrm{d}}{\mathrm{d} x} \Sinc\left(\frac{x - (k - \ell) \Delta Q}{\Delta Q}\right)
+        }
+    } \\
+    & = \Sum{p \in \Z}{}{
+        \left(\Sum{\ell = - \infty}{p}{
+            f_{q(X)}(\ell \Delta Q)
+        }\right) 
+        \frac{\mathrm{d}}{\mathrm{d} x} \Sinc\left(\frac{x - p \Delta Q}{\Delta Q}\right)
+    }
+\end{align*}
+
+\end{proof}
+
+Wir können nun mit \Cref{thm:random:widrow} aus der Dichte der quantisierten Werte $f_{q(X)}$ die Dichte der nicht-quantisierten Werte $f_X$ bestimmen.
+Dies ist einmal basierend auf dem vorherigen Beispiel aus \Cref{py:random:quantization2} in \Cref{py:random:quantization3} durchgeführt.
 
 \begin{listing}[ht]
     \noindent
@@ -592,6 +660,11 @@ Im vorletzten Schritt wird das Spektrum der charakteristischen Funktion in den Z
     \end{minipage}
     \codecaption{dsv/code/random/quantization3.py}{Schätzung der Dichte $f_X$ aus $f_{q(X)}$, die aus Area Sampling gewonnen wurde}\label{py:random:quantization3}
 \end{listing}
+
+Zusammenfassend ist also zu sagen, dass Quantisierung von zufällig modellierten stationären Signalen mit Dichte $f_X$ einer Abtastung dieser in Abhängigkeit von der Granularität jener gesehen werden kann.
+Demzufolge konnten wir schlussfolgern, dass bei Quantisierung darauf geachtet werden muss, dass keine Information der Dichte verloren geht, sodass sich die Dichte des analogen Signals aus der Dichte der quantisierten Werte rekonstruieren lässt.
+Somit haben wir eine Anwendung des Samplingtheorems~\ref{thm:sampling_theorem} gefunden, die nicht direkt mit Abtastung im Raum oder Zeit zu tun hat, sondern mit Abtastung im \emph{Wertebereich} eines analogen Signals!
+Damit haben wir eine wunderschöne Brücke zwischen der Theorie der zufälligen Signale und der Samplingtheorie aus \Cref{sec:sampling} gefunden -- ein toller Abschluss!
 %
 %
 %

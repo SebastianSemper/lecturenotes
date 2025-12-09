@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import ecdf
 from scipy.special import sinc
+from scipy.differentiate import derivative
 
 
 def X(t):
@@ -19,7 +20,7 @@ def X(t):
     )
 
 
-N = 100
+N = 1000
 F_s = 16  # sampling freq
 N_s = 64  # sample duration
 T = np.linspace(
@@ -59,7 +60,7 @@ def empirical_pdf(x, edges):
     density_eval = np.linspace(
         edges[0],
         edges[-1],
-        int(10 * (edges[-1] - edges[0])),
+        int(20 * (edges[-1] - edges[0])),
     )
     # |\Cref{eq:random:cdf}|
     x_ecdf = ecdf(XN.flatten()).cdf
@@ -77,7 +78,47 @@ def empirical_pdf(x, edges):
     return x_epdf, density_eval[1:]
 
 
-def invert_quant(X_f_q, evalGrid, centers):
+def sinc_deriv(x):
+    return np.where(
+        np.isclose(x, 0),
+        np.zeros_like(x),
+        (
+            np.pi**2 * np.cos(np.pi * x) * x
+            - np.pi * np.sin(np.pi * x)
+        )
+        / (np.pi * x) ** 2,
+    )
+
+
+def invert_quant_time(X_f_q, evalGrid, centers):
+    # X_f_q_sum = np.cumsum([0, *X_f_q])
+    X_f_q_sum = np.pad(
+        np.cumsum(X_f_q), (2, 2), mode="edge"
+    )
+    sinc_shift = np.diff(centers)[0]
+    padded_centers = np.pad(
+        centers, (2, 2), mode=""
+    )
+    X_f_fine = sinc(
+        np.add.outer(
+            evalGrid, -centers - sinc_shift / 2
+        )
+        / sinc_shift
+    ).dot(X_f_q_sum)
+
+    return (
+        sinc_deriv(
+            np.add.outer(
+                evalGrid,
+                -centers - sinc_shift / 2,
+            )
+            / sinc_shift
+        ),
+        X_f_fine,
+    )
+
+
+def invert_quant_freq(X_f_q, evalGrid, centers):
     # stuetzstellen im freq-bereich
     f_bins = np.fft.fftfreq(X_f_q.size)
 
@@ -107,9 +148,10 @@ def invert_quant(X_f_q, evalGrid, centers):
     X_f = X_f - X_f[0]
 
     # sinc-interpolation
-    shift = np.diff(centers)[0]
+    sinc_shift = np.diff(centers)[0]
     X_f_fine = sinc(
-        np.add.outer(evalGrid, -centers) / shift
+        np.add.outer(evalGrid, -centers)
+        / sinc_shift
     ).dot(X_f)
 
     return X_f, X_f_fine
@@ -125,7 +167,7 @@ XN_f_q, _ = np.histogram(
     XN_q, edges, density=True
 )
 
-XN_f_est, XN_phi_est = invert_quant(
+XN_f_est, XN_f_est_fine = invert_quant_time(
     XN_f_q, density_eval, centers
 )
 
@@ -145,9 +187,24 @@ plt.stem(
     linefmt="r",
     label="$f_{q(X)}$",
 )
+plt.stem(
+    centers,
+    np.cumsum(XN_f_q),
+    markerfmt="r",
+    basefmt="r",
+    linefmt="r",
+    label="$f_{q(X)}$",
+)
 plt.plot(
     density_eval,
-    XN_phi_est,
+    XN_f_est,
+    color="grey",
+    alpha=0.5,
+    label="estimate of $f_X$",
+)
+plt.plot(
+    density_eval,
+    XN_f_est_fine,
     color="g",
     label="estimate of $f_X$",
 )
