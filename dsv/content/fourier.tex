@@ -757,10 +757,10 @@ gilt.
 Das heißt, dass die zyklische Faltung von zwei periodischen Signalen wieder ein periodisches Signal ergibt, dessen \gls{dft} das Produkt der \glspl{dft} der gefalteten Signale ist.
 Wenn wir an \gls{lti}-Systeme denken und uns erinnern, dass viele Filter als \gls{lti}-Systeme aufgefasst werden können, so ist klar, warum diese Eigenschaft wichtig ist.
 Die digitalen Filter können also im Frequenzbereich sehr einfach angewendet werden, weil dort nur eine einfache punktweise Multiplikation notwendig ist.
-Doch dies allein ist nicht ausreichend, denn wir benötigen noch einen effizienten weg, um zwischen Zeit- und Freqeunzbereich wechseln zu können.
+Doch dies allein ist nicht ausreichend, denn wir benötigen noch einen effizienten Weg, um zwischen Zeit- und Frequenzbereich wechseln zu können.
 Dies wird uns durch die \gls{fft} ermöglicht werden.
 In \Cref{py:dft_1} hatten wir bereits erfahren, dass man die \gls{dft} als Matrix-Vektor-Produkt formulieren kann, wozu etwa \glspl{flop} in der Größenordnung $N^2$ notwendig sind.
-Die \gls{fft} erlaubt es aber eine \gls{dft} mit \glspl{flop} in der Größenordnung von nur $N \log{N}$ durchzuführen.
+Die \gls{fft} erlaubt es aber eine \gls{dft}  in der Größenordnung von nur $N \log{N}$ \glspl{flop} durchzuführen.
 
 Dann beläuft sich eine effiziente Implementierung eines \gls{fir} Filters mit Impulsantwort $h[\cdot]$ auf folgende Schritte:
 \begin{enumerate}
@@ -772,19 +772,19 @@ Dann beläuft sich eine effiziente Implementierung eines \gls{fir} Filters mit I
 Dieser Prozess wurde in \Cref{py:dft_conv} nachgestellt und wird mit der zyklischen Faltung im Zeitbereich verglichen.
 Als Beispiel nehmen wir hier eine abgetastete Sinusfunktion, deren Werte mit Rauschen belegt sind.
 Um das Signal ein wenig vom Rauschen zu befreien, implementieren wir ein gleitendes Mittel, siehe \Cref{py:moving_average}, dessen Mittelungsdauer wir mit einem \q{cut-off} einstellen können.
-Wie man sieht, ist das Ergbenis der Faltung im Zeitbreich mit dem im Frequenzbereich identisch ist.
+Wie man sieht, ist das Ergbenis der Faltung im Zeitbreich mit dem im Frequenzbereich identisch.
 Außerdem stellt sich durch die Mittelung eine Glättung der Werte ein, die mehr dem Verlauf des ursprünglichen Signals ähnelt.
-Jedoch sieht man auch, dass sich die Phase des Resultates sich von der des Eingangs unterscheidet.
+Jedoch sieht man auch, dass sich die Phase des Resultates von der des Eingangs unterscheidet.
 Diese Phase wird vom Filter $h$ aufgeprägt und ist somit eine Konsequenz der gewählten Signalverabeitung.
 Es gibt Möglichkeiten diesen Einfluss zu reduzieren, die aber über unser aktuelles Interesse hinausgehen.
 
 Es sei hier angemerkt, dass dies er einfachste Fall ist, den man sich für die sogenannte schnelle Faltung vorstellen kann.
 Es ist beispielsweise nicht direkt klar, was zu tun ist, wenn $x[\cdot]$ und $h[\cdot]$ nicht diesselbe Länge haben, was dazu führt, dass die resultierenden \glspl{dft} ebensfalls von verschiedener Länge sind.
-Darüber hinaus ist unsere Implementierung eine \q{offline}-Version in dem Sinne, dass die zu verarbeitenden Daten bereits im Speicher liegen.
-Doch, wenn man an Echtzeitanwendungen, beispielsweise im Audiobereich, denkt so wird es notwendig sein, diese Operation auf Daten anzuwenden, die nicht vollständig im Zugriff liegen.
-Außerdem will man natürlich nicht immer eine zyklische Faltung, sondern eine \q{normale} Faltung implementieren.
+Darüber hinaus ist unsere Implementierung eine \q{offline}-Version in dem Sinne, dass die zu verarbeitenden Daten bereits vollständig im Speicher liegen müssen.
+Doch wenn man an Echtzeitanwendungen, beispielsweise im Audiobereich, denkt so wird es notwendig sein, diese Operation auf Daten anzuwenden, die nicht vollständig im Zugriff liegen, sondern sich fortlaufend aktualisieren.
+Außerdem will man natürlich nicht immer eine zyklische Faltung, sondern eine \q{normale} Faltung implementieren, besonders im Echtzeitfall ist dies besonders wichtig.
 
-Alle diese Probleme können aber mit einigen Tricks so umformuliert werden, dass man am Ende wieder eine zyklische Faltung rechnen kann.
+All diese Probleme können aber mit einigen Tricks so umformuliert werden, dass man an einer Stelle in der Verarbeitung wieder eine zyklische Faltung rechnen kann.
 Oft müssen hierzu das Signal order die Impulsantwort zielführend manipuliert werden, oder das Ergebnis nach Faltung noch prozessiert werden.
 
 \begin{listing}[ht]
@@ -811,11 +811,5 @@ dass
 \begin{equation}\label{eq:fourier:cycl_conv_dual}
     X_3[k] = \frac{1}{N}(X_1 \circledast X_2)[k].
 \end{equation}
-%
-% \begin{itemize}
-%     \item dft als approximation der dtft
-%     \begin{itemize}
-%         \item $s(t) = \exp(-t/\tau) \cdot \sin(\omega_0 \cdot t)$, 
-%         \item $s(t) = \exp(-(t - \mu)^2/\sigma^2)$ (Uebung)
-%     \end{itemize}
-% \end{itemize}
+
+Wir haben nun genügend Eigenschaften der \gls{dft} gesammelt, sodass wir uns nun Anwendungen zuwenden können.
