@@ -1,44 +1,46 @@
 Bisher waren wir ausschließlich mit deterministischen Signalen befasst. 
 Also solchen, welche sich bequem durch eine Funktionsvorschrift $t \mapsto x(t)$ beschreiben lassen.
-Doch eigentlich ist dies ein absolut idealisierter Spezialfall, da für gew\"ohnlich alle Signale, die wir verarbeiten, zu mindestens einem Zeitpunkt von einem Messgerät beobachtet wurden.
+Doch eigentlich ist dies ein absolut idealisierter Spezialfall, da für gewöhnlich alle Signale, die wir verarbeiten, zu mindestens einem Zeitpunkt von einem Messgerät beobachtet wurden.
 Somit sind diese notwendigerweise mit Messrauschen behaftet, dessen unangenehme Eigenschaft es ist, zuällig zu sein.
-Aus diesem Grund ist es uns nicht m\"oglich, ein gemessenes und digitalisiertes Signal $x[\cdot]$ mittels eines alebraischen Ausdrucks zu beschreiben.
-Notwendigerweise wird $x[\cdot]$ zu einer sog. Zufallsgr\"oße, welche wir \q{nur} noch durch deren statistische Eigenschaften beschreiben k\"onnen.
-Nicht nur das, auch jede folgende Verarbeitung von $x[\cdot]$, bespielsweise durch ein \gls{lti}-System, wird zu einer Zufallsgr\"oße, deren Eigenschaften u.A. von denen des Messrauschens abhängen.
+Aus diesem Grund ist es uns nicht möglich, ein gemessenes und digitalisiertes Signal $x[\cdot]$ mittels eines alebraischen Ausdrucks zu beschreiben.
+Notwendigerweise wird $x[\cdot]$ zu einer sog. Zufallsgröße, welche wir \q{nur} noch durch deren statistische Eigenschaften beschreiben können.
+Nicht nur das, auch jede folgende Verarbeitung von $x[\cdot]$, bespielsweise durch ein \gls{lti}-System, wird zu einer Zufallsgröße, deren Eigenschaften u.A. von denen des Messrauschens abhängen.
 
 Weiterhin kann es für gewisse Anwendungen auch absolut ausreichend sein, eigentlich deterministische Signale als zufällig zu modellieren.
-Wenn es beispielsweise darum geht, zu bestimmen, ob ein Kommunikationssystem in der Lage ist, Informationen fehlerfrei zu übertragen, dann kann es ausreichend sein, \q{nur} eine Ausfallrate/-wahrscheinlichkeit zu bestimmen, oder diese Rate zu begrenzen, anstatt dies für jedes m\"ogliche zu übertragende Signal zu bestimmen/gewährleisten.
+Wenn es beispielsweise darum geht, zu bestimmen, ob ein Kommunikationssystem in der Lage ist, Informationen fehlerfrei zu übertragen, dann kann es ausreichend sein, \q{nur} eine Ausfallrate/-wahrscheinlichkeit zu bestimmen, oder diese Rate zu begrenzen, anstatt dies für jedes mögliche zu übertragende Signal zu bestimmen/gewährleisten.
+Außerdem haben wir auch schon in \cref{sec:mseq} gesehen, dass man die Korrelation von deterministischen Signalen mit Messrauschen in den Griff bekommen muss, wenn man sich mit Radar-Signalverarbeitung beschäftigt.
 
-Um diese \q{neue} Sichtweise auf Signale gut verinnerlichen zu k\"onnen, ben\"otigen wir jedoch einige Werkzeuge aus der Wahrscheinlichkeitstheorie, die wir uns nun ansehen werden, wobei wir versuchen, uns nicht mit vielen mathematischen Details aufzuhalten, sondern wollen stattdessen unsere Intuition schärfen.
+Um diese \q{neue} Sichtweise auf Signale gut verinnerlichen zu können, benötigen wir jedoch einige Werkzeuge aus der Wahrscheinlichkeitstheorie, die wir uns nun ansehen werden, wobei wir versuchen, uns nicht mit vielen mathematischen Details aufzuhalten, sondern wollen stattdessen unsere Intuition schärfen.
 
 \subsection{Grundlagen Wahrscheinlichkeitstheorie}\label{sec:random:prbly}
 
 Nehmen wir zunächst einmal an, dass wir einen zufälligen Vorgang betrachten, dessen Ausgang sich in Form einer einzelnen reellen Zahl manifestiert.
-Diesen zufälligen Vorgang assoziieren wir mit der Zufallsgr\"oße $X : \Omega \rightarrow \R$, also $\omega \rightarrow X(\omega)$, wobei wir uns vorstellen, dass $\Omega$, beziehungsweise $\omega$, dafür sorgen, dass Zufall ins Spiel kommt. \textit{$\ast$MITHÄNDENWEDEL$\ast$} 
-Wir sind nun daran interessiert, wie die \emph{Verteilung} der Werte $X(\omega)$ charakterisiert werden kann.
+Diesen zufälligen Vorgang assoziieren wir mit der Zufallsgröße $X : \Omega \rightarrow \R$, also $\omega \rightarrow X(\omega)$, wobei wir uns vorstellen, dass $\Omega$, beziehungsweise $\omega$, dafür sorgen, dass Zufall ins Spiel kommt. \textit{$\ast$MITHÄNDENWEDEL$\ast$} 
+Wir sind nun daran interessiert, wie die \emph{Verteilung} der Werte $X(\omega)$ über dem Wertebereich $\R$ charakterisiert werden kann.
 
-Hierzu definieren wir beigeordnet zu $X$ eine Funktion $F_X: \R \rightarrow [0,1]$, welche uns für $x \in \R$ mitteilt, was die Wahrscheinlichkeit für das Ereignis $X \leqslant x$ ist.
+Hierzu definieren wir beigeordnet zu $X$ eine Funktion $F_X: \R \rightarrow [0,1]$, welche uns für $x \in \R$ mitteilt, was die Wahrscheinlichkeit für das zufällig eintretende Ereignis $X \leqslant x$ ist.
 Man kann auch sagen/schreiben:
 \begin{equation}
     \label{eq:random:cdf}
     F_X(x) = P(X \leqslant x).
 \end{equation}
+Hier nennt man $P$ auch ein \emph{Wahrscheinlichkeitsmaß}, da $P$ im Grunde die Wahrscheinlichkeitsmasse auf den Wertebereich $\R$ verteilt.
 Die Funktion $F$ ist monoton wachsend, da natürlich $P(X \leqslant x_1) \leqslant P(X \leqslant x_2)$, falls $x_1 < x_2$, also auch $F_X(x_1) \leqslant F_X(x_2)$.
 Jetzt kann man mit der \emph{Verteilungsfunktion} $F_X$ schon eine Menge anfangen.
-Beispielsweise k\"onnen wir damit auch bestimmen, mit welcher Wahrscheinlichkeit das Ereignis $x_1 < X \leqslant x_2$ eintritt, indem wir einfach 
+Beispielsweise können wir damit auch bestimmen, mit welcher Wahrscheinlichkeit das Ereignis $x_1 < X \leqslant x_2$ eintritt, indem wir einfach 
 \[
 P(x_1 < X \leqslant x_2) = P(\{x_1 < X\} \cup \{X < x_2\}) = F_X(x_2) - F_X(x_1)
 \]
 berechnen.
 
-Wir k\"onnen sogar noch einen Schritt weiter gehen, und die Gr\"oße
+Wir können sogar noch einen Schritt weiter gehen, und die Größe
 \begin{equation}
     \label{eq:random:pdf_approx}
     f^h_X(x) = \frac{F_X(x + h) - F_X(x)}{h}
 \end{equation}
 betrachten.
 Man kann es sich so vorstellen, dass wir das Intervall $[x,x+h]$ hernehmen, berechnen, wie \q{viel} von $X$ in $[x,x+h]$ landen kann, und normieren das mit der Intervallbreite $h$.
-Im Grunde berechnen wir, wie \q{dicht} die Zufallsgr\"oße zwischen $x$ und $x+h$ ist.
+Im Grunde berechnen wir, wie \q{dicht} die Zufallsgröße zwischen $x$ und $x+h$, oder \q{um} $x$, ist.
 Aus diesem Grund nennt man den Grenzwert
 \begin{equation}
     \label{eq:random:density}
@@ -46,14 +48,14 @@ Aus diesem Grund nennt man den Grenzwert
 \end{equation}
 die \emph{Dichte} von $X$.
 Natürlich sehen wir, dass der berechnete Grenzwert der sogenannte Differenzenquotient der Verteilungsfunktion $F_x$ ist. Es gilt also $f_X = F^\prime_X = (\mathrm d)/{\mathrm d x} F_{x}(x)$.
-Deshalb kann man nun die Verteilungsfunktion auch aus der Dichte gewinnen, indem wir
+Deshalb kann man die Verteilungsfunktion auch aus der Dichte gewinnen, indem wir
 \[
 F_X(x) = \Int{-\infty}{x}{f_X(s)}{s}
 \]
 auswerten.
 Die obigen Betrachtungen gelten freilich nur, wenn die formulierten Grenzwerte auch immer existieren, doch erstens existieren diese meistens und für ein intuitives Verständnis sollte es zunächst genügen.
 
-Weiterhin gilt für reelle Zufallsgrößen $X$, dass diese sich \q{irgendwo} zwischen $-\infty$ und $+\infty$ mit Wahrscheinlichkeit $1$ realisieren muss.
+Weiterhin gilt für eine reell Zufallsgröße $X$, dass diese sich \q{irgendwo} zwischen $-\infty$ und $+\infty$ mit Wahrscheinlichkeit $1$ realisieren muss.
 Also gilt
 \[
 \lim_{x \rightarrow \infty} F_X(x) = 1,
@@ -70,30 +72,30 @@ Da $F_X$ monoton wachsend ist, muss auch immer gelten, dass $f_X(x) \geqslant 0$
 %
 Gegeben zwei Zufallsgrößen $X$ und $Y$ ist es oft interessant deren Verhältnis zueinander zu untersuchen. 
 Beispielsweise wollen wir $P(X \leqslant x, Y \leqslant y)$, also die Wahrscheinlichkeit, dass $X \leqslant x$ und $Y \leqslant y$ gemeinsam (gleichzeitig) eintreten, berechnen/untersuchen/kennen.
-Im allgemeinen Fall, benötigt man hierfür die \emph{gemeinsame} Verteilung von $X$ und $Y$, also $F_{X,Y}$ oder $f_{X,Y}$.
+Im allgemeinen Fall, benötigt man hierfür die \emph{gemeinsame} Verteilung von $X$ und $Y$, also $F_{X,Y}$ oder $f_{X,Y}$, direkt einen zwei-dimensionalen Wertebereich impliziert.
 
 Gilt aber für alle $x,y$, dass
 \begin{equation}\label{eq:random:unabh}
     P(X \leqslant x, Y \leqslant y) = P(X \leqslant x) \cdot P(Y \leqslant y),
 \end{equation}
 so nennt man $X$ und $Y$ (stochastisch) \emph{unabhängig}. 
-Die gemeinsame Verteilung von $X$ und $Y$ ergibt sich also als das Produkt der Einzelverteilungen, was \emph{sehr} viele Berechnungen vereinfacht.
+Die gemeinsame Verteilung von $X$ und $Y$ ergibt sich als das Produkt der Einzelverteilungen, was \emph{sehr} viele Berechnungen vereinfacht.
 Jedoch ist es schwer Unabhängigkeit nachzuweisen, weshalb es oft eine Annahme ist, die man im Vorhinein während der Modellierung eines Zufallsprozesses trifft.
 %
 %
 \subsubsection{Diskrete Verteilungen}
 %
-Bisher haben wir immer den Fall betrachtet, dass die Verteilungsfunktion $F_X$ (nicht die Dichte $f_X$, siehe uniforme Verteilung) immer stetig war.
+Bisher haben wir immer den Fall betrachtet, dass die Verteilungsfunktion $F_X$ (nicht die Dichte $f_X$, siehe uniforme Verteilung) stetig war.
 In diesem Fall spricht man auch von stetigen Verteilungen.
-Deren Eigenschaft ist es (intuitiv), dass wenn $f_X(x) > 0$ für ein $x$, dann gibt es auch in jeder Umgebung, egal wie klein, um $x$ noch Punkte $y$ mit $f_X(x) > 0$.
-Bei diskreten Verteilungen kann es sein, dass \q{Wahrscheinlichkeitsmasse} auf isolierte (diskrete) \emph{Punkte} konzentriert ist.
+Deren Eigenschaft ist (intuitiv), dass wenn $f_X(x) = f_0$ für ein $x$, dann unterscheiden sich die Werte von $f_X$ in einer kleinen Umgebung von $x$ nicht stark von $y_0$.
+Bei diskreten Verteilungen kann es sein, dass \q{Wahrscheinlichkeitsmasse} auf isolierte (diskrete) \emph{Punkte} konzentriert ist und somit die obige Stetigkeitsbedingung nicht erfüllt ist.
 
 Ein einfaches Beispiel (siehe \Cref{sec:random:quanti}) wäre die quantisierte Version $Q(X)$ einer stetigen Zufallsgröße $X$. 
-Dann erhalten wir mit $Q(X)$ wieder eine Zufallsgröße, deren Werte aber auf die Quantisierungsstufen $\mathcal{Q}$ beschränkt sind.
+Dann erhalten wir mit $Q(X)$ wieder eine Zufallsgröße, deren Werte auf die Quantisierungsstufen $\mathcal{Q}$ beschränkt sind.
 Da wir später diese Art von Verteilung irgendwie in den Griff bekommen müssen, wollen wir uns kurz damit befassen.
 
 Eigentlich müssen diskrete Verteilungen kein Spezialfall von kontinuierlichen Verteilungen sein, wenn man die richtige Theorie\footnote{\url{https://en.wikipedia.org/wiki/Measure_(mathematics)}} verwendet.
-Um das zu vermeiden, müssen wir auf eine etwas unsaubere Schreib- und Denkweise zurückgreifen und im Hinterkopf behalten, dass hier einige Spitzfindigkeiten versteckt sind.
+Um das zu vermeiden, müssen wir auf eine etwas unsaubere Schreib- und Denkweise zurückgreifen und im Hinterkopf behalten, dass hier einige Spitzfindigkeiten versteckt sind, die wir nicht weiter diskutieren.
 
 Hierzu nutzen wir den stetigen Dirac-Stoß.
 Gegeben eine Menge von diskreten Punkten der Form $D = \{d_k \vert k \in \Z \}$ und zugehörige Wahrscheinlichkeiten $p_k \geqslant 0$ für $k \in \Z$ mit der Eigenschaft, dass
@@ -104,7 +106,7 @@ dann definieren wir eine diskrete Zufallsgröße $X$ mit Dichte $f_X$ durch
 \begin{equation}\label{eq:diskrete_dichte}
     f_X(x) = \Sum{k \in \Z}{}{p_k \delta(x - d_k)}.
 \end{equation}
-Wir heften also an die Punkte in $D$ jeweile einen Dirac-Stoß, der mit der Wahrscheinlichkeit für diesen Punkt gewichtet wird.
+Wir heften also an die Punkte in $D$ jeweils einen Dirac-Stoß, der mit der Wahrscheinlichkeit $p_k$ für diesen Punkt gewichtet wird.
 Dann ergibt sich also direkt aus den Eigenschaften von $\delta$, dass $P(X = d_k) = p_k$ und $P(X=x) = 0$ für $x \notin D$, siehe \Cref{py:random:discrete}.
 
 \begin{listing}[ht]
@@ -120,17 +122,19 @@ Dann ergibt sich also direkt aus den Eigenschaften von $\delta$, dass $P(X = d_k
     \codecaption{dsv/code/random/discrete.py}{Visualisierung der Dichte und der Verteilungsfunktion einer diskreten Zufallsgröße}\label{py:random:discrete}
 \end{listing}
 
-Mithilfe von $\delta$ sind wir also in der Lage, weiterhin die aus der Signalverarbeitung bekannten Integrale und deren Eigenschaften in bezug auf $\delta$ zu nutzen.
+Mithilfe von dem Dirac-Stoß $\delta$ sind wir also in der Lage, weiterhin die aus der Signalverarbeitung bekannten Integrale und deren Eigenschaften in Bezug auf $\delta$ zu nutzen.
 %
 %
 \subsubsection{Beispiele}
 %
 Es ist zunächst noch eine Schreibweise einzuführen. 
-Wir werden die Notation $X \sim V$, wobei gemeint ist, dass $V$ für eine Verteilung steht, die die Dichte und damit auch die Verteilungsfunktion und damit auch das oben definierte $P$ festlegt. 
-Wenn wir nun schreiben $X,Y \sim V$ (oder kurz: $X \sim Y$), dann meint das \emph{nicht}, dass $X = Y$!
+Wir werden die Notation $X \sim V$, wobei gemeint ist, dass $V$ für eine Verteilung steht, die die Dichte $f_X$ und damit auch die Verteilungsfunktion $F_X$ und damit auch das oben definierte $P$ festlegt. 
+Wenn wir nun schreiben $X,Y \sim V$ (oder kurz: $X \sim Y$), dann meint das \emph{nicht}, dass $X(\omega) = Y(\omega)$!
 Es meint nur, dass $X$ und $Y$ derselben Verteilung folgen, aber nicht, dass deren Realisierungen $X(\omega)$ und $Y(\omega)$ immer diesselben Werte annehmen. 
-Das Ereignis $X = Y$ tritt also nur mit einer Wahrscheinlichkeit $P(X = Y)$ ein, wobei wir hierfür Kenntnis über die \emph{gemeinsame Dichte} $f_{X,Y}(x,y)$ benötigen.
-Es ist bei vielen unserer Beispiele sehr oft der Fall, dass $P(X = Y) = 0$, wenn $X \sim Y$.
+Das Ereignis $X = Y$ tritt also nur mit einer Wahrscheinlichkeit $P(X = Y)$ ein, wobei wir hierfür wiederum Kenntnis über die \emph{gemeinsame Dichte} $f_{X,Y}(x,y)$ benötigen würden.
+Es ist im Gegenteil bei vielen unserer Beispiele sehr oft der Fall, dass $P(X = Y) = 0$, wenn $X \sim Y$.
+%
+%
 %
 \paragraph{Uniforme Verteilung/Gleichverteilung}
 Gegeben zwei reelle Zahlen $a < b$ nennt man eine Zufallsgröße $X$ verteilt nach $\Unif(a,b)$, man schreibt $X \sim \Unif(a,b)$, wenn die Dichte $f_X$ gegeben ist durch
@@ -142,8 +146,7 @@ f_X(x) = \begin{cases}
 \end{cases} = 
     \frac 1{b-a} \Rect\left(\frac{x-(b+a)/2}{b-a}\right)
 \]
-Der Name dieser Verteilung ergibt sich daraus, dass intuitiv alle Intervalle, die im Intervall $[a,b]$ liegen mit einer Wahrscheinlichkeit proportional zu ihrer \q{Länge} von $X$ \q{getroffen} werden.
-Man schreibt auch oft $X \sim \Unif(a,b)$.
+Der Name dieser Verteilung ergibt sich daraus, dass intuitiv alle Intervalle, die im Intervall $[a,b]$ liegen mit einer Wahrscheinlichkeit proportional zu ihrer \q{Länge} von $X$ \q{getroffen} werden, also $P(X \in [c,d]) = (d-c)/(b-a)$.
 %
 \paragraph{Normalverteilung}
 Gegeben zwei Parameter $\mu \in \R$ und $\sigma^2 \in \R^+$, so nennt man eine Zufallsgröße $X$ normalverteilt mit Erwartungswert $\mu$ und Varianz $\sigma^2$, falls deren Dichte $f_X$
@@ -151,8 +154,8 @@ Gegeben zwei Parameter $\mu \in \R$ und $\sigma^2 \in \R^+$, so nennt man eine Z
 f_X(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2 \sigma^2}\right)
 \]
 erfüllt.
-Die Normalverteilungist eine sehr wichtige Verteilung, weil aus Gründen die meisten Messwerte einer Normalverteilung mit Erwartungswert $\mu$ und einer gewissen Varianz $\sigma^2$ folgen.
-Je größer $\sigma^2$, desto stärker ist die Streuung der gemessenen Werte um den Erwartungswert $\mu$.
+Die Normalverteilung ist eine sehr wichtige Verteilung, weil -- aus Gründen -- die meisten Messwerte einer Normalverteilung mit Erwartungswert $\mu$ und einer gewissen Varianz $\sigma^2$ folgen.
+Je größer $\sigma^2$, desto stärker ist die Streuung der Werte von $X$ um den Erwartungswert $\mu$.
 Man schreibt auch $X \sim \mathcal{N}(\mu, \sigma^2)$.
 Es sind zwei Beispiele in \Cref{py:random:normal1} zusammen mit der Berechnung der Dichte via \texttt{scipy} dargestellt.
 Auch hier ist es wieder ratsam, keine eigenen Implementierungen solcher Standardfunktionen zu nutzen und stattdessen auf Funktionen aus getesteten Paketen zurück zu greifen.
@@ -171,7 +174,7 @@ Auch hier ist es wieder ratsam, keine eigenen Implementierungen solcher Standard
 %
 %
 \paragraph{Exponentialverteilung}
-Gegeben eine Intensität $\lambda > 0$, so folgt eine Zufallsgröße $X$ einer Exponentialverteilung $\Exp(\lambda)$, falls die Dichte $f_X$ die Form 
+Gegeben eine Intensität $\lambda > 0$, so folgt eine Zufallsgröße $X$ einer Exponentialverteilung $X \sim \Exp(\lambda)$, falls die Dichte $f_X$ die Form 
 \[
 f_X(x) = \begin{cases}
     \lambda \exp(-\lambda x), \Text{für} x \geqslant
@@ -187,14 +190,14 @@ Je kleiner $\lambda$, desto höher die Intensität, also desto kürzer die Warte
 \paragraph{Laplace- und Binomialverteilung}
 %
 Wir stellen uns vor, dass wir ein Zufallsexperiment $X$ durchführen, bei dem Erfolg $X=1$ mit Wahrscheinlichkeit $p$ auftritt und Misserfolg $X=0$ mit Wahrscheinlichkeit $(1-p)$.
-Demzufolge gibt es nur diese beiden Möglichkeiten, und wir haben als Dichte entsprechend
+Demzufolge gibt es nur diese beiden Möglichkeiten, und wir erhalten als Dichte entsprechend
 \[
 f_{X}(x) = (1-p) \delta(x) + p \delta(x-1). 
 \]
-Solche eine diskrete Verteilung nennt man Laplaceverteilung mit Parameter $p$.
+Solch eine diskrete Verteilung nennt man Laplaceverteilung mit Parameter $p$.
 
 Allein ist diese Verteilung so einfach, wie sie nur sein kann.
-Betrachten wir aber nun $n$ viele solcher \emph{unabhängiger} Laplaceexperimente $X_1, \ldots X_n$, man nennt diese dann \gls{iid}, und zählen die Anzahl der Erfolge $X$ in diesen $n$ Experimenten, also 
+Betrachten wir aber nun $n$ viele solcher \emph{unabhängiger} Laplaceexperimente $X_1, \ldots X_n$, man nennt diese dann \gls{iid}, und zählen mit $X$ die Anzahl der Erfolge in diesen $n$ Experimenten, also 
 \[
     X = \Sum{i = 1}{n}{X_n},
 \]
@@ -203,7 +206,7 @@ so erhalten wir als Dichte
     f_{X}(x) = \Sum{k = 0}{n}{\binom{n}{k} p^k (1-p)^{n-k} \delta(x - k)}.
 \]
 Diese Verteilung nennt man Binomialverteilung mit Parametern $n$ und $p$.
-Die Unabhängigkeit ist hier sehr wichtig, da diese für das Herleiten von $f_X$ aus denen der einzelnen $f_{X_i}$ hergenommen wird.
+Die Unabhängigkeit ist hier sehr wichtig, da diese für das Herleiten von $f_X$ aus den einzelnen $f_{X_i}$ hergenommen wird.
 %
 %
 %
@@ -219,7 +222,7 @@ Interessiert man sich für den Wert, der sich \q{im Mittel} bei einer Verteilung
 \begin{equation}\label{eq:random:mean}
     \E(X) = \Int{-\infty}{+\infty}{x f_X(x)}{x}.
 \end{equation}
-Wenn $f_X$ einer physikalischen Dichteverteilung im Raum entspräche, so würde $\E(X)$ genau den Masseschwerpunkt dieser Verteilung darstellen.
+Wenn $f_X$ einer physikalischen Dichteverteilung eines Objektes im Raum entspräche, so würde $\E(X)$ genau den Masseschwerpunkt dieser Verteilung darstellen.
 Ist beispielsweise $X \sim \Unif(a,b)$, so gilt $\E(X) = (a+b)/2$ und falls $X \sim \mathcal{N}(\mu, \sigma^2)$, so gilt $\E(X) = \mu$.
 
 Mit dem Erwartungswert kann man Zufallsgrößen \emph{zentrieren}, indem man für $X$ die Zufallsgröße $\tilde{X} = X - \E(X)$ betrachtet. 
@@ -227,12 +230,12 @@ Dann gilt
 \[
 \E(\tilde{X}) = \E(X) - \E(\E(X)) = \E(X) - \E(X) = 0
 \]
-Man nennt Zufallsgrößen $X$ mit $\E(X)$ \emph{mittelwertfrei}.
+Man nennt Zufallsgrößen $X$ mit $\E(X)$ \emph{mittelwert-} oder \emph{biasfrei}.
 %
 %
 \paragraph{Varianz}
 %
-Basierend auf dem Erwartungswert, können wir auch die mittlere Streuung einer Zufallsgröße um $\E(X)$ herum betrachten, also das zweite zentrierte Moment, die \emph{Varianz},
+Basierend auf dem Erwartungswert, können wir auch die mittlere Streuung einer Zufallsgröße um $\E(X)$ herum betrachten, also das zweite zentrierte Moment, die \emph{Varianz}, definiert durch
 %
 \begin{equation}\label{eq:random:var}
 \Var(X) 
@@ -254,7 +257,7 @@ Hierzu kann man deren \emph{Korrelation} $\E(X Y)$ betrachten, also den Erwartun
 Betrachtet man stattdessen die Korrelation der zentrierten Versionen $\E(\tilde{X} \tilde{Y})$, so spricht man von der \emph{Kovarianz}.
 
 Es ist wieder darauf hinzuweisen, dass man Korrelation und Kovarianz nicht \q{einfach} berechnen kann, weil man hierfür wieder die gemeinsame Verteilung der beiden Zufallsgrößen benötigt.
-Sind aber $X$ und $Y$ unabhängig, dann gilt
+Sind aber $X$ und $Y$ unabhängig, dann gilt folgender einfacher Zusammenhang:
 \begin{align*}
 \E(X Y) 
     & = \Int{}{}{
@@ -293,14 +296,14 @@ also die Ableitungen von $\phi_X$ mit den Momenten von $X$ in Zusammenhang stehe
 \subsection{Zufällige Signale}
 %
 Die bisherigen Konzepte reichen jedoch nicht aus, um die zeitliche Komponente von Zufallsprozessen richtig modellieren zu können, da wir bis jetzt nur einzelne Zufallsgrößen betrachtet haben, die nicht in einem gemeinsamen (beispielsweise zeitlichen) Kontext gebracht wurden.
-Wenn wir von zufallsbehafteten Signalen, beispielsweise im Zeitbereich, sprechen, so stellen wir uns vor, dass an jedem Zeitpunkt $t$ eine Zufallsgröße $X_t$ \q{angeheftet} ist, die sich dann in ihrer Gesamtheit zu einer zufälligen Funktion $f : \R \rightarrow \C$ realisieren, indem wir $f(t) = X_t(\omega)$ setzen.
-Die \emph{zufällige} Funktion $f$ ist also die punktweise Realisierung der verschiedenen Zufallsprozesse $X_t$, siehe \Cref{py:random:signal1}.
+Wenn wir von zufallsbehafteten Signalen, beispielsweise im Zeitbereich, sprechen, so müssen wir uns vorstellen, dass an jedem Zeitpunkt $t$ eine Zufallsgröße $X_t$ \q{angeheftet} ist, die sich dann in ihrer Gesamtheit zu einer \emph{zufälligen} Funktion $f : \R \rightarrow \C$ realisieren, indem wir $f(t) = X_t(\omega)$ setzen.
+Die Funktion $f$ ist also die punktweise Realisierung der verschiedenen Zufallsprozesse $X_t$, siehe \Cref{py:random:signal1}.
 Man nennt dann die Folge von Zufallsgrößen $(X_t)_{t \in \R}$ einen \emph{stochastischen Prozess}, oder einfach \emph{zufälliges/stochastisches Signal}.
 Eine spezielle Realisierung zu einer zufälligen Funktion $f$ nennen wir auch \emph{Pfad}.
 
 Daraus ergeben sich nun zwei Sichtweisen auf stochastische Signale. 
 Wir können von einer Folge von Zufallsgrößen im Zeitbereich sprechen, und deren gemeinsame Verteilung betrachten.
-Alternativ können wir auch direkt auf den Pfaden eine andere, aber darauf bezogene, Verteilung im Raum der Funktionen betrachten. 
+Alternativ können wir auch direkt auf den Pfaden $f$ eine andere, aber darauf bezogene, Verteilung im Raum der Funktionen betrachten. 
 Im ersten Fall betrachten wir die Verteilung zu einzelnen Zeitpunkten, aber gemeinsam für alle Punkte.
 Im zweiten betrachten wir das Verhalten als \emph{Ganzes}.
 Beide Sichtweisen sind in \Cref{py:random:signal2} zusammengefasst.
@@ -335,13 +338,13 @@ Man kann also auch Bild-Signale der Form $(X_{x,y})_{x,y \in \R}$ als räumliche
 \end{listing}
 
 Es gibt zu stochastischen Signalen eine Menge zu sagen und man kann viel Theorie dazu konsumieren und betreiben. 
-Wir wollen uns jedoch direkt auf eine kleine Klasse von stochastischen Signalen beschränken.
+Wir wollen uns jedoch direkt auf eine kleine Klasse von stochastischen Signalen beschränken, die wir im Digitalen antreffen.
 
 \subsection{Diskrete Stationäre Signale}\label{sec:random:station}
 
 Nehmen wir an, dass wir eine diskrete Folge von Zufallsgrößen $(X_{n})_{n \in \N}$, also ein diskretes stochastisches Signal gegeben haben.
 Dann gibt es für diese Werte eine gemeinsame Dichte $f_{X_{1}, X_{2}, \ldots}(x_1, x_2, \ldots)$.
-Wenn wir nun diese Samples um ein $\tau \in \N$ verschieben, also $(X_{n + \tau})_{n \in \N}$ verschieben und 
+Wenn wir nun diese Samples um ein $\tau \in \N$ verschieben, also $(X_{n + \tau})_{n \in \N}$, und 
 %
 \[
 f_{X_{1}, X_{2}, \ldots}(x_1, x_2, \ldots) =
@@ -351,13 +354,14 @@ f_{X_{1}, X_{2}, \ldots}(x_1, x_2, \ldots) =
 für alle Stellen $n \in \N$ und $\tau \in \N$ gilt, dann nennt man den Prozess $X_n$ \emph{stark stationär}.
 Dies führt dazu, dass sowohl Erwartungswert als auch Varianz \emph{konstant} sind, also $\E(X_n) = \E(X_0) = c$.
 Umgekehrt muss der Prozess nicht stationär sein, wenn die Momente zeitlich konstant sind.
+Hat ein Prozess konstante Momente, so nennt man ihn \emph{schwach stationär}.
 
 Wir definieren die \gls{acf} $\gamma_{X,X}: \N \times \N \rightarrow \R$ als
 \begin{equation}
     \label{eq:random:acf}
     \gamma_{X,X}[n_1, n_2] = \E(X_{n_1} X^\ast_{n_2}).
 \end{equation}
-Somit stellt $\gamma$ die Korrelation der Prozesses $X_n$ zwischen verschiedenen Zeitpunkten dar.
+Somit stellt $\gamma$ die Korrelation des Prozesses $X_n$ zwischen verschiedenen Zeitpunkten dar.
 Ist nun $X_n$ stark stationär, dann unterscheidet sich die Verteilung von $X_n$ nicht von der von $X_{n + \tau}$.
 Also gilt wegen
 \begin{equation}
@@ -367,6 +371,7 @@ Also gilt wegen
         = \gamma_{X,X}[n_1 - n_2, 0] = \gamma_{X,X}[n_1 - n_2],
 \end{equation}
 dass die \gls{acf} nur von $n_1-n_2$ abhängig, also dem Abstand der Abtastzeitpunkte, ist.
+Man nennt solche Funktionen \emph{translationsinvariant}.
 Da wir in \eqref{eq:random:stat_acf} auch in die andere Richtung hätten argumentieren können, gilt $\gamma_{X,X}[\tau] = \gamma_{X,X}[-\tau]$, was $\gamma$ zu einer geraden Funktion macht.
 
 Es ist nun essentiell zu sehen, dass wir mit $\gamma$ aus einem stochastischen Objekt, also dem stationären Prozess $X_n$ die \emph{deterministische}, also nicht-zufällige, Funktion $\gamma$ gewonnen haben, die uns gleichzeitig etwas über das zeitliche Verhalten des Prozesses, also des Signals, mitteilen kann.
@@ -405,14 +410,14 @@ x[n] = X_n = \sin(2 \pi 0.75 n \Delta t + \phi_1) + \sin(2 \pi 3 n \Delta t + \p
 wobei $z_n \sim \mathcal{N}(0, 0.6^2)$ und $\phi_{1,2} \sim \Unif(0, 2\pi)$ \gls{iid}, die spektralen Komponenten extrahieren kann.
 Von diesem zufälligen Signal haben wir in dem oberen Plot von \Cref{py:random:signal3} verschiedene Realisierungen dargstellt.
 Im mittleren Plot haben wir Histogramme von $X_{10}$ und von $X_{50}$ geplottet, um eine Möglichkeit zu zeigen, wie man zumindest \emph{visuel} prüfen kann, ob das Signal $x[n]$ stationär ist.
-Wir sehen, dass die Histogramme in etwa übereinstimmen, also können wir von Stationarität ausgehen, da gleiche Histogramme an verschiedenen Zeitpunkten auf eine gleiche Dichte an diesen Zeitpunkten schließen lassen.
+Wir sehen, dass die Histogramme in etwa übereinstimmen, also können wir von Stationarität ausgehen, da ähnliche Histogramme an verschiedenen Zeitpunkten auf eine gleiche Dichte an diesen Zeitpunkten schließen lassen.
 Beispielsweise wäre das Signal aus \Cref{py:random:signal2} \emph{nicht} stationär.
 
-Im unteren Plot zeigen wir eine Schätzung von $\gamma_{X,X}$ basiernd auf mehreren Realisierungen des Signals $x[\cdot]$, indem wir einfach für jedes einzelne $x[\cdot]$ die Faltung $x \ast x[-\cdot]$ berechnet haben und dann über \emph{diese} Realisierungen gemittelt, um den Erwartungswert in \eqref{eq:random:acf} zu approximieren.
+Im unteren Plot (vorletzter Plot) zeigen wir eine Schätzung von $\gamma_{X,X}$ basiernd auf mehreren Realisierungen des Signals $x[\cdot]$, indem wir einfach für jedes einzelne $x[\cdot]$ die Faltung $x \ast x[-\cdot]$ berechnet haben und dann über \emph{diese} Realisierungen der \gls{acf} gemittelt haben, um den Erwartungswert in \eqref{eq:random:acf} zu approximieren.
 Man sieht sehr gut, dass die (\textbf{zufällige}) Approximation von $\gamma_{X,X}$ sich sehr stabil verhält, auch wenn wir $N$ in \Cref{py:random:signal3} viel kleiner werden lassen.
-Weiterhin sehen wir im Plot ganz unten den Effekt von \Cref{thm:random:wiener-chintschin}, weil die \gls{dft} von $\gamma_{X,X}$ an den Stellen $F=\pm 3$ und $F = \pm 0.75$ lokale Maxima zu sehen sind, was genau den spektralen Komponenten des \emph{zufälligen} Signals $X_n$ entspricht.
+Weiterhin sehen wir im Plot ganz unten den Effekt von \Cref{thm:random:wiener-chintschin}, weil die \gls{dft} von $\gamma_{X,X}$ an den Stellen $F=\pm 3$ und $F = \pm 0.75$ lokale Maxima besitzt, was genau den spektralen Komponenten des \emph{zufälligen} Signals $X_n$ entspricht.
 
-Mit der Berechnung der \gls{acf} kann man also aus einzelnen wenigen Realisierungen von zufälligen Signalen deren spektrale Komponenten extrahieren.
+Mit der Berechnung der \gls{acf} kann man also aus einigen wenigen Realisierungen eines stochastischen Signals dessen spektrale Komponenten extrahieren.
 Diese Herangehensweise ist durch das Wiener-Chintschin-\Cref{thm:random:wiener-chintschin} theoretisch untermauert.
 %
 %
@@ -421,7 +426,7 @@ Diese Herangehensweise ist durch das Wiener-Chintschin-\Cref{thm:random:wiener-c
 %
 Wir wollen die entwickelte Theorie zu stochastischen Signalen nun auf ein Problem anwenden, das wir bis jetzt gutmütig ingoriert haben: Quantisierung.
 Bisher sind wir von einem zeitdiskreten, aber nicht wert-diskreten Signal ausgegangen. 
-Dies wollen wir nun noch einmal kurz umreißen indem wir den Effekt von Quantisierung auf zufällige stationäre Signale betrachten.
+Dies wollen wir nun noch einmal kurz umreißen, indem wir den Effekt von Quantisierung auf zufällige stationäre Signale betrachten.
 Hierzu folgen wir im Grunde den jeweiligen Abschnitten in \cite{widrow2008quantization}.
 
 \begin{figure}[ht]
@@ -433,7 +438,7 @@ Hierzu folgen wir im Grunde den jeweiligen Abschnitten in \cite{widrow2008quanti
 Wir gehen nun davon aus, dass wir ein stationäres Signal $X_n$ quantisieren, und dadurch $Q_n = q(X_n)$ erhalten, wobei $q$ die Quantisierungsoperation darstellt.
 Zunächst wollen wir ein Gefühl für die Wirkung von Quantisierung bekommen und betrachten hierzu den Effekt vom sogenannten \q{Area Sampling}, siehe \Cref{fig:random:quantization1}.
 
-Dies ist in \Cref{py:random:quantization1} durchgeführt, wobei wir von 3 Quantisierungsstufen ausgegangen sind, und deren Werte so gelegt haben, dass sie zum Signal passen, das wie in \Cref{py:random:signal3} generiert wird.
+Dies ist in \Cref{py:random:quantization1} durchgeführt, wobei wir von $3$ Quantisierungsstufen ausgegangen sind, und deren Werte so gelegt haben, dass sie zum Signal passen, das wie in \Cref{py:random:signal3} generiert wird.
 Außerdem sind zusätzlich die Bereiche (\texttt{edges}) markiert, die gleiche Quantisierungswerte ergeben, sowie die einzelnen Quantisierungsstufen (\texttt{centers}).
 Man sieht, dass diese Art der Quantisierung sehr leicht durch geschicktes Runden implementiert werden kann.
 
@@ -453,9 +458,9 @@ Man sieht, dass diese Art der Quantisierung sehr leicht durch geschicktes Runden
 Ein Grund, weshalb wir uns auf die Verteilung, oder Dichte $f_x$, eines stationären Signals konzentrieren ist der Fakt, dass zwar einerseits Quantisierung eines Signals nicht-linear auf das eine einzelne Signalrealisierung wirkt, doch wir sehen gleich, dass Area Sampling eine lineare Operation auf der Dichte $f_X$ darstellt.
 
 Geometrisch wird aus \Cref{fig:random:quantization1} klar, dass Area Sampling im Grunde alle Werte in einem Bereich, einer Fläche (daher der Name) unter der Dichte des nicht-quantisierten Signals, auf einen Punkt zusammenzieht.
-Die Verteilung der nicht-quantisierten Werte ist also auch eine stetige Verteilung, während die Verteilung des quantisierten Signals diskret sein muss -- schließlich ist ja genau das unser Ziel bei der Quantisierung.
+Die Verteilung der nicht-quantisierten Werte ist also auch eine stetige Verteilung (wenn wir von einem ursprünglich analogen Signal ausgehen), während die Verteilung des quantisierten Signals diskret sein \emph{muss} -- schließlich ist ja genau das unser Ziel bei der Quantisierung.
 
-Betrachten wir also nun einmal das Area Sampling mit $\Delta Q > 0$ als Abstand zwischen den Quantisierungsstufen analytisch via
+Betrachten wir also nun einmal die Dichte $f_{q(X)}$ eines mittels Area Samplings mit $\Delta Q > 0$  als Abstand zwischen den Quantisierungsstufen quantisierten Signals $X$ analytisch via
 \begin{align*}
     f_{q(X)}(x) = \Sum{k \in \Z}{}{
         \delta(x - k \Delta Q) 
@@ -469,17 +474,17 @@ Definieren wir nun die Funktion $\Rect_{\Delta Q}: \R \rightarrow \R$ via
 \Rect_{\Delta Q}(x) = \begin{cases}
     1 \Text{für} x \in [-\Delta Q/2,+\Delta Q/2], \\
     0 \Text{sonst}
-\end{cases}
+\end{cases},
 \]
-Die Faltung von $\Rect_{\Delta Q}$ mit einer Funktion $f$ ergibt
+so ergibt die Faltung von $\Rect_{\Delta Q}$ mit einer Funktion $f$, dass
 \begin{equation}
     \label{eq:random:conv_cdf}
     [\Rect_{\Delta Q} \ast f](x) 
         = \Int{x - \Delta Q/2}{x + \Delta Q/2}{f(t)}{t} 
-        = F_{X}(x + \Delta Q/2) - F_{X}(x - \Delta Q/2),
+        = F_{X}(x + \Delta Q/2) - F_{X}(x - \Delta Q/2).
 \end{equation}
-somit müssen wir nur noch die Faltung von $\Rect_{\Delta Q}$ und $f_X$ an der richtigen Stelle auswerten, um das Area Sampling analytisch zu reproduzieren.
-Diese Auswertung kann wegen \Cref{eq:random:density} durch Verwenden Verteilungsfunktion $F_X$ erfolgen.
+Somit müssen wir nur noch die Faltung von $\Rect_{\Delta Q}$ und $f_X$ an der richtigen Stelle auswerten, um das Area Sampling analytisch zu reproduzieren.
+Diese Auswertung kann wegen \Cref{eq:random:density} durch Verwenden der Verteilungsfunktion $F_X$ erfolgen.
 
 Definieren wir für die Auswertung einen entsprechenden Dirac-Kamm in Abhängigkeit von $\Delta Q$ via
 \[
@@ -512,18 +517,19 @@ Dieser Zusammenhang wird in \Cref{py:random:quantization2} beispielhaft für die
 Wir sehen in \Cref{py:random:quantization2} in \pyinl{empirical_pdf}, wie man aus \pyinl{N} Realisierungen eine Schätzung für die Dichte $f_X$ bekommen kann.
 Dies nennt man entsprechend \emph{empirische Dichte}, da sie nicht analytisch, sondern empirisch durch Mittelung, entstanden ist.
 Wir berechnen erst die \emph{empirische Verteilung} als Schätzung von $F_X$ aus \Cref{eq:random:cdf} und bilden dann numerische Ableitungen, wie in \Cref{eq:random:pdf_approx} gefordert und erhalten somit \pyinl{XN_f}. 
-Dann vollziehen wir die beiden Möglichkeiten für die Berechnung der Dichte der quantisierten Werte $f_{q(X)}$, indem wir erst quantisieren und dann das Histogram an den Quantisierungsstufen bilden, um \pyinl{XN_f_q} zu erhalten.
+Dann vergleichen wir die beiden Möglichkeiten für die Berechnung der Dichte der quantisierten Werte $f_{q(X)}$, indem wir erst quantisieren und dann das Histogram an den Quantisierungsstufen bilden, um \pyinl{XN_f_q} zu erhalten, oder eben die entsprechende Faltung aus \Cref{eq:random:area_sampling} auswerten.
 Schließlich erhalten wir \pyinl{XN_f_q_as} durch direktes Implementieren von \Cref{eq:random:area_sampling} mittels \pyinl{density_area_sampling}.
-Wie man im unteren Plot erkennen kann, stimmen die beiden Implementierungen sehr gut überein. 
+Wie man im unteren Plot von \Cref{py:random:quantization2} erkennen kann, stimmen die Ergebnisse der beiden Implementierungen sehr gut überein. 
 Kleinste Abweichungen kommen von der Tatsache, dass die empirische Dichte verwendet wurde und dass wir auch für die alternative Implementierung des Area Samplings eine empirische Version der Verteilung $F_X$ verwendet haben.
 
 \FloatBarrier
 Die Frage, die wir uns nun stellen wollen ist: 
-Unter welchen Bedingungen kann man aus der diskreten Dichte $f_{q(X)}$ die ursprüngliche Dichte $f_{X}$ des Nicht-quantisierten Signals rekonstruieren?
+Unter welchen Bedingungen kann man aus der diskreten Dichte $f_{q(X)}$ der quantisierten Werte die ursprüngliche Dichte $f_{X}$ des Nicht-quantisierten Signals rekonstruieren?
+Somit erhalten wir zwar nicht die ursprünglichen Werte, aber immerhin deren Statistik.
 
 Hierzu betrachten wir den Zusammenhang aus \Cref{eq:random:area_sampling} im Frequenzbereich.
-In \eqref{eq:random:char_fun} haben wir die charakteristische Funktion $\phi_X$ als Fourier-Transformierte einer Dichte $f_X$ eingeführt.
-Definieren wir $F_Q = 1 / \Delta Q$, dass ergibt sich aus den Eigenschaften der Fourier-Transformation direkt, dass
+In \eqref{eq:random:char_fun} haben wir die charakteristische Funktion $\phi_X$ als Fourier-Transformierte der Dichte $f_X$ eingeführt.
+Definieren wir $F_Q = 1 / \Delta Q$, dass ergibt sich aus den Eigenschaften der \gls{ft} direkt, dass
 \begin{equation}
     \label{eq:random:area_sampling_fourier}
     \phi_{q(X)}(F) = \Sum{k \in \Z}{}{
@@ -550,17 +556,17 @@ wobei wir
 definiert haben.
 
 Wir sehen hier schön die Eigenschaften, die wir aus \Cref{sec:sampling} bereits kennen, am Werk.
-Da die Dichte der quantisierten Werte aus Faltung und Abtastung mit Rate $F_Q = 1/T_Q$ hervorgeht, ist deren Spektrum periodisch mit Periodenlänge $T_Q$. 
+Da die Dichte der quantisierten Werte aus Faltung und Abtastung mit Rate $F_Q = 1/\Delta_Q$ hervorgeht, ist deren Spektrum periodisch mit Periodenlänge $\Delta_Q$. 
 Weiterhin muss vor Periodifizierung die charakteristische Funktion der nicht-quantisierten Werte $\phi_X$ mit der Fourier-Transformierten von $\Rect_{\Delta Q}$ multipliziert werden.
 Dies ist in \Cref{fig:random:quant_cf} sehr schön aufbereitet.
 
-Wir kommen nun zum Abschluss, da wir nun basierend auf \eqref{eq:random:area_sampling_fourier} ein Kriterium angeben können, sodass wir $f_X$ aus $f_{q(X)}$ rekonstruieren können. 
+Wir kommen nun zum Abschluss, da wir basierend auf \eqref{eq:random:area_sampling_fourier} ein Kriterium angeben können, sodass wir $f_X$ aus $f_{q(X)}$ rekonstruieren können. 
 Dies ist in der Praxis natürlich von großem Interesse, da wir für gewöhnlich nur $f_{q(X)}$ ermitteln können, aber eigentlich Informationen über $f_X$ aus unseren Beobachtungen ziehen wollen.
 
 Wie wir gesehen haben, hängt die Periodifizierung im Frequenzbereich in \eqref{eq:random:area_sampling_fourier} von dem Abstand der Quantisierungsstufen ab.
 Wählen wir also $\Delta Q$ so klein, dass $\phi_X(F) = 0$ für alle $\Abs{F} > F_Q$, dann tritt in \Cref{eq:random:area_sampling_fourier} kein Aliasing auf.
 Das heißt, dass sich die Kriterien für hinreichend feines Quantisieren \emph{direkt} aus der Anwendung des Samplingtheorems~\ref{thm:sampling_theorem} auf $f_{X}$ beziehungsweise $f_{q(X)}$ ergeben!
-Man kann sich in diesem Sinne Quantisierung als \q{Abtastung} der Dichte $f_X$ vorstellen.
+Man kann sich in diesem Sinne Quantisierung als \q{Abtastung} der Dichte $f_X$ (gefaltet mit $\Rect$) vorstellen.
 Deshalb ergibt sich auch, dass die Quantisierungsstufen so nah beieinander liegen müssen, dass diese Dichte kritisch abgetastet wurde.
 
 \FloatBarrier
@@ -668,4 +674,5 @@ Damit haben wir eine wunderschöne Brücke zwischen der Theorie der zufälligen 
 %
 %
 %
+% TODO
 % \input{content/paramest.tex}

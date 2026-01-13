@@ -1,10 +1,14 @@
 % !TEX root = ../dsv_script.tex
+In \Cref{sec:sampling:sampling_theorem} haben wir eine Theorie entwickelt, welche es uns erlaubt aus einer diskreten Menge von Abtastpunkten, das ursprüngliche Signal zu rekonstruieren.
+Allgemeiner kann man dies auch als ein Interpolationsproblem betrachten, wobei es darum geht, eine Funktion zu finden, deren Werte an bestimmten Punkten vorbestimmt sind.
+Das heißt, wir suchen nicht unbedingt eine bestimmte Funktion, sondern eine beliebige, die \q{nur} die sogenannte Interpolationseigenschaft erfüllt.
+Eine Möglichkeit, solche eine Funktion zu finden, bietet die \gls{dft}.
 %
 %
 \subsubsection{Theoretische Grundlagen}\label{sec:dftintp:theory}
 %
 Gegeben sei ein periodisches, analoges Signal $x: \R \rightarrow \C$, mit Periode $T_p = 1/F_0$. 
-Wir beobachten dieses Signal auf einem uniformen Raster von Punkten, via $x[n] = x(n T)$ und wollen eine Funktion $y(t)$ herleiten, für welche die Interpolationsbedingung
+Wir beobachten dieses Signal auf einem uniformen Raster von Punkten, via $x[n] = x(n T)$ und wollen eine Funktion $y$ herleiten, für welche die Interpolationsbedingung
 \begin{equation}\label{eq:dftintp:interpol_cond}
     y(nT) = x[n] = x(nT)
 \end{equation}
@@ -13,8 +17,9 @@ Hierzu entwickeln wir das Signal $x$ in seine Fourier-Reihe via
 \begin{equation}\label{eq:dftintp:fourier_series}
     x(t) = \Sum{k=-\infty}{+\infty}{
         c[k] \exp(\jmath 2 \pi k t F_0) 
-    }.
+    },
 \end{equation}
+womit nun \q{nur} noch die Fourierkoeffizienten $c[\cdot]$ zu finden sind.
 Nun tasten wir dieses Signal uniform mit Samplerate $F_s = N/T_p = 1/T$ (also passend zur Periodendauer) ab und erhalten die Folge 
 \begin{equation}
     x[n] = x(n T) = \Sum{k=-\infty}{+\infty}{
@@ -25,7 +30,7 @@ Nun tasten wir dieses Signal uniform mit Samplerate $F_s = N/T_p = 1/T$ (also pa
     \Text{für}
     n \in \N
 \end{equation}
-bestehend aus den Samples von $x$. 
+bestehend aus den Samples von $x$ an deren Stellen die Interpolationsbedingung erfüllt sein soll. 
 Mit der Periodizität von $\exp(\jmath 2 \pi t)$, siehe \Cref{sec:fourier:disc_period} und \Cref{sec:sampling:disc_sin}, und der Abtastung erhalten wir außerdem noch
 \begin{equation}
     x[n] = \Sum{k=0}{N-1}{
@@ -80,15 +85,16 @@ Eine Anwendung der hier vorgestellten Methode zur Interpolation wird in \cref{se
 %
 %
 %
+\FloatBarrier
 \subsubsection{Interpolation von Antennen-Richtcharakteristiken}\label{sec:eadf}
 %
 \paragraph{Motivation}
 %
 %
-Mit jeder Erschließung von neuen Frequenzbereichen für die Kommunikation ist es von Interesse das Ausbreitungsverhalten der Elektro-Magnetischen Wellen für verschiedene Umgebungen zu charakterisieren, beispielsweise innerstädtisch, auf der Autobahn, etc.
+Mit jeder Erschließung von neuen Frequenzbereichen für die Kommunikation ist es von Interesse das Ausbreitungsverhalten der elektro-magnetischen Wellen für verschiedene Umgebungen zu charakterisieren, beispielsweise innerstädtisch, auf der Autobahn, etc.
 Zwar können solche Umgebungen auch computerbasiert simuliert werden, doch für eine empirisch abgeleitete Statistik solcher sogenannter Kanalmodelle~\cite{delgaldo2007phd} sind repräsentative Messungen unerlässlich. 
 Diese Charakteristiken werden genutzt, um in realistischen Szenarien Kanalkapazitäten, Datenraten und dergleichen zu bestimmen. 
-Schlussendlich fließen solche Statistiken dann in neue Mobilfunkstandards ein.
+Schlussendlich fließen solche Statistiken dann in neue Mobilfunkstandards ein, indem jene Statistiken zur Quantifizierung der Performance von beispielsweise Endgeräten herangezogen werden.
 
 \begin{figure}
     \centering\includegraphics[width=0.6\textwidth]{img/eadf/sounding.png}
