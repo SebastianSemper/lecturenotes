@@ -2,7 +2,7 @@ Bisher waren wir ausschließlich mit deterministischen Signalen befasst.
 Also solchen, welche sich bequem durch eine Funktionsvorschrift $t \mapsto x(t)$ beschreiben lassen.
 Doch eigentlich ist dies ein absolut idealisierter Spezialfall, da für gewöhnlich alle Signale, die wir verarbeiten, zu mindestens einem Zeitpunkt von einem Messgerät beobachtet wurden.
 Somit sind diese notwendigerweise mit Messrauschen behaftet, dessen unangenehme Eigenschaft es ist, zuällig zu sein.
-Aus diesem Grund ist es uns nicht möglich, ein gemessenes und digitalisiertes Signal $x[\cdot]$ mittels eines alebraischen Ausdrucks zu beschreiben.
+Aus diesem Grund ist es uns nicht möglich, ein gemessenes und digitalisiertes Signal $x[\cdot]$ mittels eines algebraischen Ausdrucks zu beschreiben.
 Notwendigerweise wird $x[\cdot]$ zu einer sog. Zufallsgröße, welche wir \q{nur} noch durch deren statistische Eigenschaften beschreiben können.
 Nicht nur das, auch jede folgende Verarbeitung von $x[\cdot]$, bespielsweise durch ein \gls{lti}-System, wird zu einer Zufallsgröße, deren Eigenschaften u.A. von denen des Messrauschens abhängen.
 
@@ -353,7 +353,7 @@ f_{X_{1}, X_{2}, \ldots}(x_1, x_2, \ldots) =
 %
 für alle Stellen $n \in \N$ und $\tau \in \N$ gilt, dann nennt man den Prozess $X_n$ \emph{stark stationär}.
 Dies führt dazu, dass sowohl Erwartungswert als auch Varianz \emph{konstant} sind, also $\E(X_n) = \E(X_0) = c$.
-Umgekehrt muss der Prozess nicht stationär sein, wenn die Momente zeitlich konstant sind.
+Umgekehrt muss der Prozess nicht stark stationär sein, wenn die Momente zeitlich konstant sind.
 Hat ein Prozess konstante Momente, so nennt man ihn \emph{schwach stationär}.
 
 Wir definieren die \gls{acf} $\gamma_{X,X}: \N \times \N \rightarrow \R$ als
@@ -579,7 +579,7 @@ Ist die Dichte der nicht-quantisierten Werte $f_x$ bandbegrenzt, also gilt
 dann lässt sich die Dichte $f_X$ schreiben als
 \[
 f_X(x) = \Sum{k \in \Z}{}{
-    \Sum{\ell = \infty}{k}{
+    \Sum{\ell = -\infty}{k}{
         f_{q(X)}(\ell \Delta Q)
     }
     \frac{\mathrm{d}}{\mathrm{d} x}\Sinc\left(
@@ -612,7 +612,7 @@ f_{X}(x + \Delta Q/2) - f_{X}(x - \Delta Q/2) =
     = g(x)
 \]
 impliziert.
-Betrachten wir $g(x) + g(x + \Delta Q)$ so ergibt sich
+Betrachten wir $g(x) + g(x - \Delta Q)$ so ergibt sich
 \begin{align*}
 g(x) + g(x - \Delta Q)
     & = f_{X}(x + \Delta Q/2) - f_{X}(x - \Delta Q/2)
@@ -622,12 +622,12 @@ g(x) + g(x - \Delta Q)
 Also folgern wir induktiv, dass
 \[
 \Sum{\ell = 0}{\infty}{
-    g(x + \ell \Delta Q)
-} = f_X(x + \Delta Q / 2) + \lim_{\ell \rightarrow \infty} f_X(x + \ell \Delta Q), 
+    g(x - \ell \Delta Q)
+} = f_X(x + \Delta Q / 2) + \lim_{\ell \rightarrow \infty} f_X(x - \ell \Delta Q), 
 \]
 Da Dichten endliches Integral besitzen und die Dichten, die wir betrachten gutartig genug sind, gilt
 \[
-\lim_{\ell \rightarrow \infty} f_X(x + \ell \Delta Q) = 0,
+\lim_{\ell \rightarrow \infty} f_X(x - \ell \Delta Q) = 0,
 \]
 sodass wir mit ein bisschen Umindizieren von $p = k - \ell$ und Vertauschung von Summen nachrechnen, dass
 \begin{align*}
