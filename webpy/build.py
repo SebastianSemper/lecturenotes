@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
-"""
-build.py - Generates docs/webpy/index.html for DSV WebAssembly Runner
-"""
-import os
+"""Generate the standalone DSV WebAssembly playground."""
+import argparse
+import base64
 import json
+import os
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CODE_DIR = os.path.join(REPO_ROOT, "dsv", "code")
+
+if not os.path.isdir(CODE_DIR):
+    raise FileNotFoundError(f"Python source directory not found: {CODE_DIR}")
 
 # Collect all 44 python scripts
 scripts_data = {}
-for root, _, files in os.walk(CODE_DIR):
+for root, dirs, files in os.walk(CODE_DIR):
+    dirs.sort()
     for f in sorted(files):
         if f.endswith(".py"):
             full_path = os.path.join(root, f)
@@ -93,6 +97,17 @@ LECTURE_MAP = [
     ])
 ]
 
+missing_scripts = sorted({
+    script_file
+    for _, items in LECTURE_MAP
+    for script_file, _ in items
+    if script_file not in scripts_data
+})
+if missing_scripts:
+    raise FileNotFoundError(
+        "Lecture catalog references missing scripts: " + ", ".join(missing_scripts)
+    )
+
 # Generate select HTML options
 options_html = []
 for group_name, items in LECTURE_MAP:
@@ -106,17 +121,15 @@ scripts_json_str = json.dumps(scripts_data)
 
 # Embed binary data files (WAV) as base64 so Pyodide can write them into its virtual FS.
 # stft_bass.py uses a relative ../data path; the web UI also exposes the files at /data.
-import base64
 DATA_DIR = os.path.join(REPO_ROOT, "dsv", "data")
 data_files = {}
 for fname in ["g_maj.wav", "g_bend.wav"]:
     fpath = os.path.join(DATA_DIR, fname)
-    if os.path.exists(fpath):
-        with open(fpath, "rb") as fp:
-            data_files[fname] = base64.b64encode(fp.read()).decode("ascii")
-        print(f"Embedded {fname} ({os.path.getsize(fpath):,} bytes -> {len(data_files[fname]):,} b64 chars)")
-    else:
-        print(f"WARNING: {fpath} not found, skipping.")
+    if not os.path.isfile(fpath):
+        raise FileNotFoundError(f"Required data file not found: {fpath}")
+    with open(fpath, "rb") as fp:
+        data_files[fname] = base64.b64encode(fp.read()).decode("ascii")
+    print(f"Embedded {fname} ({os.path.getsize(fpath):,} bytes -> {len(data_files[fname]):,} b64 chars)")
 
 data_files_json_str = json.dumps(data_files)
 
@@ -1122,7 +1135,16 @@ final_html = (
     .replace("__EMBEDDED_DATA_FILES_JSON__", data_files_json_str)
 )
 
-OUTPUT_HTML = os.path.join(os.path.dirname(__file__), "index.html")
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument(
+    "--output",
+    default=os.path.join(REPO_ROOT, "docs", "index.html"),
+    help="Generated HTML path (default: docs/index.html)",
+)
+args = parser.parse_args()
+
+OUTPUT_HTML = os.path.abspath(args.output)
+os.makedirs(os.path.dirname(OUTPUT_HTML), exist_ok=True)
 with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
     f.write(final_html)
 print(f"Created {OUTPUT_HTML} ({len(final_html)} bytes)")
