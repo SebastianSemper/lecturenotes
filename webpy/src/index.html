@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSV Codeschnippsel | TU Ilmenau (EMS)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  
+  <!-- Pyodide WASM -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+
+  <style>
+__APP_CSS__  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-title">
+        <i class="fa-solid fa-wave-square" style="color: var(--accent);"></i>
+        DSV <span>Codeschnippsel</span>
+      </div>
+      <div class="logo-badge">DSV Lehrprojekt</div>
+    </div>
+
+    <div class="controls">
+      <select id="demo-select" class="demo-select" title="Vorlesungs-Demo wählen">
+__DEMO_OPTIONS__
+      </select>
+
+      <button id="btn-run" class="btn btn-run" title="Skript ausführen (Strg + Enter)">
+        <i class="fa-solid fa-play"></i>
+        <span>Ausführen</span>
+      </button>
+
+      <button id="btn-reset" class="btn btn-secondary" title="Code auf Originalzustand zurücksetzen">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span>Reset</span>
+      </button>
+
+      <button id="btn-share" class="btn btn-secondary" title="Link zu diesem Skript kopieren">
+        <i class="fa-solid fa-link"></i>
+      </button>
+
+      <div class="status-pill" id="status-pill">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text">Lade WebAssembly...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Workspace -->
+  <main class="workspace">
+    <!-- Left: Code Editor -->
+    <section class="pane-editor">
+      <div class="pane-header">
+        <div class="file-info">
+          <i class="fa-brands fa-python"></i>
+          <span id="current-filename">aliasing.py</span>
+        </div>
+        <div style="font-size: 0.75rem; color: var(--text-sub);">
+          <kbd style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">Strg + Enter</kbd> zum Starten
+        </div>
+      </div>
+      <div class="editor-container">
+        <textarea id="code-editor"></textarea>
+      </div>
+    </section>
+
+    <!-- Right: Output Pane -->
+    <section class="pane-output">
+      <div class="output-tabs">
+        <button class="output-tab active" id="tab-output">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Plots & Ausgabe</span>
+        </button>
+        <div style="flex: 1;"></div>
+        <button id="btn-clear-out" style="background: none; border: none; color: var(--text-sub); padding: 0 14px; cursor: pointer; font-size: 0.8rem;" title="Ausgabe leeren">
+          <i class="fa-solid fa-trash-can"></i> Leeren
+        </button>
+      </div>
+
+      <div id="run-indicator" class="run-indicator" role="status" aria-live="polite" aria-hidden="true">
+        <div class="run-indicator-card">
+          <div class="run-indicator-spinner" aria-hidden="true">
+            <div class="run-indicator-bars">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <span>Skript wird ausgeführt …</span>
+        </div>
+      </div>
+
+      <div class="output-content">
+        <!-- Rendered Plots -->
+        <div id="plot-container">
+          <div class="empty-state">
+            <i class="fa-regular fa-image"></i>
+            <span>Hier erscheinen generierte Matplotlib-Grafiken.<br>Klicken Sie oben auf <strong>Ausführen</strong>.</span>
+          </div>
+        </div>
+
+        <!-- Terminal Output -->
+        <div style="margin-top: 8px;">
+          <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-sub); margin-bottom: 4px; display: flex; justify-content: space-between;">
+            <span><i class="fa-solid fa-terminal"></i> Terminal / Konsolen-Ausgabe:</span>
+          </div>
+          <div id="terminal-container"><span class="terminal-info">Warte auf Programmausführung...</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 Dr.-Ing. Sebastian Semper</span>
+    <span aria-hidden="true">·</span>
+    <a href="rechtliches.html#impressum">Impressum</a>
+    <span aria-hidden="true">·</span>
+    <a href="rechtliches.html#datenschutz">Datenschutz</a>
+    <span aria-hidden="true">·</span>
+    <a href="rechtliches.html#lizenzen">Lizenzen</a>
+  </footer>
+
+  <!-- CodeMirror JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+
+  <!-- Main Application Logic -->
+  <script>
+__APP_JS__  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+    :root {
+      --bg: #1b2729;
+      --surface: #23373b;
+      --text: #f0f4f5;
+      --sub: #b2c2c5;
+      --border: #3b5055;
+      --accent: #ff5d00;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    header, main, footer { width: min(840px, calc(100% - 32px)); margin-inline: auto; }
+    header { padding: 28px 0 14px; }
+    header a, footer a { color: var(--accent); }
+    main { padding-bottom: 32px; }
+    section {
+      margin: 18px 0;
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      scroll-margin-top: 16px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 4vw, 2.2rem); }
+    h2 { margin-top: 0; color: var(--accent); }
+    h3 { margin-bottom: 4px; }
+    p, ul { margin-top: 8px; }
+    a { color: #ff8b4a; }
+    address { font-style: normal; }
+    .subtitle, .notice { color: var(--sub); }
+    .license-list li { margin-bottom: 8px; }
+    footer {
+      padding: 14px 0 28px;
+      color: var(--sub);
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+
