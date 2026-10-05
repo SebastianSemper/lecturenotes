@@ -44,6 +44,9 @@ _minted*
 *.synctex.gz(busy)
 *.pdfsync
 
+# Generated GitHub Pages site
+/docs/index.html
+
 ## Build tool directories for auxiliary files
 # latexrun
 latex.out/
