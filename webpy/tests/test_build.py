@@ -174,7 +174,7 @@ if (JSON.stringify(actual) !== JSON.stringify(["aliasing.py", "random/discrete.p
     def test_code_caption_links_to_nested_site(self):
         header = (REPO_ROOT / "include" / "head.tex").read_text(encoding="utf-8")
         self.assertIn(
-            r"\href{https://SebastianSemper.github.io/lecturenotes/dsv/?script=#1}",
+            r"\href{https://sebastiansemper.github.io/lecturenotes/dsv/?script=#1}",
             header,
         )
 
