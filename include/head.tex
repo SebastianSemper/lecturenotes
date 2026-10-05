@@ -77,6 +77,7 @@ giveninits=true,]{biblatex}
 \numberwithin{equation}{subsection}
 
 \usepackage{minted}
+\usepackage{xstring}
 \setminted{fontsize=\footnotesize}
 \setminted{escapeinside=||}
 
@@ -100,10 +101,11 @@ giveninits=true,]{biblatex}
 \newcommand{\q}[1]{{\glqq{}#1\grqq{}}}
 \newcommand{\myemph}[1]{\emph{#1}}
 \newcommand{\codecaption}[2]{
+  \StrBehind{#1}{dsv/code/}[\codescript]%
   \caption[{#2}]{%
     % \backrefsetup{disable}%
     {#2}, % 
-    siehe \href{https://github.com/SebastianSemper/lecturenotes/blob/main/#1}{%
+    siehe \href{https://sebastiansemper.github.io/lecturenotes/?script=\codescript}{%
         \path{#1}%
       }\hfill%
     % \backrefsetup{enable}%
