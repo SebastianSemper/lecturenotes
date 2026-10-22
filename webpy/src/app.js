@@ -16,6 +16,10 @@
     const runIndicator = document.getElementById("run-indicator");
     const plotContainer = document.getElementById("plot-container");
     const terminalContainer = document.getElementById("terminal-container");
+    const tabPlots = document.getElementById("tab-plots");
+    const tabTerminal = document.getElementById("tab-terminal");
+    const panelPlots = document.getElementById("panel-plots");
+    const panelTerminal = document.getElementById("panel-terminal");
 
     // Immediately bind Pyodide Matplotlib target so plots NEVER append to document.body
     document.pyodideMplTarget = plotContainer;
@@ -96,23 +100,6 @@
     // Plot Display
     function clearPlots() {
       plotContainer.innerHTML = "";
-    }
-
-    // Shrink the rendered figure to fit the visible output pane height, mirroring
-    // the existing max-width/height:auto rule that already shrinks it to fit width.
-    // The canvas itself is capped (in px, not %) because a percentage max-height
-    // can't resolve against a parent that only has max-height set, not height.
-    function fitPlotToViewport() {
-      const card = plotContainer.firstElementChild;
-      if (!card || card.classList.contains("empty-state")) return;
-      const canvas = card.querySelector("canvas");
-      if (!canvas) return;
-      const outputContent = plotContainer.closest(".output-content");
-      if (!outputContent) return;
-
-      const available = Math.max(outputContent.clientHeight - 24, 150);
-      const chrome = card.offsetHeight - canvas.offsetHeight; // padding + toolbar
-      canvas.style.maxHeight = Math.max(available - chrome, 100) + "px";
     }
 
     // Load Pyodide WASM Runtime
@@ -333,14 +320,12 @@ sys.modules['_dsv_harness'].execute(__user_code__, __user_filename__)
         setStatus("ready", `Fertig (${elapsed}s)`);
         appendTerminal(`\n✔ Erfolgreich beendet in ${elapsed}s\n`, "terminal-info");
 
-        fitPlotToViewport();
-
         // If no plots were generated, show informative note in plot area
         if (plotContainer.children.length === 0) {
           plotContainer.innerHTML = `
             <div class="empty-state">
               <i class="fa-solid fa-circle-check" style="color: var(--success); opacity: 0.85;"></i>
-              <span>Skript ohne grafische Ausgabe ausgeführt.<br>Siehe Konsolenausgabe unten.</span>
+              <span>Skript ohne grafische Ausgabe ausgeführt.<br>Siehe Tab „Terminal Output“.</span>
             </div>
           `;
         }
@@ -353,12 +338,24 @@ sys.modules['_dsv_harness'].execute(__user_code__, __user_filename__)
           plotContainer.innerHTML = `
             <div class="empty-state">
               <i class="fa-solid fa-triangle-exclamation" style="color: var(--error); opacity: 0.85;"></i>
-              <span>Ausführung mit Fehler abgebrochen.<br>Details siehe Terminal-Ausgabe.</span>
+              <span>Ausführung mit Fehler abgebrochen.<br>Details siehe Tab „Terminal Output“.</span>
             </div>
           `;
         }
       }
     }
+
+    // Output Tabs
+    function showOutputTab(tab) {
+      const isPlots = tab === "plots";
+      tabPlots.classList.toggle("active", isPlots);
+      tabTerminal.classList.toggle("active", !isPlots);
+      panelPlots.classList.toggle("active", isPlots);
+      panelTerminal.classList.toggle("active", !isPlots);
+    }
+
+    tabPlots.addEventListener("click", () => showOutputTab("plots"));
+    tabTerminal.addEventListener("click", () => showOutputTab("terminal"));
 
     // Event Listeners
     btnRun.addEventListener("click", runCode);
@@ -390,8 +387,6 @@ sys.modules['_dsv_harness'].execute(__user_code__, __user_filename__)
         </div>
       `;
     });
-
-    window.addEventListener("resize", fitPlotToViewport);
 
     demoSelect.addEventListener("change", async (e) => {
       const script = e.target.value;

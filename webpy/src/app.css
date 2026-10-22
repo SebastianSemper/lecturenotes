@@ -381,9 +381,13 @@
       flex: 1;
       overflow-y: auto;
       padding: 16px;
-      display: flex;
+      display: none;
       flex-direction: column;
       gap: 14px;
+    }
+
+    .output-content.active {
+      display: flex;
     }
 
     /* Plots Container */
@@ -407,7 +411,6 @@
       max-width: 100% !important;
       box-sizing: border-box !important;
       overflow-x: auto;
-      overflow-y: visible;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -453,8 +456,7 @@
       font-family: 'Fira Code', ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
       font-size: 0.83rem;
       color: #38bdf8;
-      min-height: 120px;
-      max-height: 260px;
+      flex: 1;
       overflow-y: auto;
       white-space: pre-wrap;
       word-break: break-all;

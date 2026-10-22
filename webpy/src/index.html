@@ -78,9 +78,13 @@ __DEMO_OPTIONS__
     <!-- Right: Output Pane -->
     <section class="pane-output">
       <div class="output-tabs">
-        <button class="output-tab active" id="tab-output">
+        <button class="output-tab active" id="tab-plots">
           <i class="fa-solid fa-chart-line"></i>
-          <span>Plots & Ausgabe</span>
+          <span>Plots</span>
+        </button>
+        <button class="output-tab" id="tab-terminal">
+          <i class="fa-solid fa-terminal"></i>
+          <span>Terminal Output</span>
         </button>
         <div style="flex: 1;"></div>
         <button id="btn-clear-out" style="background: none; border: none; color: var(--text-sub); padding: 0 14px; cursor: pointer; font-size: 0.8rem;" title="Ausgabe leeren">
@@ -99,22 +103,19 @@ __DEMO_OPTIONS__
         </div>
       </div>
 
-      <div class="output-content">
-        <!-- Rendered Plots -->
+      <!-- Plots Panel -->
+      <div class="output-content active" id="panel-plots">
         <div id="plot-container">
           <div class="empty-state">
             <i class="fa-regular fa-image"></i>
             <span>Hier erscheinen generierte Matplotlib-Grafiken.<br>Klicken Sie oben auf <strong>Ausführen</strong>.</span>
           </div>
         </div>
+      </div>
 
-        <!-- Terminal Output -->
-        <div style="margin-top: 8px;">
-          <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-sub); margin-bottom: 4px; display: flex; justify-content: space-between;">
-            <span><i class="fa-solid fa-terminal"></i> Terminal / Konsolen-Ausgabe:</span>
-          </div>
-          <div id="terminal-container"><span class="terminal-info">Warte auf Programmausführung...</span></div>
-        </div>
+      <!-- Terminal Output Panel -->
+      <div class="output-content" id="panel-terminal">
+        <div id="terminal-container"><span class="terminal-info">Warte auf Programmausführung...</span></div>
       </div>
     </section>
   </main>
