@@ -407,6 +407,7 @@
       max-width: 100% !important;
       box-sizing: border-box !important;
       overflow-x: auto;
+      overflow-y: visible;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -414,7 +415,6 @@
 
     #plot-container canvas {
       max-width: 100% !important;
-      max-height: 100%;
       height: auto !important;
       display: block;
       border-radius: 4px;

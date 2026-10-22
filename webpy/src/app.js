@@ -100,12 +100,19 @@
 
     // Shrink the rendered figure to fit the visible output pane height, mirroring
     // the existing max-width/height:auto rule that already shrinks it to fit width.
+    // The canvas itself is capped (in px, not %) because a percentage max-height
+    // can't resolve against a parent that only has max-height set, not height.
     function fitPlotToViewport() {
       const card = plotContainer.firstElementChild;
       if (!card || card.classList.contains("empty-state")) return;
+      const canvas = card.querySelector("canvas");
+      if (!canvas) return;
       const outputContent = plotContainer.closest(".output-content");
       if (!outputContent) return;
-      card.style.maxHeight = Math.max(outputContent.clientHeight - 24, 150) + "px";
+
+      const available = Math.max(outputContent.clientHeight - 24, 150);
+      const chrome = card.offsetHeight - canvas.offsetHeight; // padding + toolbar
+      canvas.style.maxHeight = Math.max(available - chrome, 100) + "px";
     }
 
     // Load Pyodide WASM Runtime
