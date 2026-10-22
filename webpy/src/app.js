@@ -98,6 +98,16 @@
       plotContainer.innerHTML = "";
     }
 
+    // Shrink the rendered figure to fit the visible output pane height, mirroring
+    // the existing max-width/height:auto rule that already shrinks it to fit width.
+    function fitPlotToViewport() {
+      const card = plotContainer.firstElementChild;
+      if (!card || card.classList.contains("empty-state")) return;
+      const outputContent = plotContainer.closest(".output-content");
+      if (!outputContent) return;
+      card.style.maxHeight = Math.max(outputContent.clientHeight - 24, 150) + "px";
+    }
+
     // Load Pyodide WASM Runtime
     async function initPyodideRuntime() {
       try {
@@ -316,6 +326,8 @@ sys.modules['_dsv_harness'].execute(__user_code__, __user_filename__)
         setStatus("ready", `Fertig (${elapsed}s)`);
         appendTerminal(`\n✔ Erfolgreich beendet in ${elapsed}s\n`, "terminal-info");
 
+        fitPlotToViewport();
+
         // If no plots were generated, show informative note in plot area
         if (plotContainer.children.length === 0) {
           plotContainer.innerHTML = `
@@ -371,6 +383,8 @@ sys.modules['_dsv_harness'].execute(__user_code__, __user_filename__)
         </div>
       `;
     });
+
+    window.addEventListener("resize", fitPlotToViewport);
 
     demoSelect.addEventListener("change", async (e) => {
       const script = e.target.value;
