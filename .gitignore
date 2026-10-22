@@ -46,6 +46,7 @@ _minted*
 
 # Generated GitHub Pages site
 /docs/index.html
+/docs/dsv/
 
 ## Build tool directories for auxiliary files
 # latexrun
@@ -309,3 +310,6 @@ TSWLatexianTemp*
 
 # joel
 tmuxp.yaml
+
+# slides
+slides/*
