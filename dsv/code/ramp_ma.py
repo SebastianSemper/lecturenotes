@@ -41,7 +41,7 @@ plt.stem(
 )
 plt.stem(
     nOut[: 2 * l + 1] + 0.05,
-    h[: 2 * l + 1],
+    h1[: 2 * l + 1],
     linefmt="b",
     label="h1",
 )
