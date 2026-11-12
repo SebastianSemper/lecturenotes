@@ -18,7 +18,7 @@ plt.subplot(211)
 plt.stem(y)
 plt.ylabel("y[n]")
 plt.xlabel("Iteration n")
-plt.axhline(rootA, linestyle="--", color=)
+plt.axhline(rootA, linestyle="--", color="red")
 plt.subplot(212)
 plt.semilogy(
     np.abs(np.array(y) - rootA)
